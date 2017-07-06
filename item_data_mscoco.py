@@ -7,14 +7,10 @@ Created on Wed Jul  5 17:19:26 2017
 """
 
 import os
+import sys
 import csv
+import argparse
 import speechcoco.speechcoco as sp
-
-path_val_sql="../val2014/val_2014.sqlite3" # SQL database on validation dataset ( ~ 200 k  English captions)
-path_tra_sql="../val2014/tra/val_translate.sqlite3" # SQL translation (Japanese) database on validation dataset ( ~ 200 k captions)
-path_output='/pylon2/ci560op/larsene/abx_eval/mscoco/'
-
-db = sp.SpeechCoco(path_val_sql,path_tra_sql,verbose=True) # SQL database
 
 
 ## create the whole phoneme item file 
@@ -55,10 +51,12 @@ def write_phoneme_item_file(db, path_output, name_item_file, columns_names_list,
                 write_row(f, columns_names_list[ii], False)
             
             for caption in captions : 
-                phonemes = [phoneme for words in caption.timecode.parse() for syllables in words["syllable"] for phoneme in
+                phonemes = [phoneme for words in caption.timecode.parse() 
+                            for syllables in words["syllable"] for phoneme in
                             syllables["phoneme"]]
                 
-                for i in range(len(phonemes)): # for each phoneme create a row with different columns
+                # for each phoneme create a row with different columns
+                for i in range(len(phonemes)): 
                     if i!=0 and i!=len(phonemes)-1:
                 
                         source=caption.filename.split(".")[0]
@@ -132,39 +130,65 @@ def write_word_item_file(db, path_output, name_item_file, columns_names_list, al
                 
         finally: f.close()
                 
-        
+
+
+
+parser = argparse.ArgumentParser(description='Write an item or alignment file for an ABX task')
+
+parser.add_argument(
+    '-s', '--source', type=str, metavar='<str>',
+    help='path of the source language SQL database containing written captions of images')
+
+parser.add_argument(
+    '-t', '--target', type=str, metavar='<int>', 
+    help='path of the target language SQL database containing written captions of images')
+
+parser.add_argument(
+    '-o', '--output', type=str, help='path to output the file')
+
+parser.add_argument(
+     '--on', type=str, default="phoneme",
+     help='''item on which the abx task will be (phoneme, word or object category),
+    default is %(default)s.''')
+
+ parser.add_argument(
+     '-n', '--columns_names', type=list, default=["name_of_image_caption_file", "onset", "offset", "phoneme"]
+     help='''list of the columns names of the item file, default is %(default)s.''')
+
+parser.add_argument(
+     '-a', '--alignment', type=boolean, default=False
+     help='''By default, the alignment is on triphone''')
+
+
+
+
+
+def main():
+    """Entry point of the 'item_data_mscoco' command"""
+    
+    args=parser.parse_args()
+
+    db = sp.SpeechCoco(args.source,args.target,verbose=True)  ## SQL database
+    
+    if args.on=="phoneme":
+        write_phoneme_item_file(db, args.output, args.on+".item", args.columns_names, args.alignment)
+    
+    elif args.on=="word": 
+        write_word_item_file(db, args.output, args.on+".item", args.columns_names, args.alignment)
+  
+    
+    
+    
+
+if __name__ == '__main__':
+    main(args.source, args.target, args.ouput, args.on, args.columns_names, args.alignment)
+    
+    
+    
 
        
-    
-       
-    
-'''OLD
-with open(path_output+"phoneme_item_file_val2014.txt", 'w') as f:  
-    try:
-        f.write('\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}'.format('#filename', 'onset', 'offset','#phoneme', 'context', 'imageID','captionID', 'speaker_name','nationality')) 
-        for caption in captions : 
-            phonemes = [phoneme for words in caption.timecode.parse() for syllables in words["syllable"] for phoneme in
-                            syllables["phoneme"]]
-            nbTier = len(phonemes)
-            for i in range(nbTier):
-                if i!=0 and i!=nbTier-1:
-                    #list_colonnes
-                    #ecrire(f,list_colonnes)
-                    f.write('\n{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(caption.filename.split(".")[0],
-                                                                  str(phonemes[i-1]['begin']),
-                                                                  str(phonemes[i+1]['end']), 
-                                                                  str(phonemes[i]['value']), 
-                                                                  str('_'.join((phonemes[i-1]['value'], phonemes[i+1]['value']))),
-                                                                  caption.imageID,
-                                                                  caption.captionID,
-                                                                  caption.speaker.name,
-                                                                  caption.speaker.nationality,
-                                                                  )
-    
-                            )
-    finally: f.close()
- '''   
+
     
 
-## sample the item file 
+
 
