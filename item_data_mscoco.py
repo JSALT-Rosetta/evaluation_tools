@@ -24,7 +24,8 @@ def write_row(output_file, columns, jump=True):
     
 
 def write_phoneme_item_file(db, path_output, name_item_file, columns_names_list, alignment=False):
-    """Write an item file for an ABX task on phonemes.
+    """
+    Write an item file for an ABX task on phonemes.
     Parameters
     ----------
     db : SQLite3 database containing meta-data about SpeechCoco  
@@ -35,7 +36,7 @@ def write_phoneme_item_file(db, path_output, name_item_file, columns_names_list,
          name of the item file
     columns_names_list: list,
          list of the columns of the item file, must be at least in that order
-         "name of the image_caption file", "onset", "offset", "phoneme"
+         "#filename", "onset", "offset", "#phoneme"
          if alignment=False, then columns such as "context", "image ID", 
          "captionID", "speaker IF", "speaker nationality",  can be added
     alignment : boolean, 
@@ -85,7 +86,8 @@ def write_phoneme_item_file(db, path_output, name_item_file, columns_names_list,
                 
                                
 def write_word_item_file(db, path_output, name_item_file, columns_names_list, alignment=False):
-     """Write an item file for an ABX task on words.
+    """
+    Write an item file for an ABX task on words.
     Parameters
     ----------
     db : SQLite3 database containing meta-data about SpeechCoco  
@@ -96,12 +98,11 @@ def write_word_item_file(db, path_output, name_item_file, columns_names_list, al
          name of the item file
     columns_names_list: list,
          list of the columns of the item file, must be at least in that order
-         "name of the image_caption file", "onset", "offset", "word"
+         "#filename", "onset", "offset", "#word"
          if alignment=False, then columns such as  "image ID", 
          "captionID", "speaker IF", "speaker nationality",  can be added
-    alignment : boolean, 
+    alignment : boolean
     """
-    
     captions=db.filterCaptions() # captions and metadata from the SQL database
     
     with open(path_output+name_item_file,'w' ) as f: 
@@ -152,7 +153,7 @@ parser.add_argument(
     default is %(default)s.''')
 
  parser.add_argument(
-     '-n', '--columns_names', type=list, default=["name_of_image_caption_file", "onset", "offset", "phoneme"]
+     '-n', '--columns_names', type=list, default=["#filename", "onset", "offset", "#phoneme"]
      help='''list of the columns names of the item file, default is %(default)s.''')
 
 parser.add_argument(
@@ -186,7 +187,12 @@ if __name__ == '__main__':
     
     
 
-       
+   # python item_data_mscoco -s "/pylon2/ci560op/odette/data/mscoco/val2014/val_2014.sqlite3" 
+                               -t "/pylon2/ci560op/odette/data/mscoco/val2014/tra/val_2014.sqlite3"     
+                               -o "/pylon2/ci560op/larsene/abx_eval/mscoco/"
+                               --on "phoneme"
+                               -n ["#filename", "onset", "offset", "#phoneme", "context", "imageID", "captionID", "speakerID", "speaker_nationality"  ]
+                                -a "False"
 
     
 
