@@ -185,14 +185,7 @@ if __name__ == '__main__':
     main(args.source, args.target, args.ouput, args.on, args.columns_names, args.alignment)
     
     
-    
 
-   # python item_data_mscoco -s "/pylon2/ci560op/odette/data/mscoco/val2014/val_2014.sqlite3" 
-                               -t "/pylon2/ci560op/odette/data/mscoco/val2014/tra/val_2014.sqlite3"     
-                               -o "/pylon2/ci560op/larsene/abx_eval/mscoco/"
-                               --on "phoneme"
-                               -n ["#filename", "onset", "offset", "#phoneme", "context", "imageID", "captionID", "speakerID", "speaker_nationality"  ]
-                                -a "False"
 
     
 
