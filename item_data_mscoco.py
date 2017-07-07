@@ -45,7 +45,7 @@ def write_phoneme_item_file(db, path_output, name_item_file, columns_names_list,
     
     captions=db.filterCaptions() # captions and metadata from the SQL database
     
-    with open(path_output+name_item_file,'w' ) as f: 
+    with open(path_output+"/" + name_item_file,'w' ) as f: 
         try : 
             for ii in range(len(columns_names_list)): 
                 write_row(f, columns_names_list[ii], False)
@@ -78,6 +78,7 @@ def write_phoneme_item_file(db, path_output, name_item_file, columns_names_list,
                         if alignment==False : 
                             write_row(f,context, False)
                             write_row(f,caption.imageID, False)
+                            write_row(f,caption.captionID, False)
                             write_row(f,caption.speaker.name, False)
                             write_row(f,caption.speaker.nationality, False)
                 
@@ -104,7 +105,7 @@ def write_word_item_file(db, path_output, name_item_file, columns_names_list, al
     """
     captions=db.filterCaptions() # captions and metadata from the SQL database
     
-    with open(path_output+name_item_file,'w' ) as f: 
+    with open(path_output+ "/" + name_item_file,'w' ) as f: 
         try : 
             for ii in range(len(columns_names_list)): 
                 write_row(f, columns_names_list[ii], False)
@@ -125,6 +126,7 @@ def write_word_item_file(db, path_output, name_item_file, columns_names_list, al
                         
                         if alignment==False: 
                             write_row(f,caption.imageID, False)
+                            write_row(f,caption.captionID, False)
                             write_row(f,caption.speaker.name, False)
                             write_row(f,caption.speaker.nationality, False)
                 
