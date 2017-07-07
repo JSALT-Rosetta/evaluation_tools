@@ -6,9 +6,6 @@ Created on Wed Jul  5 17:19:26 2017
 @author: elinlarsen
 """
 
-import os
-import sys
-import csv
 import argparse
 import speechcoco.speechcoco as sp
 
@@ -152,12 +149,12 @@ parser.add_argument(
      help='''item on which the abx task will be (phoneme, word or object category),
     default is %(default)s.''')
 
- parser.add_argument(
-     '-n', '--columns_names', type=list, default=["#filename", "onset", "offset", "#phoneme"]
+parser.add_argument(
+     '-n', '--columns_names', type=list, default=["#filename", "onset", "offset", "#phoneme"],
      help='''list of the columns names of the item file, default is %(default)s.''')
 
 parser.add_argument(
-     '-a', '--alignment', type=boolean, default=False
+     '-a', '--alignment', type=bool, default=False,
      help='''By default, the alignment is on triphone''')
 
 
