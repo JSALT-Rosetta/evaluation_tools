@@ -11,13 +11,15 @@ import speechcoco.speechcoco as sp
 
 
 ## create the whole phoneme item file 
-def write_row(output_file, columns, jump=True): 
+def write_row(output_file, column, jump=True): 
     if jump:
         output_file.write('\n')
     
-    for el in columns:
+    output_file.write('\t{}'.format(column))
+    '''for el in columns:
         el_str = str(el)
         output_file.write('\t{}'.format(el_str))
+    '''
     
 
 def write_phoneme_item_file(db, path_output, name_item_file, columns_names_list, alignment=False):
