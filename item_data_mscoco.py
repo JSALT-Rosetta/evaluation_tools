@@ -47,7 +47,7 @@ def write_phoneme_item_file(db, path_output, name_item_file, columns_names_list,
     
     with open(path_output+name_item_file,'w' ) as f: 
         try : 
-            for ii in len(columns_names_list): 
+            for ii in range(len(columns_names_list)): 
                 write_row(f, columns_names_list[ii], False)
             
             for caption in captions : 
@@ -106,7 +106,7 @@ def write_word_item_file(db, path_output, name_item_file, columns_names_list, al
     
     with open(path_output+name_item_file,'w' ) as f: 
         try : 
-            for ii in len(columns_names_list): 
+            for ii in range(len(columns_names_list)): 
                 write_row(f, columns_names_list[ii], False)
             
             for caption in captions : 
@@ -152,7 +152,8 @@ parser.add_argument(
     default is %(default)s.''')
 
 parser.add_argument(
-     '-n', '--columns_names', type=list, default=["#filename", "onset", "offset", "#phoneme"],
+     '-n', '--columns_names', type=list, default=["#file_name", "onset", "offset", "#phoneme", 
+     "context", "imageID", "captionID", "speakerID", "speaker_nationality"],
      help='''list of the columns names of the item file, default is %(default)s.''')
 
 parser.add_argument(
@@ -163,7 +164,7 @@ parser.add_argument(
 
 
 
-def main():
+if __name__=='__main__':
     """Entry point of the 'item_data_mscoco' command"""
     
     args=parser.parse_args()
@@ -174,14 +175,10 @@ def main():
         write_phoneme_item_file(db, args.output, args.on+".item", args.columns_names, args.alignment)
     
     elif args.on=="word": 
-        write_word_item_file(db, args.output, args.on+".item", args.columns_names, args.alignment)
+        write_word_item_file(db, args.output, str(args.on)+".item", args.columns_names, args.alignment)
   
     
     
-    
-
-if __name__ == '__main__':
-    main(args.source, args.target, args.ouput, args.on, args.columns_names, args.alignment)
     
     
 
