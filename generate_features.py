@@ -1,4 +1,4 @@
-from spectral._spectral import Spectral
+from spectral import Spectral
 import numpy as np
 import h5features
 from scipy.io import wavfile
@@ -39,8 +39,8 @@ def do_mfccs(fname):
         ncep=13,                # nb of cepstral coefficients
         lowerf=100,
         upperf=6855.4976,
-        do_deltas=False,        # speed
-        do_deltasdeltas=False   # acceleration
+        do_deltas=True,        # speed
+        do_deltasdeltas=True   # acceleration
     )
     fb = np.array(fbanks.transform(sound), dtype='float32')
     return fb

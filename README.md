@@ -1,9 +1,10 @@
-# evaluation_tools
+# Evaluation Tools
 Intrinsic and extrinsic evaluation metrics
 
 Starting with ABX tasks
 
 _______
+
 <br >Script : item_data_mscoco.py <br />
 
 <br >Requirement : the speechcoco package need to be installed <br />
@@ -18,3 +19,12 @@ _______
 
 
 <br >python item_data_mscoco.py -s  $SOURCE -t $TARGET -o $OUT --on $ON -n $NAMES -a $ALIGN <br />
+
+Starting with ABX tasks
+
+# Install Requirements
+	- JSALT-Rosetta/SpeechCoco
+	- scipy.io
+	- bootphon/Spectral
+	- h5py 
+	- bootphon/h5features
