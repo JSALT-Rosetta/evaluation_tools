@@ -67,7 +67,7 @@ def random_sampling(item_file, col, sample_size, replace=False):
     try : 
         selected=np.random.choice(df[col],sample_size,replace)
     except ValueError:
-        print "The group_by value is not a colunm names of the item file"
+        print ("The group_by value is not a colunm names of the item file")
     
     sampled_data = df[df[col].isin(selected)]
     
