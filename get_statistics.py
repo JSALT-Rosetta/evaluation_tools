@@ -9,6 +9,8 @@ Created on Sun Jul  9 17:18:26 2017
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import os
+    
 
 
 def autolabel(rects, ax):
@@ -82,7 +84,8 @@ def count_occurrences(item_file, occ_of, name_fig="occurence_in_file", the_n_fir
     autolabel(rects,ax)
     
     plt.show()
-    fig.savefig(name_fig)
+    my_path = os.path.abspath(item_file) 
+    fig.savefig(os.path.join(my_path, name_fig))   
     
     
 def histogram(item_file, col1, col2, name_fig): 
@@ -119,7 +122,8 @@ def histogram(item_file, col1, col2, name_fig):
     fig, ax = plt.subplots()
     df[[col1, col2]].hist(by=col1,ax=ax)
 
-    fig.savefig(name_fig)
+    my_path = os.path.abspath(item_file) 
+    fig.savefig(os.path.join(my_path, name_fig)) 
     
     
 #test
