@@ -51,7 +51,7 @@ def sample_audio_files(input_path, new_path, sample_size,  speakers, replace=Fal
     sampled_files=np.random.choice(np.asarray(new_list),sample_size,replace)
     
     #save the list as an numpy array
-    np.array(sampled_files).dump(open(os.path.join(input_path, 'name_sampled.npy'), 'wb'))
+    np.array(sampled_files).dump(open(os.path.join(new_path, 'name_sampled.npy'), 'wb'))
     
     #mv the the selected files to the new directory
     for file_name in sampled_files:
@@ -83,25 +83,30 @@ def get_sampled_files(input_path, new_path, sampled_wav_path, type_file):
     #get into the directory containing images file to sample
     #load list containing name of files
     inputfiles = [f for f in listdir(input_path) if isfile(join(input_path, f))]
+    print(inputfiles)
      
     #select files that have the same ID than in the audio sampled files
     wavfiles=[f for f in listdir(sampled_wav_path) if isfile(join(sampled_wav_path, f))]
+    print(wavfiles)
     
     #get inputfiles that have a string in commun with wavfiles:
     for i1, i2 in getMatchingIndex(wavfiles, inputfiles):
+        print(inputfiles[i2])
         new_list.append(inputfiles[i2]) 
+        
     
     #save the list as an numpy array
     np.array(new_list).dump(open(os.path.join(new_path, 'name_sampled.npy'), 'wb'))
-    
+    print(new_list)
     #mv the the selected files to the new directory
     for file_name in new_list:
         full_file_name = os.path.join(input_path, file_name)
-        if (os.path.isfile(full_file_name)):
+        try :
+            (os.path.isfile(full_file_name))
             shutil.copy(full_file_name, new_path)
+        except ValueError: 
+            print("file name is invalid")
     
-
-
 
 
 
@@ -111,10 +116,10 @@ def getNum(image_name_list, type_file="image"):
         s=s.split('.')[0] # get rid of the extension
         if type_file=="image":
             s=s.replace("000000","")# get rid of 0 
-        if s.isdigit():
-           yield s        
-        else:
-            yield None
+        yield s
+            
+            
+            
 
 def getMatchingIndex(list1, list2):
     for (i, num) in enumerate(getNum(list1)):
