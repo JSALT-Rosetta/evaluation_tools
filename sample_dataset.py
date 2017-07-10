@@ -74,8 +74,6 @@ def get_sampled_files(input_path, new_path, sampled_wav_path, type_file):
          path to the audio file sampled
     """
     
-    new_list=[]
-    
     #create a directory "subset_mscoco/img" or "subset_mscoco.json"
     if not os.path.exists(new_path):
         os.makedirs(new_path)
@@ -83,21 +81,23 @@ def get_sampled_files(input_path, new_path, sampled_wav_path, type_file):
     #get into the directory containing images file to sample
     #load list containing name of files
     inputfiles = [f for f in listdir(input_path) if isfile(join(input_path, f))]
-    print(inputfiles)
+    
+    #get dictionary with images file names and image ID
+    dict_image=getImgID_jpg_or_json(inputfiles, type_file="image")
+    print(dict_image)
      
     #select files that have the same ID than in the audio sampled files
     wavfiles=[f for f in listdir(sampled_wav_path) if isfile(join(sampled_wav_path, f))]
-    print(wavfiles)
     
-    #get inputfiles that have a string in commun with wavfiles:
-    for i1, i2 in getMatchingIndex(wavfiles, inputfiles):
-        print(inputfiles[i2])
-        new_list.append(inputfiles[i2]) 
-        
+    #get dictionary with images file names and image ID
+    dict_wav=getImgID_wav(wavfiles)
+    
+    new_list=getMatchingKey1(dict_image, dict_wav)
     
     #save the list as an numpy array
     np.array(new_list).dump(open(os.path.join(new_path, 'name_sampled.npy'), 'wb'))
-    print(new_list)
+    
+    
     #mv the the selected files to the new directory
     for file_name in new_list:
         full_file_name = os.path.join(input_path, file_name)
@@ -109,25 +109,33 @@ def get_sampled_files(input_path, new_path, sampled_wav_path, type_file):
     
 
 
+def getImgID_wav(wav_name_list):
+    dictionary = {}
+    for key in wav_name_list: 
+        value = key.split('_')[0]
+        dictionary[key]=value
+    return(dictionary)
+        
 
-def getNum(image_name_list, type_file="image"):
+def getImgID_jpg_or_json(image_name_list, type_file="image"):
+    dictionary = {}
     for s in image_name_list:
-        s = s.split('_')[-1] # take the last string 
-        s=s.split('.')[0] # get rid of the extension
+        v = s.split('_')[-1] # take the last string 
+        v=v.split('.')[0] # get rid of the extension
         if type_file=="image":
-            s=s.replace("000000","")# get rid of 0 
-        yield s
+            v=v.replace("000000","")# get rid of 0 
+        dictionary[s]=v
+    return(dictionary)
             
-            
-            
+                     
 
-def getMatchingIndex(list1, list2):
-    for (i, num) in enumerate(getNum(list1)):
-        if not num:
-            continue
-        for (j, other_num) in enumerate(getNum(list2)):
-            if (num == other_num):
-                yield (i, j)
-
+def getMatchingKey1(dic1, dic2):
+    t=[]
+    for (k1, v1) in dic1.items():
+        for (k2,v2) in dic2.items():
+            if v1==v2:
+                t.append(k1)
+    return(t)
+            
    
     
