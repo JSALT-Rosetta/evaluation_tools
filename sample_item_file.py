@@ -9,7 +9,10 @@ Created on Thu Jul  6 18:52:04 2017
 
 import numpy as np
 import pandas as pd
+<<<<<<< HEAD
+=======
 
+>>>>>>> 208817fbca1bb0647e0c884a3e80e17b872652ae
 
     
     
