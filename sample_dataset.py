@@ -56,7 +56,18 @@ def sample_audio_files(input_path, new_path, sample_size,  speakers, replace=Fal
     
     
 
-def get_sampled_files(new_path, input_path, sampled_wav_path, dataset="training"):
+def get_sampled_files(input_path, new_path, sampled_wav_path):
+    """
+    Suppose that audio files have been sampled by the function  "sample_audio_files"
+    Get image or json files corresponding to the audio sample
+    ----------
+    input_path : string, 
+        directory path where files to sample are 
+    new_path : string,
+         name of of the path where will be the new sampled dataset
+    sampled_wav_path : string,    
+         path to the audio file sampled
+    """
     
     new_list=[]
     
