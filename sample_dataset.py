@@ -39,14 +39,16 @@ def sample_audio_files(input_path, new_path, sample_size,  speakers, replace=Fal
     #get into the directory containing audio files to sample
     # and load list containing name of files
     onlyfiles = [f for f in listdir(input_path) if isfile(join(input_path, f))]
+    #print(onlyfiles)
  
     #for each speaker selected, select files containing its name
     for sub in speakers:
         new_list.extend([s for s in onlyfiles if sub in s])
     
-
+    #print("\n")
+    #print( new_list)
     #randomly sample files names in the new list 
-    sampled_files=np.random.choice(new_list,sample_size,replace)
+    sampled_files=np.random.choice(np.asarray(new_list),sample_size,replace)
     
     #mv the the selected files to the new directory
     for file_name in sampled_files:
