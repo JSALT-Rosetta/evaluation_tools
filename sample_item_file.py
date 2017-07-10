@@ -11,32 +11,6 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-
-def stats(item_file, col1, col2, name_fig): 
-    """
-    Sample an item file to get a reasonable size for running an ABX task
-    Parameters
-    ----------
-    item file : text file containing at least as columns :  onset, offset, 
-    #phoneme and context and side information such as image ID, speakerID
-    col1 : string,
-         name of the column of the item file in which the distrbition on col2 will
-         be looked on. Example : speakerID, speaker_nationality
-    col2: str,    
-         number of the column that will be the exis of the histogram. 
-         Example : imageID, captionID
-    name_fig: str,
-         name of the figure 
-    """
-    
-    f=pd.read_csv(item_file, sep='\t', header=0)
-    
-    # get the histogram 
-    fig, ax = plt.subplots()
-    f[[col1, col2]].hist(by=col1,ax=ax)
-
-    fig.savefig(name_fig)
-  
     
     
 def random_sampling(item_file, col, sample_size, replace=False):
