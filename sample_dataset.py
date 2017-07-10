@@ -50,6 +50,7 @@ def sample_audio_files(input_path, new_path, sample_size,  speakers, replace=Fal
     #randomly sample files names in the new list 
     sampled_files=np.random.choice(np.asarray(new_list),sample_size,replace)
     
+    #save the list as an numpy array
     np.array(sampled_files).dump(open(os.path.join(input_path, 'name_sampled.npy'), 'wb'))
     
     #mv the the selected files to the new directory
@@ -90,7 +91,9 @@ def get_sampled_files(input_path, new_path, sampled_wav_path, type_file):
     for i1, i2 in getMatchingIndex(wavfiles, inputfiles):
         new_list.append(inputfiles[i2]) 
     
-     
+    #save the list as an numpy array
+    np.array(new_list).dump(open(os.path.join(new_path, 'name_sampled.npy'), 'wb'))
+    
     #mv the the selected files to the new directory
     for file_name in new_list:
         full_file_name = os.path.join(input_path, file_name)
@@ -104,9 +107,10 @@ def get_sampled_files(input_path, new_path, sampled_wav_path, type_file):
 
 def getNum(image_name_list, type_file="image"):
     for s in image_name_list:
-        s = s.split('_')[2]
+        s = s.split('_')[-1] # take the last string 
+        s=s.split('.')[0] # get rid of the extension
         if type_file=="image":
-            s=s.replace("0","")
+            s=s.replace("000000","")# get rid of 0 
         if s.isdigit():
            yield s        
         else:
