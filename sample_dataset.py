@@ -50,6 +50,8 @@ def sample_audio_files(input_path, new_path, sample_size,  speakers, replace=Fal
     #randomly sample files names in the new list 
     sampled_files=np.random.choice(np.asarray(new_list),sample_size,replace)
     
+    np.array(sampled_files).dump(open(os.path.join(input_path, 'name_sampled.npy'), 'wb'))
+    
     #mv the the selected files to the new directory
     for file_name in sampled_files:
         full_file_name = os.path.join(input_path, file_name)
@@ -58,7 +60,7 @@ def sample_audio_files(input_path, new_path, sample_size,  speakers, replace=Fal
     
     
 
-def get_sampled_files(input_path, new_path, sampled_wav_path):
+def get_sampled_files(input_path, new_path, sampled_wav_path, type_file):
     """
     Suppose that audio files have been sampled by the function  "sample_audio_files"
     Get image or json files corresponding to the audio sample
@@ -80,26 +82,43 @@ def get_sampled_files(input_path, new_path, sampled_wav_path):
     #get into the directory containing images file to sample
     #load list containing name of files
     inputfiles = [f for f in listdir(input_path) if isfile(join(input_path, f))]
-    
-    
+     
     #select files that have the same ID than in the audio sampled files
     wavfiles=[f for f in listdir(sampled_wav_path) if isfile(join(sampled_wav_path, f))]
     
-    #get files in input_path that have 
-    match=[]
-    for w in wavfiles: 
-        for ii in inputfiles:
-            match.append()
+    #get inputfiles that have a string in commun with wavfiles:
+    for i1, i2 in getMatchingIndex(wavfiles, inputfiles):
+        new_list.append(inputfiles[i2]) 
     
-    #attach match to a new list
-    for m in match : 
-        new_list.extend([s for s in inputfiles if m in s])
-             
+     
     #mv the the selected files to the new directory
-    for file_name in match:
+    for file_name in new_list:
         full_file_name = os.path.join(input_path, file_name)
         if (os.path.isfile(full_file_name)):
             shutil.copy(full_file_name, new_path)
     
-    
+
+
+
+
+
+def getNum(image_name_list, type_file="image"):
+    for s in image_name_list:
+        s = s.split('_')[2]
+        if type_file=="image":
+            s=s.replace("0","")
+        if s.isdigit():
+           yield s        
+        else:
+            yield None
+
+def getMatchingIndex(list1, list2):
+    for (i, num) in enumerate(getNum(list1)):
+        if not num:
+            continue
+        for (j, other_num) in enumerate(getNum(list2)):
+            if (num == other_num):
+                yield (i, j)
+
+   
     
