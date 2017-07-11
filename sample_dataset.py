@@ -101,7 +101,7 @@ def get_sampled_files(input_path, new_path, sampled_wav_path, type_file="img"):
     
     #get dictionary with images file names and image ID
     dict_image=getImgID_jpg_or_json(inputfiles)
-    print(dict_image)
+    #print(dict_image)
      
     #select files that have the same ID than in the audio sampled files
     wavfiles_names=np.load(sampled_wav_path)
@@ -109,7 +109,7 @@ def get_sampled_files(input_path, new_path, sampled_wav_path, type_file="img"):
     
     #get dictionary with images file names and image ID
     dict_wav=getImgID_wav(wavfiles_names)
-    print(dict_wav)
+    #print(dict_wav)
     
     new_list=getMatchingKey1(dict_image, dict_wav)
     
@@ -123,7 +123,7 @@ def get_sampled_files(input_path, new_path, sampled_wav_path, type_file="img"):
             (os.path.isfile(full_file_name))
             shutil.copy(full_file_name, new_path)
         except ValueError: 
-            print("file name is invalid")
+            #print("file name is invalid")
      
     return(new_list)
 
