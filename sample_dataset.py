@@ -56,16 +56,21 @@ def sample_audio_files(input_path, new_path, sample_size,  speakers, replace=Fal
     # use  jsonToSQL to create a sqlite3 database in the new directory with the selected files
     
     #save the list as an numpy array
-    np.array(sampled_files).dump(open(os.path.join(new_path, 'wav_file_name_sampled.npy'), 'wb'))
-    np.array(json_files).dump(open(os.path.join(new_path, 'json_file_name_sampled.npy'), 'wb'))
+    np.save(sampled_files, os.path.join(new_path, 'wav_file_name_sampled.npy'))
+    np.save(json_files, open(os.path.join(new_path, 'json_file_name_sampled.npy'))
+    
+    #np.array(sampled_files).dump(open(os.path.join(new_path, 'wav_file_name_sampled.npy'), 'wb'))
+    #np.array(json_files).dump(open(os.path.join(new_path, 'json_file_name_sampled.npy'), 'wb'))
     
     
     #mv the the selected files to the new directory
     '''
     for file_name in sampled_files:
-        full_file_name = os.path.join(input_path, file_name)
-        if (os.path.isfile(full_file_name)):
-            shutil.copy(full_file_name, new_path)
+        input_full_file_name = os.path.join(input_path, file_name)
+        output_full_file_name = os.path.join(new_path, file_name)
+        os.system ("cp input_full_file_name output_full_file_name")
+        #if (os.path.isfile(full_file_name)):
+            #shutil.copy(full_file_name, new_path)
     '''
     
 
