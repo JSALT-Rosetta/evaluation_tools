@@ -112,7 +112,7 @@ def get_sampled_files(input_path, new_path, sampled_wav_path, type_file):
     new_list=getMatchingKey1(dict_image, dict_wav)
     
     #save the list as an numpy array
-    np.save(os.path.join(new_path, type_file+"_file_name_sampled.npy"), np.asarray(new_list), allow_picke=False)
+    np.save(os.path.join(new_path, type_file+"_file_name_sampled.npy"), np.asarray(new_list), allow_pickel=False)
     
     #mv the the selected files to the new directory
     for file_name in new_list:
