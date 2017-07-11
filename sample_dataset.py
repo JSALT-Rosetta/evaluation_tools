@@ -50,15 +50,25 @@ def sample_audio_files(input_path, new_path, sample_size,  speakers, replace=Fal
     #randomly sample files names in the new list 
     sampled_files=np.random.choice(np.asarray(new_list),sample_size,replace)
     
+    #change wav extension into json extension
+    json_files=[]
+    for ss in sampled_files: 
+        json_files.append(os.path.splitext(ss)[0]+".json")
+    
+    # use  jsonToSQL to create a sqlite3 database in the new directory with the selected files
+    
     #save the list as an numpy array
-    np.array(sampled_files).dump(open(os.path.join(new_path, 'name_sampled.npy'), 'wb'))
+    np.array(sampled_files).dump(open(os.path.join(new_path, 'wav_file_name_sampled.npy'), 'wb'))
+    np.array(json_files).dump(open(os.path.join(new_path, 'json_file_name_sampled.npy'), 'wb'))
+    
     
     #mv the the selected files to the new directory
+    '''
     for file_name in sampled_files:
         full_file_name = os.path.join(input_path, file_name)
         if (os.path.isfile(full_file_name)):
             shutil.copy(full_file_name, new_path)
-    
+    '''
     
 
 def get_sampled_files(input_path, new_path, sampled_wav_path, type_file):
