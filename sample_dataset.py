@@ -15,7 +15,8 @@ import numpy as np
 
 def sample_audio_files(input_path, new_path, sample_size,  speakers, replace=False):
     """
-    Randomly sample a list of file in a directory by choosing those that contain the desized speaker 
+    Randomly sample a list of wav file in a directory by choosing those that contain the desized speaker 
+    Store numpy arrays of list of the selected wav file names and json file names
     ----------
     input_path : string, 
         directory path where files to sample are 
@@ -56,12 +57,13 @@ def sample_audio_files(input_path, new_path, sample_size,  speakers, replace=Fal
     # use  jsonToSQL to create a sqlite3 database in the new directory with the selected files
     
     #save the list as an numpy array
-    np.save(sampled_files, os.path.join(new_path, 'wav_file_name_sampled.npy'))
-    np.save(json_files, os.path.join(new_path, 'json_file_name_sampled.npy'))
+    np.save(os.path.join(new_path, 'wav_file_name_sampled.npy'), sampled_files, allow_pickle=False)
+    np.save(os.path.join(new_path, 'json_file_name_sampled.npy'), json_files, allow_pickle=False)
     
     #np.array(sampled_files).dump(open(os.path.join(new_path, 'wav_file_name_sampled.npy'), 'wb'))
     #np.array(json_files).dump(open(os.path.join(new_path, 'json_file_name_sampled.npy'), 'wb'))
     
+    return(sampled_files)
     
     #mv the the selected files to the new directory
     '''
@@ -77,7 +79,7 @@ def sample_audio_files(input_path, new_path, sample_size,  speakers, replace=Fal
 def get_sampled_files(input_path, new_path, sampled_wav_path, type_file):
     """
     Suppose that audio files have been sampled by the function  "sample_audio_files"
-    Get image or json files corresponding to the audio sample
+    Get image or json or vgg files corresponding to the audio sample
     ----------
     input_path : string, 
         directory path where files to sample are 
@@ -97,7 +99,6 @@ def get_sampled_files(input_path, new_path, sampled_wav_path, type_file):
     
     #get dictionary with images file names and image ID
     dict_image=getImgID_jpg_or_json(inputfiles, type_file="image")
-    print(dict_image)
      
     #select files that have the same ID than in the audio sampled files
     wavfiles=[f for f in listdir(sampled_wav_path) if isfile(join(sampled_wav_path, f))]
@@ -108,8 +109,7 @@ def get_sampled_files(input_path, new_path, sampled_wav_path, type_file):
     new_list=getMatchingKey1(dict_image, dict_wav)
     
     #save the list as an numpy array
-    np.array(new_list).dump(open(os.path.join(new_path, 'name_sampled.npy'), 'wb'))
-    
+    np.save(os.path.join(new_path, type_file+"_file_name_sampled.npy"), np.asarray(new_list), allow_picke=False)
     
     #mv the the selected files to the new directory
     for file_name in new_list:
