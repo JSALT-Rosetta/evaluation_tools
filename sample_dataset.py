@@ -45,10 +45,8 @@ def sample_audio_files(input_path, new_path, sample_size,  speakers, replace=Fal
     for sub in speakers:
         new_list.extend([s for s in onlyfiles if sub in s])
     
-    #print("\n")
-    #print( new_list)
     #randomly sample files names in the new list 
-    sampled_files=np.random.choice(np.asarray(new_list),sample_size,replace)
+    sampled_files=np.random.choice(np.asarray(new_list),int(sample_size),replace)
     
     #save the list as an numpy array
     np.array(sampled_files).dump(open(os.path.join(new_path, 'name_sampled.npy'), 'wb'))
