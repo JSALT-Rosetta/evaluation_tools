@@ -76,14 +76,14 @@ def sample_audio_files(input_path, new_path, sample_size,  speakers, replace=Fal
     '''
     
 
-def get_sampled_files(input_path, new_path, sampled_wav_path, type_file):
+def get_sampled_files(input_path, new_path, sampled_wav_path, type_file="img"):
     """
     Suppose that audio files have been sampled by the function  "sample_audio_files"
     and their file names stored in a np array format
     Get image or json or vgg files corresponding to the audio sample
     ----------
     input_path : string, 
-        directory path where files to sample are 
+        directory path where files to select are 
     new_path : string,
          name of of the path where will be the new sampled dataset
     sampled_wav_path : string,    
@@ -92,15 +92,16 @@ def get_sampled_files(input_path, new_path, sampled_wav_path, type_file):
     """
     
     #create a directory "subset_mscoco/img" or "subset_mscoco.json"
-    if not os.path.exists(new_path):
-        os.makedirs(new_path)
+    if not os.path.exists(new_path+"/"+ type_file + "/"):
+        os.makedirs(new_path+"/"+ type_file + "/")
     
     #get into the directory containing images file to sample
     #load list containing name of files
     inputfiles = [f for f in listdir(input_path) if isfile(join(input_path, f))]
     
     #get dictionary with images file names and image ID
-    dict_image=getImgID_jpg_or_json(inputfiles, type_file="image")
+    dict_image=getImgID_jpg_or_json(inputfiles)
+    print(dict_image)
      
     #select files that have the same ID than in the audio sampled files
     wavfiles_names=np.load(sampled_wav_path)
@@ -108,11 +109,12 @@ def get_sampled_files(input_path, new_path, sampled_wav_path, type_file):
     
     #get dictionary with images file names and image ID
     dict_wav=getImgID_wav(wavfiles_names)
+    print(dict_wav)
     
     new_list=getMatchingKey1(dict_image, dict_wav)
     
     #save the list as an numpy array
-    np.save(os.path.join(new_path, type_file+"_file_name_sampled.npy"), np.asarray(new_list), allow_pickel=False)
+    np.save(os.path.join(new_path, type_file+"_file_name_sampled.npy"), np.asarray(new_list), allow_pickle=False)
     
     #mv the the selected files to the new directory
     for file_name in new_list:
@@ -122,7 +124,8 @@ def get_sampled_files(input_path, new_path, sampled_wav_path, type_file):
             shutil.copy(full_file_name, new_path)
         except ValueError: 
             print("file name is invalid")
-    
+     
+    return(new_list)
 
 
 def getImgID_wav(wav_name_list):
@@ -133,13 +136,13 @@ def getImgID_wav(wav_name_list):
     return(dictionary)
         
 
-def getImgID_jpg_or_json(image_name_list, type_file="image"):
+def getImgID_jpg_or_json(image_name_list):
     dictionary = {}
     for s in image_name_list:
         v = s.split('_')[-1] # take the last string 
         v=v.split('.')[0] # get rid of the extension
-        if type_file=="image":
-            v=v.replace("000000","")# get rid of 0 
+        v=int(v) # get rid of 0 in case of image file names
+        v=str(v)
         dictionary[s]=v
     return(dictionary)
             
