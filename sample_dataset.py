@@ -79,6 +79,7 @@ def sample_audio_files(input_path, new_path, sample_size,  speakers, replace=Fal
 def get_sampled_files(input_path, new_path, sampled_wav_path, type_file):
     """
     Suppose that audio files have been sampled by the function  "sample_audio_files"
+    and their file names stored in a np array format
     Get image or json or vgg files corresponding to the audio sample
     ----------
     input_path : string, 
@@ -86,7 +87,8 @@ def get_sampled_files(input_path, new_path, sampled_wav_path, type_file):
     new_path : string,
          name of of the path where will be the new sampled dataset
     sampled_wav_path : string,    
-         path to the audio file sampled
+         path to the array file containing the sampled name files
+
     """
     
     #create a directory "subset_mscoco/img" or "subset_mscoco.json"
@@ -101,7 +103,8 @@ def get_sampled_files(input_path, new_path, sampled_wav_path, type_file):
     dict_image=getImgID_jpg_or_json(inputfiles, type_file="image")
      
     #select files that have the same ID than in the audio sampled files
-    wavfiles=[f for f in listdir(sampled_wav_path) if isfile(join(sampled_wav_path, f))]
+    wavfiles_names=np.load(sampled_wav_path)
+    #wavfiles=[f for f in listdir(sampled_wav_path) if isfile(join(sampled_wav_path, f))]
     
     #get dictionary with images file names and image ID
     dict_wav=getImgID_wav(wavfiles)
