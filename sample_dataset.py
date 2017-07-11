@@ -57,7 +57,7 @@ def sample_audio_files(input_path, new_path, sample_size,  speakers, replace=Fal
     
     #save the list as an numpy array
     np.save(sampled_files, os.path.join(new_path, 'wav_file_name_sampled.npy'))
-    np.save(json_files, open(os.path.join(new_path, 'json_file_name_sampled.npy'))
+    np.save(json_files, os.path.join(new_path, 'json_file_name_sampled.npy'))
     
     #np.array(sampled_files).dump(open(os.path.join(new_path, 'wav_file_name_sampled.npy'), 'wb'))
     #np.array(json_files).dump(open(os.path.join(new_path, 'json_file_name_sampled.npy'), 'wb'))
