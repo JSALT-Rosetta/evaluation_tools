@@ -107,7 +107,7 @@ def get_sampled_files(input_path, new_path, sampled_wav_path, type_file):
     #wavfiles=[f for f in listdir(sampled_wav_path) if isfile(join(sampled_wav_path, f))]
     
     #get dictionary with images file names and image ID
-    dict_wav=getImgID_wav(wavfiles)
+    dict_wav=getImgID_wav(wavfiles_names)
     
     new_list=getMatchingKey1(dict_image, dict_wav)
     
