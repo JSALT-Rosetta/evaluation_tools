@@ -12,6 +12,9 @@ from os import listdir
 from os.path import isfile, join
 import numpy as np
 from collections import Counter
+import scipy
+
+import get_objects_categories
 
 
 def select_speaker_in_wav(input_path, speakers): 
@@ -61,20 +64,33 @@ def get_nb_caption_per_img(n, selected_captions):
         
 
 
-def cost_function(sampled_ImgIds, ImgID_selected, dict_nb_cat_per_img):
-    sample_dict=dict((k, dict_nb_cat_per_img[k]) for k in sampled_ImgIds)
+def cost_function(sampled_ImgIds, ImgID_selected, dic_ImgID_to_cat_pop):
+    """
+    Calculate a cost function which is Chi square test 
+    For each object category, get the number of image in which the category is present
+    in the sample and in the population. 
+    Compare the two distribution. 
+    ----------
     
-    freq_sample=[]
-    freq_population=[]
+    """
     
-    for key, value in sample_dict.items():
-        freq_sample.append(len(value))
-        
-    for key, value in dict_nb_cat_per_img.items():
-        freq_population.append(len(value))
+    ### get the number of images containing an object category for each category 
+    #in the population dataset
+    dic_cat_to_ImgID_pop=get_objects_categories.reverse_dic(dic_ImgID_to_cat_pop, save=False, name="") 
+    Nb_cat=len(dic_cat_to_ImgID_pop)
+    Nb_Img_per_cat_pop=np.array(get_objects_categories.dict_nb_value_per_key(dic_cat_to_ImgID_pop).items())
     
-    #cost function: 
-        cost=freq_sample/freq_population
+    
+    ### get the dictionary from image ID to category for the selected image ID
+    sample_dict=dict((k, dic_ImgID_to_cat_pop[k]) for k in sampled_ImgIds)
+    dic_cat_to_ImgID_sample=get_objects_categories.reverse_dic(sample_dict, save=False, name="")
+
+    
+    ### get the number of images containing an object category for each category 
+    #in the sampled dataset
+    Nb_Img_per_cat_sample=np.array(get_objects_categories.dict_nb_value_per_key(dic_cat_to_ImgID_sample.items()))
+    
+    cost=scipy.stats.chisquare(Nb_Img_per_cat_sample,Nb_Img_per_cat_pop, ddof=Nb_cat)
         
     return(cost)
 
