@@ -96,7 +96,7 @@ def cost_function(sampled_ImgIds, ImgID_selected, dic_ImgID_to_cat_pop):
 
     
     
-def sample_img_id(dict_nb_cat_per_img, ImgID_selected, output_path, sample_size, T_0, T_fin, tau, nb_iter,  replace=False):
+def sample_img_id(dic_ImgID_to_cat_pop, ImgID_selected, output_path, sample_size, T_0, T_fin, tau, nb_iter,  replace=False):
     """
     From the selected image id, sample them randomly in order to have 
     The sample size wanted and constraints respected
@@ -128,7 +128,7 @@ def sample_img_id(dict_nb_cat_per_img, ImgID_selected, output_path, sample_size,
                 new_sample[index]=new_sampled_ImgID
         
         
-        new_cost=cost_function(new_sample, ImgID_selected, dict_nb_cat_per_img)
+        new_cost=cost_function(new_sample, ImgID_selected, dic_ImgID_to_cat_pop)
         
         if new_cost < cost: 
             cost=new_cost
