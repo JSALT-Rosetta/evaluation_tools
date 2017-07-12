@@ -78,7 +78,8 @@ def cost_function(sampled_ImgIds, ImgID_selected, dic_ImgID_to_cat_pop):
     #in the population dataset
     dic_cat_to_ImgID_pop=get_objects_categories.reverse_dic(dic_ImgID_to_cat_pop, save=False, name="") 
     Nb_cat=len(dic_cat_to_ImgID_pop)
-    Nb_Img_per_cat_pop=np.array(get_objects_categories.dict_nb_value_per_key(dic_cat_to_ImgID_pop).items())
+    freq_pop=get_objects_categories.dict_nb_value_per_key(dic_cat_to_ImgID_pop, show_plot=False)
+    Nb_Img_per_cat_pop=np.array(freq_pop.items())
     
     
     ### get the dictionary from image ID to category for the selected image ID
@@ -88,7 +89,8 @@ def cost_function(sampled_ImgIds, ImgID_selected, dic_ImgID_to_cat_pop):
     
     ### get the number of images containing an object category for each category 
     #in the sampled dataset
-    Nb_Img_per_cat_sample=np.array(get_objects_categories.dict_nb_value_per_key(dic_cat_to_ImgID_sample.items()))
+    freq_sample=get_objects_categories.dict_nb_value_per_key(dic_cat_to_ImgID_sample, show_plot=False)
+    Nb_Img_per_cat_sample=np.array(freq_sample.items())
     
     cost=scipy.stats.chisquare(Nb_Img_per_cat_sample,Nb_Img_per_cat_pop, ddof=Nb_cat)
         

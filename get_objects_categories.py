@@ -18,6 +18,9 @@ import json
 #path_annotations="/pylon2/ci560op/larsene/data/mscoco/annotations/instances_train2014.json"
 #coco_train=COCO(path_annotations)
 #categories= coco_train.loadCats(coco_train.getCatIds())
+#d_cat_name=get_objects_categories.build_dict_cat_name_to_cat_id(categories)
+#d_cat_to_img=get_objects_categories.build_dict_cat_name_to_img_id(categories, coco_train)
+#d_img_to_cat=get_objects_categories.reverse_dic(d_cat_to_img, save=False, name="")
 
 
 
@@ -47,12 +50,13 @@ def reverse_dic(dic, save=False, name=""):
             json.dump(d, fp)
     return(d)
 
-def dict_nb_value_per_key(dic):    
+def dict_nb_value_per_key(dic, show_plot=False):    
     d={}
     for key, value in dic.items():
         d[key]=len(value)
-    plt.bar(list(d.keys()), d.values(), color='g')
-    plt.show()
+    if show_plot:
+        plt.bar(list(d.keys()), d.values(), color='g')
+        plt.show()
     return(d)
 
 '''
