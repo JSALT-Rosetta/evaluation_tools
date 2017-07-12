@@ -6,15 +6,15 @@ import os
 import h5py
 import shutil
 import tempfile
-from scikits.audiolab import Sndfile, play
+import soundfile as sf
 
 def do_fbank(fname):
     """Compute standard filterbanks from a wav file"""
-    #srate, sound = wavfile.read(fname)
-    f = Sndfile(fname,'r')
-    srate = f.samplerate
-    nf = f.nframes
-    sound = f.read_frames(nf) 
+    sound, srate = sf.read(fname)
+    #f = Sndfile(fname,'r')
+    #srate = f.samplerate
+    #nf = f.nframes
+    #sound = f.read_frames(nf) 
     fbanks = Spectral(
         nfilt=40,               # nb of filters in mel bank
         alpha=0.97,             # pre-emphasis
@@ -32,12 +32,12 @@ def do_fbank(fname):
 
 def do_mfccs(fname):
     """Compute standard mfccs from a wav file"""
-    #srate, sound = wavfile.read(fname)
+    sound, srate = sf.read(fname)
     
-    f = Sndfile(fname,'r')
-    srate = f.samplerate
-    nf = f.nframes
-    sound = f.read_frames(nf) 
+    #f = Sndfile(fname,'r')
+    #srate = f.samplerate
+    #nf = f.nframes
+    #sound = f.read_frames(nf) 
     fbanks = Spectral(
         nfilt=40,               # nb of filters in mel bank
         alpha=0.97,             # pre-emphasis
