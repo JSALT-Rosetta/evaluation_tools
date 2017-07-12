@@ -27,22 +27,24 @@ def build_dict_cat_name_to_cat_id(categories):
         dict_id_name[dd['id']]=dd['name']
     return(dict_id_name)
     
-def build_dict_cat_name_to_img_id(categories, coco):
+def build_dict_cat_name_to_img_id(categories, coco ,save, name):
     d={}
     for cat in categories: 
         imgIds=coco.getImgIds(catIds=cat['id'])
         d[cat['name']]=imgIds
-    with open('dict_cat_name_to_img_id.json', 'w') as fp:
-        json.dump(d, fp)
+    if save: 
+        with open(name, 'w') as fp:
+            json.dump(d, fp)
     return(d)
 
-def build_dict_img_id_to_cat_name(dic_name_to_img):
+def reverse_dic(dic, save=False, name):
     d = {}
-    for key, values in dic_name_to_img.items():
+    for key, values in dic.items():
         for value in values:
             d.setdefault(value, []).append(key)
-    with open('dict_img_id_to_cat_name.json', 'w') as fp:
-        json.dump(d, fp)
+    if save: 
+        with open(name, 'w') as fp:
+            json.dump(d, fp)
     return(d)
 
 def dict_nb_value_per_key(dic):    
