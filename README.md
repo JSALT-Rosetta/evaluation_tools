@@ -24,6 +24,6 @@ git clone https://github.com/erikd/libsndfile
 cd libsndfile
 mkdir CMakeBuild
 cd CMakeBuild
-cmake --build .
+cmake ..
 
 ```
