@@ -13,6 +13,7 @@ from os.path import isfile, join
 import numpy as np
 
 
+
 def sample_audio_files(input_path, new_path, sample_size,  speakers, replace=False):
     """
     Randomly sample a list of wav file in a directory by choosing those that contain the desized speaker 
@@ -123,7 +124,7 @@ def get_sampled_files(input_path, new_path, sampled_wav_path, type_file="img"):
             (os.path.isfile(full_file_name))
             shutil.copy(full_file_name, new_path)
         except ValueError: 
-            #print("file name is invalid")
+            print("file name is invalid")
      
     return(new_list)
 
