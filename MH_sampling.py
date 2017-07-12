@@ -107,7 +107,7 @@ def sample_img_id(dic_ImgID_to_cat_pop, ImgID_selected, output_path, sample_size
     ######## intialization ########    
     #randomly sample files names in the new list 
     sampled_ImgIds_0=np.random.choice(np.asarray(ImgID_selected),int(sample_size),replace)
-    cost_0=cost_function(sampled_ImgIds_0, ImgID_selected, dict_nb_cat_per_img)
+    cost_0=cost_function(sampled_ImgIds_0, ImgID_selected, dic_ImgID_to_cat_pop)
     
     i=0
     sample=sampled_ImgIds_0
@@ -145,6 +145,7 @@ def sample_img_id(dic_ImgID_to_cat_pop, ImgID_selected, output_path, sample_size
             
         T = T_0*(np.exp(-i/tau))
         i+=1
+        print ("_".join("iteration", str(i)))
     
     return(sample)
 
