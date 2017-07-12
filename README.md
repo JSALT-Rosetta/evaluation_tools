@@ -15,4 +15,4 @@ _______
 	- bootphon/Spectral
 	- h5py 
 	- bootphon/h5features
-	- soundfile
+	- pysoundfile
