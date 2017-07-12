@@ -27,7 +27,7 @@ def build_dict_cat_name_to_cat_id(categories):
         dict_id_name[dd['id']]=dd['name']
     return(dict_id_name)
     
-def build_dict_cat_name_to_img_id(categories, coco ,save, name):
+def build_dict_cat_name_to_img_id(categories, coco ,save=False, name=""):
     d={}
     for cat in categories: 
         imgIds=coco.getImgIds(catIds=cat['id'])
@@ -37,7 +37,7 @@ def build_dict_cat_name_to_img_id(categories, coco ,save, name):
             json.dump(d, fp)
     return(d)
 
-def reverse_dic(dic, save=False, name):
+def reverse_dic(dic, save=False, name=""):
     d = {}
     for key, values in dic.items():
         for value in values:
