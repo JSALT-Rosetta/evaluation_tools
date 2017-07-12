@@ -83,7 +83,8 @@ def cost_function(sampled_ImgIds, ImgID_selected, dic_ImgID_to_cat_pop):
     
     
     ### get the dictionary from image ID to category for the selected image ID
-    sample_dict=dict((k, dic_ImgID_to_cat_pop[k]) for int(k) in sampled_ImgIds)
+    
+    sample_dict=dict((int(k), dic_ImgID_to_cat_pop[int(k)]) for k in sampled_ImgIds)
     dic_cat_to_ImgID_sample=get_objects_categories.reverse_dic(sample_dict, save=False, name="")
 
     
