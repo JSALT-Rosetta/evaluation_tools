@@ -13,6 +13,8 @@ import matplotlib.pyplot as plt
 import pylab
 import json
 
+from collections import defaultdict
+
 # Throughout the API "ann"=annotation, "cat"=category, and "img"=image.
 
 #path_annotations="/pylon2/ci560op/larsene/data/mscoco/annotations/instances_train2014.json"
@@ -41,16 +43,24 @@ def build_dict_cat_name_to_img_id(categories, coco ,save=False, name=""):
     return(d)
 
 def reverse_dic(dic, save=False, name=""):
-    d = {}
-    for key, values in dic.items():
-        for value in values:
-            d.setdefault(value, []).append(key)
+    """
+    For a given dictionary (dic), reverse keys and values. Return a dictionary
+    """
+    d = defaultdict(set)
+    
+    for k, v in dic.iteritems():
+        d[v].add(k)
+        
     if save: 
         with open(name, 'w') as fp:
             json.dump(d, fp)
     return(d)
 
-def dict_nb_value_per_key(dic, show_plot=False):    
+def dict_nb_value_per_key(dic, show_plot=False):   
+    """
+    For a given dictionary (dic), compute for each key, the number of values
+    Return a dictionary
+    """
     d={}
     for key, value in dic.items():
         d[key]=len(value)
