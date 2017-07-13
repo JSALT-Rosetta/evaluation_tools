@@ -9,6 +9,8 @@ Created on Wed Jul 12 17:36:03 2017
 from pycocotools.coco import COCO
 import get_objects_categories
 import MH_sampling
+import time
+import numpy as np
 
 path_annotations="/pylon2/ci560op/larsene/data/mscoco/train2014/instances_train2014.json"
 coco_train=COCO(path_annotations)
@@ -31,13 +33,21 @@ T_fin=1
 tau=2
 nb_iter=10
 
+start_time = time.time()
 print("selecting wave file names according to speaker names...")
 wave_file_name_selected=MH_sampling.select_speaker_in_wav(input_path, speakers)
+np.array(wave_file_name_selected).dump(open("/pylon2/ci560op/larsene/data/subset_mscoco/train/"+'wave_file_name_selected.npy', 'wb'))
+print("--- %s seconds ---" % (time.time() - start_time))
 
+start_time = time.time()
 print("selecting image that have 4 captions ...")
 ImgID_selected=MH_sampling.get_nb_caption_per_img(n, wave_file_name_selected)
 ImgID_selected_list=list(ImgID_selected)
+np.array(ImgID_selected_list).dump(open("/pylon2/ci560op/larsene/data/subset_mscoco/train/"+'ImgID_selected.npy', 'wb'))
+print("--- %s seconds ---" % (time.time() - start_time))
 
 
+start_time = time.time()
 print("sampling selected images ...")
 final_img_selected=MH_sampling.sample_img_id(d_img_to_cat, ImgID_selected_list, output_path, int(sample_size*train_size), T_0, T_fin, tau, nb_iter,  replace=False)
+print("--- %s seconds ---" % (time.time() - start_time))
