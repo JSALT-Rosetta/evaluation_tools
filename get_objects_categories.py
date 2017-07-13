@@ -33,7 +33,7 @@ def build_dict_cat_name_to_cat_id(categories):
     return(dict_id_name)
     
 def build_dict_cat_name_to_img_id(categories, coco ,save=False, name=""):
-    d={}
+    d = defaultdict(set)
     for cat in categories: 
         imgIds=coco.getImgIds(catIds=cat['id'])
         d[cat['name']]=imgIds
@@ -48,8 +48,10 @@ def reverse_dic(dic, save=False, name=""):
     """
     d = defaultdict(set)
     
-    for k, v in dic.iteritems():
-        d[v].add(k)
+    for k in dic.keys(): 
+        for v in dic.values():
+            for ii in v: 
+                d[ii].add(k)
         
     if save: 
         with open(name, 'w') as fp:
