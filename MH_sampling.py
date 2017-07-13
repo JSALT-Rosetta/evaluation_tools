@@ -99,7 +99,7 @@ def cost_function(sampled_ImgIds, ImgID_selected, dic_ImgID_to_cat_pop):
 
     
     
-def sample_img_id(dic_ImgID_to_cat_pop, ImgID_selected, output_path, sample_size, T_0, T_fin, tau, nb_iter,  replace=False):
+def sample_img_id(dic_ImgID_to_cat_pop, ImgID_selected, output_path, sample_size, MH_sampling=False, T_0=100, T_fin=1, tau=2, nb_iter=100,  replace=False):
     """
     From the selected image id, sample them randomly in order to have 
     The sample size wanted and constraints respected
@@ -110,46 +110,53 @@ def sample_img_id(dic_ImgID_to_cat_pop, ImgID_selected, output_path, sample_size
     ######## intialization ########    
     #randomly sample files names in the new list 
     sampled_ImgIds_0=np.random.choice(np.asarray(ImgID_selected),int(sample_size),replace)
-    cost_0=cost_function(sampled_ImgIds_0, ImgID_selected, dic_ImgID_to_cat_pop)
     
-    i=0
-    sample=sampled_ImgIds_0
-    cost=cost_0
-    T=T_0
-
-    ######## algorithm MH ########
-    while T > T_fin and cost<1 and i < nb_iter: 
+    if MH_sampling:
+        cost_0=cost_function(sampled_ImgIds_0, ImgID_selected, dic_ImgID_to_cat_pop)
         
-        rest=[item for item in ImgID_selected if item not in sample]
-        take_one_out=np.random.choice(np.asarray(sample),1,replace)
-        new_sampled_ImgID=np.random.choice(np.asarray(rest),1,replace)
-        
-        # replace take_one_out by new_sampled_ImgID        
-        new_sample=sample
-        for index, item in sample.enumerate():
-            if item==take_one_out: 
-                new_sample[index]=new_sampled_ImgID
-        
-        
-        new_cost=cost_function(new_sample, ImgID_selected, dic_ImgID_to_cat_pop)
-        
-        if new_cost < cost: 
-            cost=new_cost
-            sample=new_sample
+        i=0
+        sample=sampled_ImgIds_0
+        cost=cost_0
+        T=T_0
+    
+        ######## algorithm MH ########
+        while T > T_fin and cost<1 and i < nb_iter: 
             
-        else: 
-            p=np.random.uniform(0, 1)
-            if p < np.exp(-(new_cost-cost)/T):
+            rest=[item for item in ImgID_selected if item not in sample]
+            take_one_out=np.random.choice(np.asarray(sample),1,replace)
+            new_sampled_ImgID=np.random.choice(np.asarray(rest),1,replace)
+            
+            # replace take_one_out by new_sampled_ImgID        
+            new_sample=sample
+            for index, item in sample.enumerate():
+                if item==take_one_out: 
+                    new_sample[index]=new_sampled_ImgID
+            
+            
+            new_cost=cost_function(new_sample, ImgID_selected, dic_ImgID_to_cat_pop)
+            
+            if new_cost < cost: 
                 cost=new_cost
                 sample=new_sample
+                
             else: 
-                pass
+                p=np.random.uniform(0, 1)
+                if p < np.exp(-(new_cost-cost)/T):
+                    cost=new_cost
+                    sample=new_sample
+                else: 
+                    pass
+                
+                
+            T = T_0*(np.exp(-i/tau))
+            i+=1
+            print ("_".join("iteration", str(i)))
             
-            
-        T = T_0*(np.exp(-i/tau))
-        i+=1
-        print ("_".join("iteration", str(i)))
+        return(sample)
     
-    return(sample)
+    else: 
+        return(sampled_ImgIds_0)
+    
+    
 
 
