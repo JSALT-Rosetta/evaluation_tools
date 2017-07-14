@@ -50,3 +50,28 @@ def random_sampling(item_file, col, sample_size, replace=False):
     
     return(sampled_data)
     
+
+def get_sample_item_file(wav_file_names_sample, item_file, output):
+    """
+    From a sampled dataset, get an item file for running an ABX task
+    Parameters
+    ----------
+    item file : text file containing at least as columns : #filename, onset, offset, 
+    #phoneme and context and side information such as image ID
+    item_file : string,
+         path to the item file of the whole dataset
+    output: string, 
+        path where the sample item file will be stored
+    """
+    wav_names=[]
+    temp=np.load(wav_file_names_sample)
+    for s in temp:
+        wav_names.append(s.split(".")[0])
+    
+    df=pd.read_csv(item_file, sep="\t", index_col="#filename")
+    df_sample=df.loc[wav_names]
+    
+    df_sample.to_csv(output, sep="\t", header=True, index=True)
+    
+    return(df_sample)
+    
