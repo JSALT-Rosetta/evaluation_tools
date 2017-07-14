@@ -30,9 +30,10 @@ def select_speaker_in_wav(input_path, speakers):
     # and load list containing name of files
     files = [f for f in listdir(input_path) if isfile(join(input_path, f))]
     
+    l=[]
     df=pd.DataFrame(files, columns=["wave_files"])
     for sub in speakers:
-        l=[sub for s in files if sub in s]
+        l.append([sub for s in files if sub in s])
     df["speaker_id"]=np.asarray(l) 
     
     gp_spk=df.groupby("speaker_id")
