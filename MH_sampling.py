@@ -33,7 +33,9 @@ def select_speaker_in_wav(input_path, speakers):
     df=pd.DataFrame(files, columns=["wave_files"])
     for sub in speakers:
         l=[sub for s in files if sub in s]
-    df["speaker_id"]=l
+    try : 
+        df["speaker_id"]=np.asarray(l)
+    except: 
     
     gp_spk=df.groupby("speaker_id")
     
@@ -187,7 +189,11 @@ def get_Img_file_name_from_ID(ImgId_file, pre_name="COCO_", train=True, output_p
     
     if output_path!="": 
         np.array(Img_file_name_list).dump(open(output_path+"/"+'Img_file_name.npy', 'wb'))
-        
+    
+    f=open(output_path+'/jpg_file_names.txt', 'w')
+    for item in Img_file_name_list:
+        f.write("%s\n" % item)
+    f.close()   
     return(Img_file_name_list)
 
     
@@ -197,22 +203,14 @@ def get_wav_file_name_from_ImgID(ImgId_file, wav_file_path, output_path=""):
     for ImgID in ImgId_file:
         inter=[s for s in wav_files_name if ImgID in s]
         
-    try: 
-        thefile = open(output_path+'/wave_file_names.txt', 'w')
-        for item in inter:
-            thefile.write("%s\n" % item)
-        thefile.close()
-    except: 
-        pass
-    
+    f = open(output_path+'/wave_file_names.txt', 'w')
+    for item in inter:
+        f.write("%s\n" % item)
+    f.close()
     return(inter)
 
 
-    for f in inter: 
-        open(f, 'a').close()
-    #if output_path!="": 
-        #np.array(inter).dump(open(output_path+"/"+'wav_file_name.npy', 'wb')) 
-    return(inter)
+
         
 '''
     for w in wav_files_name: 
