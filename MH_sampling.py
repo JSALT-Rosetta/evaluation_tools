@@ -42,7 +42,8 @@ def select_speaker_in_wav(input_path, speakers):
         
         df_spk=gp_spk.get_group(spk)
         selected_spk=df_spk.sample(frac=proba, replace=False, weights=None, axis=0)
-        if spk==speakers.items()[0]:
+        first_spk=list(speakers.keys())[0]
+        if spk==first_spk:
             final_df=selected_spk
         else: 
             final_df=pd.concat([final_df, selected_spk], axis=0)
@@ -55,7 +56,7 @@ def select_speaker_in_wav(input_path, speakers):
 
 def get_nb_caption_per_img(n, selected_captions): 
     """
-    Get image id from audio caption file namesthat were selected by their speakers
+    Get image id from audio caption file names that were selected by their speakers
     Choose images that have at least n captions per image
     ----------
     n : int, 
@@ -196,11 +197,10 @@ def get_Img_file_name_from_ID(ImgId_file, pre_name="COCO_", train=True, output_p
     return(Img_file_name_list)
 
     
-def get_wav_file_name_from_ImgID(ImgId_file, wav_file_path, output_path=""):
-    wav_files_name = [f for f in listdir(wav_file_path) if isfile(join(wav_file_path, f))]  
+def get_wav_file_name_from_ImgID(ImgId_file, wav_selected_file, output_path=""):
     inter=[]    
     for ImgID in ImgId_file:
-        inter.append([s for s in wav_files_name if ImgID in s])
+        inter.append([s for s in wav_selected_file if ImgID in s])
         
     f = open(output_path+'/wave_file_names.txt', 'w')
     for item in inter:
