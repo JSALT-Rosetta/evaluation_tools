@@ -25,15 +25,15 @@ def select_speaker_in_wav(input_path, speakers):
     speakers: dictionnary of speaker id as keys and their probability to occur as value
     """
     new_list=[]
+    l=[]
 
     #get into the directory containing audio files to sample
     # and load list containing name of files
     files = [f for f in listdir(input_path) if isfile(join(input_path, f))]
-    
-    l=[]
+     
     df=pd.DataFrame(files, columns=["wave_files"])
-    for sub in speakers:
-        l.append([sub for s in files if sub in s])
+    for row in df["wave_files"]:
+        l.append([spk for spk in speakers if spk in row])
     df["speaker_id"]=np.asarray(l) 
     
     gp_spk=df.groupby("speaker_id")
@@ -198,9 +198,9 @@ def get_Img_file_name_from_ID(ImgId_file, pre_name="COCO_", train=True, output_p
     
 def get_wav_file_name_from_ImgID(ImgId_file, wav_file_path, output_path=""):
     wav_files_name = [f for f in listdir(wav_file_path) if isfile(join(wav_file_path, f))]  
-        
+    inter=[]    
     for ImgID in ImgId_file:
-        inter=[s for s in wav_files_name if ImgID in s]
+        inter.append([s for s in wav_files_name if ImgID in s])
         
     f = open(output_path+'/wave_file_names.txt', 'w')
     for item in inter:
