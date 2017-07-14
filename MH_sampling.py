@@ -192,11 +192,11 @@ def get_Img_file_name_from_ID(ImgId_file, pre_name="COCO_", train=True, output_p
 
     
 def get_wav_file_name_from_ImgID(ImgId_file, wav_file_path, output_path=""):
-    wav_files_name = [f for f in listdir(wav_file_path) if isfile(join(wav_file_path, f))]
-    imgID_from_wavfile=[]
-    for w in wav_files_name: 
-        imgID_from_wavfile.append(w.split('_')[0])    
-    inter = list(filter(lambda itm:itm in ImgId_file, imgID_from_wavfile) )
+    wav_files_name = [f for f in listdir(wav_file_path) if isfile(join(wav_file_path, f))]  
+        
+    for ImgID in ImgId_file:
+        inter=[s for s in wav_files_name if ImgID in s]
+        
     try: 
         thefile = open(output_path+'/wave_file_names.txt', 'w')
         for item in inter:
@@ -204,6 +204,7 @@ def get_wav_file_name_from_ImgID(ImgId_file, wav_file_path, output_path=""):
         thefile.close()
     except: 
         pass
+    
     return(inter)
 
 
