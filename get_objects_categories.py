@@ -92,11 +92,13 @@ def dict_nb_value_per_key(dic, show_plot=False):
     """
     d={}
     for key, value in dic.items():
-        d[key]=len(value)
+        d[key]=int(len(value))
     if show_plot:
-        plt.bar(list(d.keys()), d.values(), color='g')
+        plt.bar(list(d.keys()), d.values())
         plt.show()
     return(d)
+
+
 
 '''
 #tests

@@ -6,8 +6,7 @@ Created on Wed Jul 12 15:08:40 2017
 @author: elinlarsen
 """
 
-import os 
-import shutil
+
 from os import listdir
 from os.path import isfile, join
 import numpy as np
@@ -159,4 +158,36 @@ def sample_img_id(dic_ImgID_to_cat_pop, ImgID_selected, output_path, sample_size
     
     
 
+def get_Img_file_name_from_ID(ImgId_file, pre_name="COCO_", train=True, output_path=""):
+    Img_file_name_list=[]
+    #ImgID_list=np.load(ImgId_file)
+    for ii in ImgId_file:
+        fig=str(str(ii).zfill(12))
+        if train: 
+            Img_file_name_list.append(pre_name+ "train_2014_"+ fig +".jpg")
+        else: 
+            Img_file_name_list.append(pre_name+ "val_2014_"+ fig +".jpg")
+    
+    if output_path!="": 
+        np.array(Img_file_name_list).dump(open(output_path+"/"+'Img_file_name.npy', 'wb'))
+        
+    return(Img_file_name_list)
 
+    
+def get_wav_file_name_from_ImgID(ImgId_file, wav_file_path, output_path=""):
+    wav_files_name = [f for f in listdir(wav_file_path) if isfile(join(wav_file_path, f))]
+    imgID_from_wavfile=[]
+    for w in wav_files_name: 
+        imgID_from_wavfile.append(w.split('_')[0])    
+    inter = filter(lambda itm:itm in imgID_from_wavfile,ImgId_file) 
+    if output_path!="": 
+        np.array(inter).dump(open(output_path+"/"+'wav_file_name.npy', 'wb')) 
+    return(inter)
+        
+'''
+    for w in wav_files_name: 
+        for ii in ImgId_file:
+             img_id= w.split('_')[0]
+             if img_id==ii: 
+                 wav_files_sample.append(w)
+'''

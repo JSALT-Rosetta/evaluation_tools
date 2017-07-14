@@ -67,17 +67,17 @@ def sample_audio_files(input_path, new_path, sample_size,  speakers, replace=Fal
     return(sampled_files)
     
     #mv the the selected files to the new directory
-    '''
+
     for file_name in sampled_files:
         input_full_file_name = os.path.join(input_path, file_name)
         output_full_file_name = os.path.join(new_path, file_name)
         os.system ("cp input_full_file_name output_full_file_name")
         #if (os.path.isfile(full_file_name)):
             #shutil.copy(full_file_name, new_path)
-    '''
+
     
 
-def get_sampled_files(input_path, new_path, sampled_wav_path, type_file="img"):
+def get_sampled_files(input_path, new_path, sampled_wav_path, type_file="jpg"):
     """
     Suppose that audio files have been sampled by the function  "sample_audio_files"
     and their file names stored in a np array format
@@ -92,9 +92,10 @@ def get_sampled_files(input_path, new_path, sampled_wav_path, type_file="img"):
 
     """
     
+    out=new_path+"/"+ type_file + "/"
     #create a directory "subset_mscoco/img" or "subset_mscoco.json"
-    if not os.path.exists(new_path+"/"+ type_file + "/"):
-        os.makedirs(new_path+"/"+ type_file + "/")
+    if not os.path.exists(out):
+        os.makedirs(out)
     
     #get into the directory containing images file to sample
     #load list containing name of files
@@ -122,7 +123,7 @@ def get_sampled_files(input_path, new_path, sampled_wav_path, type_file="img"):
         full_file_name = os.path.join(input_path, file_name)
         try :
             (os.path.isfile(full_file_name))
-            shutil.copy(full_file_name, new_path)
+            shutil.copy(full_file_name, out)
         except ValueError: 
             print("file name is invalid")
      
