@@ -33,9 +33,7 @@ def select_speaker_in_wav(input_path, speakers):
     df=pd.DataFrame(files, columns=["wave_files"])
     for sub in speakers:
         l=[sub for s in files if sub in s]
-    try : 
-        df["speaker_id"]=np.asarray(l)
-    except: 
+    df["speaker_id"]=np.asarray(l) 
     
     gp_spk=df.groupby("speaker_id")
     
