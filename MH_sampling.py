@@ -24,7 +24,6 @@ def select_speaker_in_wav(input_path, speakers):
     ----------
     speakers: dictionnary of speaker id as keys and their probability to occur as value
     """
-    new_list=[]
     l=[]
 
     #get into the directory containing audio files to sample
@@ -47,13 +46,11 @@ def select_speaker_in_wav(input_path, speakers):
             final_df=selected_spk
         else: 
             final_df=pd.concat([final_df, selected_spk], axis=0)
-
-        
-    return(new_list)
+   
+    return(final_df)
 
 
     
-
 def get_nb_caption_per_img(n, selected_captions): 
     """
     Get image id from audio caption file names that were selected by their speakers
