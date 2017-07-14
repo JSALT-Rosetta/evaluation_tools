@@ -16,36 +16,11 @@ import scipy
 import get_objects_categories
 import pandas as pd
 
-from numpy.random import choice
-draw = choice(list_of_candidates, number_of_items_to_pick, p=probability_distribution)
 
 
-
-def select_speaker_in_wav_train(input_path, speakers): 
+def select_speaker_in_wav(input_path, speakers): 
     """
     Get all audio captions name file that are said by the selected speakers
-    for the training set
-    ----------
-    """
-    new_list=[]
-
-    #get into the directory containing audio files to sample
-    # and load list containing name of files
-    onlyfiles = [f for f in listdir(input_path) if isfile(join(input_path, f))]
-    #print(onlyfiles)
- 
-    #for each speaker selected, select files containing its name
-    for sub in speakers:
-        new_list.extend([s for s in onlyfiles if sub in s])
-        
-    return(new_list)
-
-
-
-def select_speaker_in_wav_test(input_path, speakers): 
-    """
-    Get all audio captions name file that are said by the selected speakers
-    for the test set
     ----------
     speakers: dictionnary of speaker id as keys and their probability to occur as value
     """
