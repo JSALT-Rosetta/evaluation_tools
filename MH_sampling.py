@@ -14,11 +14,17 @@ from collections import Counter
 import scipy
 
 import get_objects_categories
+import pandas as pd
+
+from numpy.random import choice
+draw = choice(list_of_candidates, number_of_items_to_pick, p=probability_distribution)
 
 
-def select_speaker_in_wav(input_path, speakers): 
+
+def select_speaker_in_wav_train(input_path, speakers): 
     """
     Get all audio captions name file that are said by the selected speakers
+    for the training set
     ----------
     """
     new_list=[]
@@ -33,6 +39,42 @@ def select_speaker_in_wav(input_path, speakers):
         new_list.extend([s for s in onlyfiles if sub in s])
         
     return(new_list)
+
+
+
+def select_speaker_in_wav_test(input_path, speakers): 
+    """
+    Get all audio captions name file that are said by the selected speakers
+    for the test set
+    ----------
+    speakers: dictionnary of speaker id as keys and their probability to occur as value
+    """
+    new_list=[]
+
+    #get into the directory containing audio files to sample
+    # and load list containing name of files
+    files = [f for f in listdir(input_path) if isfile(join(input_path, f))]
+    
+    df=pd.DataFrame(files, columns=["wave_files"])
+    for sub in speakers:
+        l=[sub for s in files if sub in s]
+    df["speaker_id"]=l
+    
+    gp_spk=df.groupby("speaker_id")
+    
+    for spk, proba in speakers.items() : 
+        
+        df_spk=gp_spk.get_group(spk)
+        selected_spk=df_spk.sample(frac=proba, replace=False, weights=None, axis=0)
+        if spk==speakers.items()[0]:
+            final_df=selected_spk
+        else: 
+            final_df=pd.concat([final_df, selected_spk], axis=0)
+
+        
+    return(new_list)
+
+
     
 
 def get_nb_caption_per_img(n, selected_captions): 
@@ -179,9 +221,21 @@ def get_wav_file_name_from_ImgID(ImgId_file, wav_file_path, output_path=""):
     imgID_from_wavfile=[]
     for w in wav_files_name: 
         imgID_from_wavfile.append(w.split('_')[0])    
-    inter = filter(lambda itm:itm in imgID_from_wavfile,ImgId_file) 
-    if output_path!="": 
-        np.array(inter).dump(open(output_path+"/"+'wav_file_name.npy', 'wb')) 
+    inter = list(filter(lambda itm:itm in ImgId_file, imgID_from_wavfile) )
+    try: 
+        thefile = open(output_path+'/wave_file_names.txt', 'w')
+        for item in inter:
+            thefile.write("%s\n" % item)
+        thefile.close()
+    except: 
+        pass
+    return(inter)
+
+
+    for f in inter: 
+        open(f, 'a').close()
+    #if output_path!="": 
+        #np.array(inter).dump(open(output_path+"/"+'wav_file_name.npy', 'wb')) 
     return(inter)
         
 '''
