@@ -12,42 +12,55 @@ from os.path import isfile, join
 import numpy as np
 from collections import Counter
 import scipy
-
+from collections import defaultdict
+import itertools
 import get_objects_categories
 import pandas as pd
+from ast import literal_eval
 
 
+def create_list_from_files_in_folder(input_path): 
+    files = [f for f in listdir(input_path) if isfile(join(input_path, f))]
+    return(files)
+    
 
-def select_speaker_in_wav(input_path, speakers): 
+def select_speaker_in_wav(wave_files, dic_speakers, output_path): 
     """
     Get all audio captions name file that are said by the selected speakers
     ----------
-    speakers: dictionnary of speaker id as keys and their probability to occur as value
+    wave_files: list of the names of the wave files 
+    dic_speakers: dictionnary of speaker id as keys and their probability to occur as value
     """
-    l=[]
-
     #get into the directory containing audio files to sample
     # and load list containing name of files
-    files = [f for f in listdir(input_path) if isfile(join(input_path, f))]
-     
-    df=pd.DataFrame(files, columns=["wave_files"])
-    for row in df["wave_files"]:
-        l.append([spk for spk in speakers if spk in row])
-    df["speaker_id"]=np.asarray(l) 
     
-    gp_spk=df.groupby("speaker_id")
+    d = defaultdict(set)
+    wav_l=[]
+    for w in wave_files: 
+        for spk in list(dic_speakers.keys()): 
+            if spk in w:
+                d[spk].add(w)
     
-    for spk, proba in speakers.items() : 
+    for spk, proba in list(dic_speakers.items()): 
         
-        df_spk=gp_spk.get_group(spk)
-        selected_spk=df_spk.sample(frac=proba, replace=False, weights=None, axis=0)
-        first_spk=list(speakers.keys())[0]
-        if spk==first_spk:
-            final_df=selected_spk
-        else: 
-            final_df=pd.concat([final_df, selected_spk], axis=0)
-   
-    return(final_df)
+        for k, v in list(d.items()): 
+            if spk==k: 
+                size=int(proba*len(v))
+                v_weighted= np.random.choice(np.asarray(list(v)), size, replace=False )
+                print(spk + " : "+str(len(v_weighted)))
+                wav_l.append(v_weighted)
+    
+    final=np.concatenate(wav_l)            
+    
+    f=open(output_path + "/wav_selected_spk_test.txt", 'w')            
+    list_wav_sel=[]
+    for i in range(8): 
+        for s in final[i]: 
+            f.write(s)
+            f.write("\n")
+            list_wav_sel.append(s)
+            
+    return(list_wav_sel)
 
 
     
@@ -193,25 +206,45 @@ def get_Img_file_name_from_ID(ImgId_file, pre_name="COCO_", train=True, output_p
     f.close()   
     return(Img_file_name_list)
 
+
+
+def getImgID_wav(wav_name_list):
+    dictionary = {}
+    for key in wav_name_list: 
+        value = key.split('_')[0]
+        dictionary[key]=value
+    return(dictionary)
+
+
+def getImgID_jpg_or_json(image_name_list):
+    dictionary = {}
+    for s in image_name_list:
+        v = s.split('_')[-1] # take the last string 
+        v=v.split('.')[0] # get rid of the extension
+        v=int(v) # get rid of 0 in case of image file names
+        v=str(v)
+        dictionary[s]=v
+    return(dictionary)
+                               
+
+def getMatchingKey1(dic1, dic2):
+    t=[]
+    for (k1, v1) in dic1.items():
+        for (k2,v2) in dic2.items():
+            if v1==v2:
+                t.append(k1)
+    return(t)
+
     
-def get_wav_file_name_from_ImgID(ImgId_file, wav_selected_file, output_path=""):
-    inter=[]    
-    for ImgID in ImgId_file:
-        inter.append([s for s in wav_selected_file if ImgID in s])
-        
+def get_wav_file_name_from_ImgID(ImgId_file, wav_selected_file, output_path=""):    
+    dic=getImgID_wav(wav_selected_file)    
+    wav_sample=[] 
+    for k, v in list(dic.items()):    
+        for ImgID in ImgId_file:
+            if ImgID==v: 
+                wav_sample.append(k)        
     f = open(output_path+'/wave_file_names.txt', 'w')
-    for item in inter:
-        f.write("%s\n" % item)
+    for s in wav_sample:
+        f.write("%s\n" % s)
     f.close()
-    return(inter)
-
-
-
-        
-'''
-    for w in wav_files_name: 
-        for ii in ImgId_file:
-             img_id= w.split('_')[0]
-             if img_id==ii: 
-                 wav_files_sample.append(w)
-'''
+    return(wav_sample)
