@@ -102,3 +102,29 @@ def dict_nb_value_per_key(dic, show_plot=False):
     return(d)
 
 
+def getImgID_wav(wav_name_list):
+    dictionary = {}
+    for key in wav_name_list: 
+        value = key.split('_')[0]
+        dictionary[key]=value
+    return(dictionary)
+
+
+def getImgID_ImgName(image_name_list):
+    dictionary = {}
+    for s in image_name_list:
+        v = s.split('_')[-1] # take the last string 
+        v=v.split('.')[0] # get rid of the extension
+        v=int(v) # get rid of 0 in case of image file names
+        v=str(v)
+        dictionary[s]=v
+    return(dictionary)
+                               
+
+def getMatchingKey1(dic1, dic2):
+    t=[]
+    for (k1, v1) in dic1.items():
+        for (k2,v2) in dic2.items():
+            if v1==v2:
+                t.append(k1)
+    return(t)

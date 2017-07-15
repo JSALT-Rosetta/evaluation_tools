@@ -11,12 +11,14 @@ from os import listdir
 from os.path import isfile, join
 import numpy as np
 from collections import Counter
-import scipy
 from collections import defaultdict
-import itertools
-import get_objects_categories
-import pandas as pd
-from ast import literal_eval
+import scipy
+
+
+
+from dictionnaries import getImgID_wav
+from dictionnaries import reverse_dic
+from dictionnaries import dict_nb_value_per_key
 
 
 def create_list_from_files_in_folder(input_path): 
@@ -30,6 +32,8 @@ def select_speaker_in_wav(wave_files, dic_speakers, output_path):
     ----------
     wave_files: list of the names of the wave files 
     dic_speakers: dictionnary of speaker id as keys and their probability to occur as value
+    output_path: string, 
+    path of the folder where this output will be stored
     """
     #get into the directory containing audio files to sample
     # and load list containing name of files
@@ -99,26 +103,29 @@ def cost_function(sampled_ImgIds, ImgID_selected, dic_ImgID_to_cat_pop):
     in the sample and in the population. 
     Compare the two distribution. 
     ----------
-    
+    sampled_ImgIds : list, 
+    ImgID_selected: list,
+    dic_ImgID_to_cat_pop: dict, 
+    linking image ID and  names of categories present in each image
     """
     
     ### get the number of images containing an object category for each category 
     #in the population dataset
-    dic_cat_to_ImgID_pop=get_objects_categories.reverse_dic(dic_ImgID_to_cat_pop, save=False, name="") 
+    dic_cat_to_ImgID_pop=reverse_dic(dic_ImgID_to_cat_pop, save=False, name="") 
     Nb_cat=len(dic_cat_to_ImgID_pop)
-    freq_pop=get_objects_categories.dict_nb_value_per_key(dic_cat_to_ImgID_pop, show_plot=False)
+    freq_pop=dict_nb_value_per_key(dic_cat_to_ImgID_pop, show_plot=False)
     Nb_Img_per_cat_pop=np.array(freq_pop.items())
     
     
     ### get the dictionary from image ID to category for the selected image ID
     
     sample_dict=dict((int(k), dic_ImgID_to_cat_pop[int(k)]) for k in sampled_ImgIds)
-    dic_cat_to_ImgID_sample=get_objects_categories.reverse_dic(sample_dict, save=False, name="")
+    dic_cat_to_ImgID_sample=reverse_dic(sample_dict, save=False, name="")
 
     
     ### get the number of images containing an object category for each category 
     #in the sampled dataset
-    freq_sample=get_objects_categories.dict_nb_value_per_key(dic_cat_to_ImgID_sample, show_plot=False)
+    freq_sample=dict_nb_value_per_key(dic_cat_to_ImgID_sample, show_plot=False)
     Nb_Img_per_cat_sample=np.array(freq_sample.items())
     
     cost=scipy.stats.chisquare(Nb_Img_per_cat_sample,Nb_Img_per_cat_pop, ddof=Nb_cat)
@@ -189,7 +196,7 @@ def sample_img_id(dic_ImgID_to_cat_pop, ImgID_selected, output_path, sample_size
 
 def get_Img_file_name_from_ID(ImgId_file, pre_name="COCO_", train=True, output_path=""):
     Img_file_name_list=[]
-    #ImgID_list=np.load(ImgId_file)
+    
     for ii in ImgId_file:
         fig=str(str(ii).zfill(12))
         if train: 
@@ -197,54 +204,27 @@ def get_Img_file_name_from_ID(ImgId_file, pre_name="COCO_", train=True, output_p
         else: 
             Img_file_name_list.append(pre_name+ "val_2014_"+ fig +".jpg")
     
-    if output_path!="": 
-        np.array(Img_file_name_list).dump(open(output_path+"/"+'Img_file_name.npy', 'wb'))
-    
     f=open(output_path+'/jpg_file_names.txt', 'w')
     for item in Img_file_name_list:
         f.write("%s\n" % item)
-    f.close()   
+    f.close() 
+    
     return(Img_file_name_list)
 
-
-
-def getImgID_wav(wav_name_list):
-    dictionary = {}
-    for key in wav_name_list: 
-        value = key.split('_')[0]
-        dictionary[key]=value
-    return(dictionary)
-
-
-def getImgID_jpg_or_json(image_name_list):
-    dictionary = {}
-    for s in image_name_list:
-        v = s.split('_')[-1] # take the last string 
-        v=v.split('.')[0] # get rid of the extension
-        v=int(v) # get rid of 0 in case of image file names
-        v=str(v)
-        dictionary[s]=v
-    return(dictionary)
-                               
-
-def getMatchingKey1(dic1, dic2):
-    t=[]
-    for (k1, v1) in dic1.items():
-        for (k2,v2) in dic2.items():
-            if v1==v2:
-                t.append(k1)
-    return(t)
 
     
 def get_wav_file_name_from_ImgID(ImgId_file, wav_selected_file, output_path=""):    
     dic=getImgID_wav(wav_selected_file)    
     wav_sample=[] 
+    
     for k, v in list(dic.items()):    
         for ImgID in ImgId_file:
             if ImgID==v: 
-                wav_sample.append(k)        
+                wav_sample.append(k) 
+                
     f = open(output_path+'/wave_file_names.txt', 'w')
     for s in wav_sample:
         f.write("%s\n" % s)
     f.close()
+    
     return(wav_sample)
