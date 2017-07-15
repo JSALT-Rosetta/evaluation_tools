@@ -46,7 +46,8 @@ flickR8k=pd.concat([flickR8k, test])
 
 wav2spk=pd.read_csv("/Users/elinlarsen/Documents/2017_JSALT/flickR8K/wav2spk.txt", delimiter=r"\s+", names = ["wave_file", "speaker_id"])
 flickR8k=pd.merge(flickR8k, wav2spk, on="wave_file", how="inner")
-
+flickR8k.to_csv("/Users/elinlarsen/Documents/2017_JSALT/flickR8K/df_wav_spk_set.txt", header=True, index=False, sep="\t")
+flickR8k.to_csv("/pylon2/ci560op/odette/data/flickr/df_wav_spk_set.txt")
 
 gp_train=flickR8k.groupby("dataset").get_group("train")
 gp_dev=flickR8k.groupby("dataset").get_group("dev")

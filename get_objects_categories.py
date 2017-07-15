@@ -15,16 +15,19 @@ import json
 
 from collections import defaultdict
 
-# Throughout the API "ann"=annotation, "cat"=category, and "img"=image.
 
-#path_annotations="/pylon2/ci560op/larsene/data/mscoco/annotations/instances_train2014.json"
-#coco_train=COCO(path_annotations)
-#categories= coco_train.loadCats(coco_train.getCatIds())
-#d_cat_name=get_objects_categories.build_dict_cat_name_to_cat_id(categories)
-#d_cat_to_img=get_objects_categories.build_dict_cat_name_to_img_id(categories, coco_train)
-#d_img_to_cat=get_objects_categories.reverse_dic(d_cat_to_img, save=False, name="")
+'''Use the COCO API  to build dictionnaries linking object information to image
 
+"ann"=annotation, "cat"=category, and "img"=image.
 
+path_annotations="/pylon2/ci560op/larsene/data/mscoco/annotations/instances_train2014.json"
+coco_train=COCO(path_annotations)
+categories= coco_train.loadCats(coco_train.getCatIds())
+d_cat_name=get_objects_categories.build_dict_cat_name_to_cat_id(categories)
+d_cat_to_img=get_objects_categories.build_dict_cat_name_to_img_id(categories, coco_train)
+d_img_to_cat=get_objects_categories.reverse_dic(d_cat_to_img, save=False, name="")
+
+'''
 
 def build_dict_cat_name_to_cat_id(categories):
     """
@@ -99,21 +102,3 @@ def dict_nb_value_per_key(dic, show_plot=False):
     return(d)
 
 
-
-'''
-#tests
-d_cat_to_img=build_dict_cat_name_to_img_id(categories, coco_train)
-with open('dict_cat_name_to_img_id.json', 'w') as fp:
-    json.dump(d_img_to_cat, fp)
-    
-    
-with open('dict_img_id_to_cat_name.json', 'w') as fp:
-    json.dump(d, fp)
-    
-with open('dict_cat_name_to_img_id.json', 'w') as fp:
-    json.dump(d_img_to_cat, fp)    
-
-with open('dict_cat_id_to_name.json', 'w') as fp:
-    json.dump(dic_id_name, fp)    
-''' 
-    
