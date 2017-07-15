@@ -15,13 +15,15 @@ def run_sample(dataset_type="test",
                path_ann="/pylon2/ci560op/larsene/data/mscoco/val2014/instances_val2014.json", 
                input_path="/pylon2/ci560op/odette/data/mscoco/val2014/", 
                output="/pylon2/ci560op/larsene/data/8K_mscoco/", 
-               dic_speakers={"Phil": 0.5 ,
-                                     "Paul": 0.5,
-                                     "Amanda":0.5,
-                                     "Judith":0.5, 
-                                     "Bruce":0.5, 
-                                     "Elizabeth":0.5 
-                                     }, 
+               dic_speakers={"Phil": 1/float(12) ,
+                             "Paul": 1/float(12),
+                             "Amanda":1/float(12),
+                             "Judith":1/float(12), 
+                             "Bruce":1/float(12), 
+                             "Elizabeth":1/float(12), 
+                             "Bronwen":0.25, 
+                             "Jenny":0.25 , 
+                             },
                n=1): 
     
     coco=COCO(path_ann)
