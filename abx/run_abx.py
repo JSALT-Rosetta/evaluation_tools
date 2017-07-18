@@ -77,7 +77,7 @@ def fullrun():
     
     print("Task is done")
     
-    distances.compute_distances(feature_file, taskfilename,
+    distances.compute_distances(feature_file, '/features/', taskfilename,
                                 distance_file, dtw_cosine_distance,
                                 normalized = True, n_cpu=NB_CPU)
     print("Computing cosine distance is done")
