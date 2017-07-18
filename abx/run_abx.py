@@ -51,6 +51,7 @@ def fullrun():
     scorefilename = output_folder+'/'+ out +'.score'
     taskfilename = output_folder + '/'+out +'.abx'
     analyzefilename = output_folder + '/'+out + '.csv'
+    statsfilename=output_folder + '/'+out + '.stats'
 
 
     # running the evaluation:
@@ -67,14 +68,9 @@ def fullrun():
              
         else:
             task = ABXpy.task.Task(item_file,ON, across=ACROSS, by=BY)
-             
-    task.generate_triplets(taskfilename)
-    stats=task.compute_statistics()
-    try: 
-        print(stats)
-    except:
-        pass
-    
+            
+        task.generate_triplets(taskfilename)
+        task.print_stats(statsfilename)
     print("Task is done")
     
     distances.compute_distances(feature_file, '/features/', taskfilename,
