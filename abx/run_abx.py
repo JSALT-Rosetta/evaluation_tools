@@ -22,14 +22,17 @@ import ABXpy.analyze as analyze
 
 
 
-folder_name= raw_input('Folder name containing the item file is ...')
+input_folder= raw_input('Folder name containing the item file AND mfcc is ...')
 ON=raw_input('the abx task is run on ...')
 feature=raw_input('feature file name is ...')
 ACROSS=raw_input('the abx task is done across ...')
 BY=raw_input('the abx task is done by ...')
 
-out='/'+ 'on_'+ ON + '_by_' + BY + '_across_'+ACROSS
+NB_CPU=raw_input("number of cpu to run the task on ")
 
+out='/'+ 'on_'+ ON + '_by_' + BY + '_ac_'+ACROSS
+
+output_folder=input_folder + out
 
 
 def dtw_cosine_distance(x, y, normalized):
@@ -38,25 +41,48 @@ def dtw_cosine_distance(x, y, normalized):
 
 
 def fullrun():
-    if not os.path.exists(folder_name):
-        os.makedirs(folder_name)
-    item_file = folder_name+'/' + ON+'.item'
-    feature_file = folder_name+'/'+ feature
-    distance_file = folder_name+ out + '.distance'
-    scorefilename = folder_name+ out +'.score'
-    taskfilename = folder_name + out +'.abx'
-    analyzefilename = folder_name + out + '.csv'
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+    item_file = input_folder+'/' + ON+'.item'
+    feature_file = input_folder+'/'+ feature
+    distance_file = output_folder+ '/'+out + '.distance'
+    scorefilename = output_folder+'/'+ out +'.score'
+    taskfilename = output_folder + '/'+out +'.abx'
+    analyzefilename = output_folder + '/'+out + '.csv'
 
 
     # running the evaluation:
    
-    task = ABXpy.task.Task(item_file,ON, across=ACROSS, by=BY)
-    task.generate_triplets(taskfilename)
-    distances.compute_distances(feature_file, '/features/', taskfilename,
+    if not os.path.exists(taskfilename):
+        if ACROSS == "" and BY!="":
+             task = ABXpy.task.Task(item_file,ON, by=BY)
+             
+        elif BY == "" and ACROSS!="":
+             task = ABXpy.task.Task(item_file,ON, across=ACROSS)
+             
+        elif ACROSS =="" and BY == "" :
+             task = ABXpy.task.Task(item_file,ON)
+             
+        else:
+            task = ABXpy.task.Task(item_file,ON, across=ACROSS, by=BY)
+             
+        task.generate_triplets(taskfilename)
+    
+    print(task.stats())
+    
+    print("Task is done")
+    
+    distances.compute_distances(feature_file, taskfilename,
                                 distance_file, dtw_cosine_distance,
-                                normalized = True, n_cpu=1)
+                                normalized = True, n_cpu=NB_CPU)
+    print("Computing cosine distance is done")
+                                
     score.score(taskfilename, distance_file, scorefilename)
+    print("Score is computed")
+    
     analyze.analyze(taskfilename, scorefilename, analyzefilename)
+    print("Results are available in the csv file !!")
 
 
 fullrun()
+
