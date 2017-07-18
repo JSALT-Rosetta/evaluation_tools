@@ -32,6 +32,8 @@ NB_CPU=raw_input("number of cpu to run the task on ")
 
 out='/'+ 'on_'+ ON + '_by_' + BY + '_ac_'+ACROSS
 
+out='/'+ 'on_'+ ON[0:2]+ '_by_' + BY[0:2]+BY[-2:] +'_ac_'+ACROSS[0:2]+ACROSS[-2:]
+
 output_folder=input_folder + out
 
 
@@ -66,9 +68,12 @@ def fullrun():
         else:
             task = ABXpy.task.Task(item_file,ON, across=ACROSS, by=BY)
              
-        task.generate_triplets(taskfilename)
-    
-    print(task.stats())
+    task.generate_triplets(taskfilename)
+    stats=task.compute_statistics()
+    try: 
+        print(stats)
+    except:
+        pass
     
     print("Task is done")
     
