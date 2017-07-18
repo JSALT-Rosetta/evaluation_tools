@@ -22,19 +22,6 @@ import ABXpy.analyze as analyze
 
 
 
-input_folder= raw_input('Folder name containing the item file AND mfcc is ...')
-ON=raw_input('the abx task is run on ...')
-feature=raw_input('feature file name is ...')
-ACROSS=raw_input('the abx task is done across ...')
-BY=raw_input('the abx task is done by ...')
-
-NB_CPU=input("number of cpu to run the task on ")
-
-out='/'+ 'on_'+ ON + '_by_' + BY + '_ac_'+ACROSS
-
-out='/'+ 'on_'+ ON[0:2]+ '_by_' + BY[0:2]+BY[-2:] +'_ac_'+ACROSS[0:2]+ACROSS[-2:]
-
-output_folder=input_folder + out
 
 
 def dtw_cosine_distance(x, y, normalized):
@@ -58,16 +45,16 @@ def fullrun():
    
     if not os.path.exists(taskfilename):
         if ACROSS == "NaN" and BY!="NaN":
-             task = ABXpy.task.Task(item_file,ON, by=BY)
+             task = ABXpy.task.Task(item_file,ON[i], by=BY[b])
              
         elif BY == "NaN" and ACROSS!="NaN":
-             task = ABXpy.task.Task(item_file,ON, across=ACROSS)
+             task = ABXpy.task.Task(item_file,ON[i], across=ACROSS[a])
              
         elif ACROSS =="NaN" and BY == "NaN" :
-             task = ABXpy.task.Task(item_file,ON)
+             task = ABXpy.task.Task(item_file,ON[i])
              
         else:
-            task = ABXpy.task.Task(item_file,ON, across=ACROSS, by=BY)
+            task = ABXpy.task.Task(item_file,ON[i], across=ACROSS[a], by=BY[b])
             
         task.generate_triplets(taskfilename)
         task.print_stats(statsfilename)
@@ -77,7 +64,7 @@ def fullrun():
     if not os.path.exists(distance_file):
 	    distances.compute_distances(feature_file, '/features/', taskfilename,
         	                        distance_file, dtw_cosine_distance,
-                	                normalized = True, n_cpu=1)
+                	                normalized = True, n_cpu=NB_CPU)
     print("Computing cosine distance is done")
                                 
     score.score(taskfilename, distance_file, scorefilename)
@@ -87,5 +74,32 @@ def fullrun():
     print("Results are available in the csv file !!")
 
 
+DATASET="test/tests/"
+input_folder= "pylon2/ci560op/odette/data/abx/8K_mscoco/"+DATASET
+feature="mfcc.h5f"
+NB_CPU=1
+
+'''
+ON="phoneme"
+    for b in BY:
+        for a in ACROSS:
+            out='/'+ 'on_'+ ON[0:2]+ '_by_' + BY[0:2]+BY[-2:] +'_ac_'+ACROSS[0:2]+ACROSS[-2:]
+            output_folder=input_folder + out
+            fullrun()
+'''     
+      
+ON="word"
+ACROSS="speakerID"
+BY="NaN"
+out='/'+ 'on_'+ ON[0:2]+ '_by_' + BY[0:2]+BY[-2:] +'_ac_'+ACROSS[0:2]+ACROSS[-2:]
+output_folder=input_folder + out
 fullrun()
 
+'''
+ON="word"
+BY="speakerID"
+ACROSS="NaN"
+out='/'+ 'on_'+ ON[0:2]+ '_by_' + BY[0:2]+BY[-2:] +'_ac_'+ACROSS[0:2]+ACROSS[-2:]
+output_folder=input_folder + out
+fullrun()
+'''
