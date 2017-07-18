@@ -28,7 +28,7 @@ feature=raw_input('feature file name is ...')
 ACROSS=raw_input('the abx task is done across ...')
 BY=raw_input('the abx task is done by ...')
 
-NB_CPU=raw_input("number of cpu to run the task on ")
+NB_CPU=input("number of cpu to run the task on ")
 
 out='/'+ 'on_'+ ON + '_by_' + BY + '_ac_'+ACROSS
 
@@ -57,13 +57,13 @@ def fullrun():
     # running the evaluation:
    
     if not os.path.exists(taskfilename):
-        if ACROSS == "" and BY!="":
+        if ACROSS == "NaN" and BY!="NaN":
              task = ABXpy.task.Task(item_file,ON, by=BY)
              
-        elif BY == "" and ACROSS!="":
+        elif BY == "NaN" and ACROSS!="NaN":
              task = ABXpy.task.Task(item_file,ON, across=ACROSS)
              
-        elif ACROSS =="" and BY == "" :
+        elif ACROSS =="NaN" and BY == "NaN" :
              task = ABXpy.task.Task(item_file,ON)
              
         else:
@@ -73,9 +73,11 @@ def fullrun():
         task.print_stats(statsfilename)
     print("Task is done")
     
-    distances.compute_distances(feature_file, '/features/', taskfilename,
-                                distance_file, dtw_cosine_distance,
-                                normalized = True, n_cpu=NB_CPU)
+    print( "number of cpu used is" + str(NB_CPU))
+    if not os.path.exists(distance_file):
+	    distances.compute_distances(feature_file, '/features/', taskfilename,
+        	                        distance_file, dtw_cosine_distance,
+                	                normalized = True, n_cpu=1)
     print("Computing cosine distance is done")
                                 
     score.score(taskfilename, distance_file, scorefilename)
