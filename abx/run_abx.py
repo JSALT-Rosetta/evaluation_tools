@@ -30,6 +30,9 @@ def dtw_cosine_distance(x, y, normalized):
 
 
 def fullrun():
+    print("the input folder is " + input_folder)
+    print("the ABX task id done on " + ON + "by " + BY + " across " + ACROSS)    
+    
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
     item_file = input_folder+'/' + ON+'.item'
@@ -44,17 +47,17 @@ def fullrun():
     # running the evaluation:
    
     if not os.path.exists(taskfilename):
-        if ACROSS == "NaN" and BY!="NaN":
-             task = ABXpy.task.Task(item_file,ON[i], by=BY[b])
+        if ACROSS == "na" and BY!="na":
+             task = ABXpy.task.Task(item_file,ON, by=BY)
              
-        elif BY == "NaN" and ACROSS!="NaN":
-             task = ABXpy.task.Task(item_file,ON[i], across=ACROSS[a])
+        elif BY == "na" and ACROSS!="na":
+             task = ABXpy.task.Task(item_file,ON, across=ACROSS)
              
-        elif ACROSS =="NaN" and BY == "NaN" :
-             task = ABXpy.task.Task(item_file,ON[i])
+        elif ACROSS =="na" and BY == "na" :
+             task = ABXpy.task.Task(item_file,ON)
              
         else:
-            task = ABXpy.task.Task(item_file,ON[i], across=ACROSS[a], by=BY[b])
+            task = ABXpy.task.Task(item_file,ON, across=ACROSS, by=BY)
             
         task.generate_triplets(taskfilename)
         task.print_stats(statsfilename)
@@ -74,32 +77,42 @@ def fullrun():
     print("Results are available in the csv file !!")
 
 
-DATASET="test/tests/"
-input_folder= "pylon2/ci560op/odette/data/abx/8K_mscoco/"+DATASET
+DATASET="test/"
+input_folder= "pylon5/ci560op/odette/data/abx/8K_mscoco/"+DATASET
 feature="mfcc.h5f"
-NB_CPU=1
+NB_CPU=11
 
-'''
+
+
 ON="phoneme"
-    for b in BY:
-        for a in ACROSS:
-            out='/'+ 'on_'+ ON[0:2]+ '_by_' + BY[0:2]+BY[-2:] +'_ac_'+ACROSS[0:2]+ACROSS[-2:]
-            output_folder=input_folder + out
-            fullrun()
-'''     
-      
+d={"speakerID":"context",
+   "context":"speakerID",
+   "na":["speakerID", "context"],
+  }
+for ACROSS, BY in d.iteritems():
+    if type(BY)==list:
+        out='/'+ 'on_'+ ON[0:2]+ '_by_' + BY[0]+ '_'+ BY[1] +'_ac_'+ACROSS[0:2]
+    else:
+        out='/'+ 'on_'+ ON[0:2]+ '_by_' + BY[0:2] +'_ac_'+ACROSS[0:2]
+    output_folder=input_folder + out
+    fullrun()
+
+
+
+   
+'''      
 ON="word"
 ACROSS="speakerID"
-BY="NaN"
-out='/'+ 'on_'+ ON[0:2]+ '_by_' + BY[0:2]+BY[-2:] +'_ac_'+ACROSS[0:2]+ACROSS[-2:]
+BY="na"
+out='/'+ 'on_'+ ON[0:2]+ '_by_' + BY[0:2] +'_ac_'+ACROSS[0:2]
 output_folder=input_folder + out
 fullrun()
 
 '''
 ON="word"
 BY="speakerID"
-ACROSS="NaN"
-out='/'+ 'on_'+ ON[0:2]+ '_by_' + BY[0:2]+BY[-2:] +'_ac_'+ACROSS[0:2]+ACROSS[-2:]
+ACROSS="na"
+out='/'+ 'on_'+ ON[0:2]+ '_by_' + BY[0:2] +'_ac_'+ACROSS[0:2]
 output_folder=input_folder + out
 fullrun()
 '''
