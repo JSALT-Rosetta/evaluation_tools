@@ -99,7 +99,7 @@ parser.add_argument(
     help='path of the input folder containing the item file')
 
 parser.add_argument(
-     '-f', '--feature_file', type=list, default="mfcc.h5f",
+     '-f', '--feature_file', type=str, default="mfcc.h5f",
      help='''name of the h5 file containing the acoustic features, default is %(default)s.''')
 
 parser.add_argument(
