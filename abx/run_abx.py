@@ -9,7 +9,6 @@ This test contains a full run of the ABX pipeline
 # -*- coding: utf-8 -*-
 
 import os
-import sys
 import argparse
 import ABXpy.task
 import ABXpy.distances.distances as distances
@@ -20,14 +19,11 @@ import ABXpy.analyze as analyze
 
 
 
-
-
 def dtw_cosine_distance(x, y, normalized):
     return dtw.dtw(x, y, cosine.cosine_distance, normalized)
 
 
-
-def fullrun(ON, BY, ACROSS, input_folder, feature, NB_CPU):
+def fullrun(ON, BY, ACROSS, input_folder, feature, cpu):
     
     if type(BY)==list:
         out='/'+ 'on_'+ ON[0:2]+ '_by_' + BY[0][0:2]+ '_'+ BY[1][0:2] +'_ac_'+ACROSS[0:2]
@@ -52,7 +48,6 @@ def fullrun(ON, BY, ACROSS, input_folder, feature, NB_CPU):
 
 
     # running the evaluation:
-   
     if not os.path.exists(taskfilename):
         if ACROSS == "na" and BY!="na":
              task = ABXpy.task.Task(item_file,ON, by=BY)
@@ -112,10 +107,6 @@ parser.add_argument(
 
 
 
-
-
-
-
 if __name__=='__main__':
     """Entry point of the 'run_abx.py' command"""
     
@@ -123,21 +114,16 @@ if __name__=='__main__':
 
     
     if args.ON=="phoneme":
-	d={"speakerID":"context",
+        d={"speakerID":"context",
 	   "context":"speakerID",
-	   "na":["speakerID", "context"],
- 	 }
-	for ACROSS, BY in d.iteritems():
-    	    fullrun(args.ON, BY , ACROSS, args.input_folder, args.feature, args.cpu)
+	   "na":["speakerID", "context"]}
+    
+        for ACROSS, BY in d.iteritems():
+            fullrun(args.ON, BY , ACROSS, args.input_folder, args.feature, args.cpu)
 
 
-    elif args.on=="word": 
-         d={"speakerID":"na",
-           "na":"speakerID",
-            }
-	for ACROSS, BY in d.iteritems():
-	    fullrun((args.ON, BY , ACROSS, args.input_folder, args.feature, args.cpu)
-
-
-
-
+    elif args.on=="word":
+        d={"speakerID":"na",
+           "na":"speakerID"}
+        for ACROSS, BY in d.iteritems():
+            fullrun(args.ON, BY , ACROSS, args.input_folder, args.feature, args.cpu)
