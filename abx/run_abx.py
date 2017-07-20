@@ -32,8 +32,9 @@ def fullrun():
     output_folder=input_folder + out
 
 
-    print("the input folder is " + input_folder)
-    print("the ABX task id done :" + out)    
+    print("the input folder is " + input_folder + "\n")
+    print("the ABX task id done :" + out + "\n")
+    print(feature)    
     
     
     if not os.path.exists(output_folder):
