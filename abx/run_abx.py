@@ -29,7 +29,7 @@ def fullrun():
         out='/'+ 'on_'+ ON[0:2]+ '_by_' + BY[0][0:2]+ '_'+ BY[1][0:2] +'_ac_'+ACROSS[0:2]
     else:
         out='/'+ 'on_'+ ON[0:2]+ '_by_' + BY[0:2] +'_ac_'+ACROSS[0:2]
-    output_folder=args.input_folder + out
+    output_folder=input_folder + out
 
 
     print("the input folder is " + input_folder)
