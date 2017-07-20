@@ -23,7 +23,7 @@ def dtw_cosine_distance(x, y, normalized):
     return dtw.dtw(x, y, cosine.cosine_distance, normalized)
 
 
-def fullrun(ON, BY, ACROSS, input_folder, feature, cpu):
+def fullrun():
     
     if type(BY)==list:
         out='/'+ 'on_'+ ON[0:2]+ '_by_' + BY[0][0:2]+ '_'+ BY[1][0:2] +'_ac_'+ACROSS[0:2]
