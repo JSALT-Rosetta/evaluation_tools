@@ -69,11 +69,11 @@ def fullrun(ON, BY, ACROSS, input_folder, feature, cpu):
             pass
     print("Task is done")
     
-    print( "number of cpu used is " + str(cpu))
+    print( "number of cpu used is " + str(NB_CPU))
     if not os.path.exists(distance_file):
         distances.compute_distances(feature_file, '/features/', taskfilename,
         	                         distance_file, dtw_cosine_distance,
-                	                   normalized = True, n_cpu=cpu)
+                	                   normalized = True, n_cpu=NB_CPU)
     print("Computing cosine distance is done")
                                 
     score.score(taskfilename, distance_file, scorefilename)
@@ -90,15 +90,15 @@ parser = argparse.ArgumentParser(description='Run several abx task either on pho
 
 
 parser.add_argument(
-    '--ON', type=str, metavar='<str>', default="phoneme",
+    '--on', type=str, metavar='<str>', default="phoneme",
     help='either phoneme or word, default is %(default)s')
 
 parser.add_argument(
-    '-i', '--input_folder', type=str, 
+    '-i', '--input', type=str, 
     help='path of the input folder containing the item file')
 
 parser.add_argument(
-     '-f', '--feature', type=list, default="mfcc.h5f",
+     '-f', '--feature_file', type=list, default="mfcc.h5f",
      help='''name of the h5 file containing the acoustic features, default is %(default)s.''')
 
 parser.add_argument(
@@ -113,17 +113,25 @@ if __name__=='__main__':
     args=parser.parse_args()
 
     
-    if args.ON=="phoneme":
+    if args.on=="phoneme":
         d={"speakerID":"context",
 	   "context":"speakerID",
 	   "na":["speakerID", "context"]}
     
         for ACROSS, BY in d.iteritems():
-            fullrun(args.ON, BY , ACROSS, args.input_folder, args.feature, args.cpu)
+            ON=args.on
+            input_folder=args.input
+            feature=args.feature_file
+            NB_CPU=args.cpu
+            fullrun()
 
 
-    elif args.ON=="word":
+    elif args.on=="word":
         d={"speakerID":"na",
            "na":"speakerID"}
         for ACROSS, BY in d.iteritems():
-            fullrun(args.ON, BY , ACROSS, args.input_folder, args.feature, args.cpu)
+            ON=args.on
+            input_folder=args.input
+            feature=args.feature_file
+            NB_CPU=args.cp
+            fullrun()
