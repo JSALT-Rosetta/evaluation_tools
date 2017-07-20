@@ -134,5 +134,5 @@ if __name__=='__main__':
             ON=args.on
             input_folder=args.input
             feature=args.feature_file
-            NB_CPU=args.cp
+            NB_CPU=args.cpu
             fullrun()
