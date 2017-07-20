@@ -50,13 +50,13 @@ def fullrun(ON, BY, ACROSS, input_folder, feature, cpu):
     # running the evaluation:
     if not os.path.exists(taskfilename):
         if ACROSS == "na" and BY!="na":
-             task = ABXpy.task.Task(item_file,ON, by=BY)
+            task = ABXpy.task.Task(item_file,ON, by=BY)
              
         elif BY == "na" and ACROSS!="na":
-             task = ABXpy.task.Task(item_file,ON, across=ACROSS)
+            task = ABXpy.task.Task(item_file,ON, across=ACROSS)
              
         elif ACROSS =="na" and BY == "na" :
-             task = ABXpy.task.Task(item_file,ON)
+            task = ABXpy.task.Task(item_file,ON)
              
         else:
             task = ABXpy.task.Task(item_file,ON, across=ACROSS, by=BY)
@@ -64,16 +64,16 @@ def fullrun(ON, BY, ACROSS, input_folder, feature, cpu):
         task.generate_triplets(taskfilename)
 
         try:
-	    task.print_stats(statsfilename)
+            task.print_stats(statsfilename)
         except:
             pass
     print("Task is done")
     
     print( "number of cpu used is " + str(cpu))
     if not os.path.exists(distance_file):
-	    distances.compute_distances(feature_file, '/features/', taskfilename,
-        	                        distance_file, dtw_cosine_distance,
-                	                normalized = True, n_cpu=cpu)
+        distances.compute_distances(feature_file, '/features/', taskfilename,
+        	                         distance_file, dtw_cosine_distance,
+                	                   normalized = True, n_cpu=cpu)
     print("Computing cosine distance is done")
                                 
     score.score(taskfilename, distance_file, scorefilename)
@@ -122,7 +122,7 @@ if __name__=='__main__':
             fullrun(args.ON, BY , ACROSS, args.input_folder, args.feature, args.cpu)
 
 
-    elif args.on=="word":
+    elif args.ON=="word":
         d={"speakerID":"na",
            "na":"speakerID"}
         for ACROSS, BY in d.iteritems():
