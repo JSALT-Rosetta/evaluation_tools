@@ -117,7 +117,7 @@ if __name__=='__main__':
     if args.on=="phoneme":
         d={"speakerID":"context",
 	   "context":"speakerID",
-	   "na":["speakerID", "context"]}
+	   }
     
         for ACROSS, BY in d.iteritems():
             ON=args.on
@@ -126,7 +126,15 @@ if __name__=='__main__':
             NB_CPU=args.cpu
             fullrun()
 
-
+    elif args.on=="speakerID":
+        ON=args.on
+        BY="context"
+        ACROSS="phoneme"
+        input_folder=args.input
+        feature=args.feature_file
+        NB_CPU=args.cpu
+        fullrun()
+ 
     elif args.on=="word":
         d={"speakerID":"na",
            "na":"speakerID"}
