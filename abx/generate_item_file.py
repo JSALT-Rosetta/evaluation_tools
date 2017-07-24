@@ -22,9 +22,10 @@ def write_row(output_file, column, jump=True):
     '''
     
 
-def write_phoneme_item_file(db, path_output, name_item_file, columns_names_list, alignment=False):
+def write_phoneme_item_file(db, path_output, name_item_file, columns_names_list, alignment=False, time_unit="seconde"):
     """
-    Write an item file for an ABX task on phonemes.
+    Write an item file for an ABX task on phonemes.Onset and offset in SECOND in the item file.
+    Onset and offeset in ms in the mscoco database.
     Parameters
     ----------
     db : SQLite3 database containing meta-data about SpeechCoco  
@@ -63,11 +64,11 @@ def write_phoneme_item_file(db, path_output, name_item_file, columns_names_list,
                         phoneme=str(phonemes[i]['value'])
                         
                         if alignment: 
-                            onset=str(phonemes[i]['begin'])
-                            offset=str(phonemes[i]['end'])
+                            onset=str(phonemes[i]['begin']/1000)
+                            offset=str(phonemes[i]['end']/1000)
                         else :    
-                            onset=str(phonemes[i-1]['begin'])
-                            offset=str(phonemes[i+1]['end'])
+                            onset=str(phonemes[i-1]['begin']/1000)
+                            offset=str(phonemes[i+1]['end']/1000)
                             context=str('_'.join((phonemes[i-1]['value'], phonemes[i+1]['value'])))
                         
                         write_row(f,source, True)
@@ -87,7 +88,8 @@ def write_phoneme_item_file(db, path_output, name_item_file, columns_names_list,
                                
 def write_word_item_file(db, path_output, name_item_file, columns_names_list, alignment=False):
     """
-    Write an item file for an ABX task on words.
+    Write an item file for an ABX task on words. Onset and offset in SECOND in the item file.
+    Onset and offeset in ms in the mscoco database.
     Parameters
     ----------
     db : SQLite3 database containing meta-data about SpeechCoco  
@@ -115,8 +117,8 @@ def write_word_item_file(db, path_output, name_item_file, columns_names_list, al
                 for word in caption.timecode.parse():
                 
                         source=caption.filename.split(".")[0]
-                        onset=str(word['begin'])
-                        offset=str(word['end'])
+                        onset=str(word['begin']/1000)
+                        offset=str(word['end']/1000)
                         word=str(word['value'])
                         
                         write_row(f,source, True)
