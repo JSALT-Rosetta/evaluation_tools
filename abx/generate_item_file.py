@@ -22,7 +22,7 @@ def write_row(output_file, column, jump=True):
     '''
     
 
-def write_phoneme_item_file(db, path_output, name_item_file, columns_names_list, alignment=False, time_unit="seconde"):
+def write_phoneme_item_file(db, path_output, name_item_file, columns_names_list, alignment):
     """
     Write an item file for an ABX task on phonemes.Onset and offset in SECOND in the item file.
     Onset and offeset in ms in the mscoco database.
@@ -86,7 +86,7 @@ def write_phoneme_item_file(db, path_output, name_item_file, columns_names_list,
         finally: f.close()
                 
                                
-def write_word_item_file(db, path_output, name_item_file, columns_names_list, alignment=False):
+def write_word_item_file(db, path_output, name_item_file, columns_names_list):
     """
     Write an item file for an ABX task on words. Onset and offset in SECOND in the item file.
     Onset and offeset in ms in the mscoco database.
@@ -103,7 +103,6 @@ def write_word_item_file(db, path_output, name_item_file, columns_names_list, al
          "#filename", "onset", "offset", "#word"
          if alignment=False, then columns such as  "image ID", 
          "captionID", "speaker IF", "speaker nationality",  can be added
-    alignment : boolean
     """
     captions=db.filterCaptions() # captions and metadata from the SQL database
     
@@ -125,7 +124,6 @@ def write_word_item_file(db, path_output, name_item_file, columns_names_list, al
                         write_row(f,onset, False)
                         write_row(f,offset, False)
                         write_row(f,word, False)
-                        
                         write_row(f,caption.imageID, False)
                         write_row(f,caption.captionID, False)
                         write_row(f,caption.speaker.name, False)
