@@ -22,7 +22,7 @@ def select_rows(item_file, wave_file_names, output):
     
     selected=df[df.iloc[:,0].isin(lines)]
     
-    selected.to_csv(output, sep='\t', header=True)
+    selected.to_csv(output, sep='\t', header=True, index=False)
     return(selected)
 
 
