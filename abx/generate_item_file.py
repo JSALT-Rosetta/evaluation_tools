@@ -126,11 +126,10 @@ def write_word_item_file(db, path_output, name_item_file, columns_names_list, al
                         write_row(f,offset, False)
                         write_row(f,word, False)
                         
-                        if alignment==False: 
-                            write_row(f,caption.imageID, False)
-                            write_row(f,caption.captionID, False)
-                            write_row(f,caption.speaker.name, False)
-                            write_row(f,caption.speaker.nationality, False)
+                        write_row(f,caption.imageID, False)
+                        write_row(f,caption.captionID, False)
+                        write_row(f,caption.speaker.name, False)
+                        write_row(f,caption.speaker.nationality, False)
                 
         finally: f.close()
                 
