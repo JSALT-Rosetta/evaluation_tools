@@ -36,9 +36,9 @@ def write_phoneme_item_file(db, path_output, name_item_file, columns_names_list,
          name of the item file
     columns_names_list: list,
          list of the columns of the item file, must be at least in that order
-         "#filename", "onset", "offset", "#phoneme"
-         if alignment=False, then columns such as "context", "image ID", 
-         "captionID", "speaker IF", "speaker nationality",  can be added
+         "#file", "onset", "offset", "#phoneme"
+         if alignment=False, then columns such as "context", "imageID", 
+         "captionID", "speakerID", "speakerNationality",  can be added
     alignment : boolean, 
          if True , onset and offset of phonemes
          else onset and offset of triphones
@@ -156,8 +156,8 @@ parser.add_argument(
     default is %(default)s.''')
 
 parser.add_argument(
-     '-n', '--columns_names', type=list, default=["#file_name", "onset", "offset", "#phoneme", 
-     "context", "imageID", "captionID", "speakerID", "speaker_nationality"],
+     '-n', '--columns_names', type=list, default=["#file", "onset", "offset", "#phoneme", 
+     "context", "imageID", "captionID", "speakerID", "speakerNationality"],
      help='''list of the columns names of the item file, default is %(default)s.''')
 
 parser.add_argument(
