@@ -144,7 +144,7 @@ if __name__ == '__main__':
     help='either phoneme,  word or speaker, default is %(default)s')
     
     g1.add_argument(
-    '-t', '--task', type=str, metavar= '<str>', default, 'across', 
+    '-t', '--task', type=str, metavar= '<str>', default= 'across', 
     help='across or within speakers, or control, default is %(default)s')
     
     
