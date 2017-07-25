@@ -54,7 +54,7 @@ def lookup(attr, task_items, default=None):
         return default
 
 
-def avg(filename, on, task_type='across'):
+def avg(filename, on='phoneme', task_type='across'):
     #task_type = lookup('type', task, 'across')
     df = pandas.read_csv(filename, sep='\t', header=0)
     
@@ -140,13 +140,14 @@ if __name__ == '__main__':
     help='cvs file with the results for all pairs')
     
     g1.add_argument(
+    '--on', type=str, metavar='<str>', default="phoneme",
+    help='either phoneme,  word or speaker, default is %(default)s')
+    
+    g1.add_argument(
     '-t', '--task', type=str, metavar= '<str>', default, 'across', 
     help='across or within speakers, or control, default is %(default)s')
     
-    g1.add_argument(
-    '--on', type=str, metavar='<str>', default="phoneme",
-    help='either phoneme,  word or speaker, default is %(default)s')
-
+    
     args = parser.parse_args()
 
     print("the ABX score of the task: " + args.filename.split('.')[0]+ "is :"+str(avg(args.filename, args.on, args.task)))
