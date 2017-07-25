@@ -28,7 +28,6 @@
 
 import ast
 import argparse
-import ConfigParser
 import h5py
 import os
 import numpy as np
@@ -37,8 +36,8 @@ import pickle
 import sys
 import warnings
 
-from tables import DataTypeWarning
-from tables import NaturalNameWarning
+#from tables import DataTypeWarning
+#from tables import NaturalNameWarning
 
 import ABXpy.distances.distances as distances
 import ABXpy.distances.metrics.cosine as cosine
@@ -120,12 +119,13 @@ def avg(filename, on='phoneme', task_type='across'):
      aggregate on talker
     groups = df.groupby(['phone_1', 'phone_2'], as_index=False)
     df = groups['score'].mean()
+
+    '''
     average = df.mean()[0]
-    average = (1.0-average)*100
-    '''    
+    average = (1.0-average)*100    
     
     
-    return (average,confidence)
+    return (average)
 
 
 if __name__ == '__main__':
