@@ -10,19 +10,17 @@ import sampling
 import dictionnaries
 from pycocotools.coco import COCO
 
-def run_sample(dataset_type="test", 
+def run_sample(dataset_type="dev", 
                sample_size=1000, 
                path_ann="/pylon2/ci560op/larsene/data/mscoco/val2014/instances_val2014.json", 
                input_path="/pylon2/ci560op/odette/data/mscoco/val2014/", 
                output="/pylon2/ci560op/larsene/data/8K_mscoco/", 
-               dic_speakers={"Phil": 1/float(12) ,
-                             "Paul": 1/float(12),
-                             "Amanda":1/float(12),
-                             "Judith":1/float(12), 
-                             "Bruce":1/float(12), 
-                             "Elizabeth":1/float(12), 
-                             "Bronwen":0.25, 
-                             "Jenny":0.25 , 
+               dic_speakers={"Phil": 1/float(6) ,
+                             "Paul": 1/float(6),
+                             "Amanda":1/float(6),
+                             "Judith":1/float(6), 
+                             "Bruce":1/float(6), 
+                             "Elizabeth":1/float(6), 
                              },
                n=1): 
     
@@ -31,8 +29,15 @@ def run_sample(dataset_type="test",
     d_cat_to_img=dictionnaries.build_dict_cat_name_to_img_id(categories, coco ,save=False, name="", type_category="supercategory")
     d_img_to_cat=dictionnaries.reverse_dic(d_cat_to_img, save=False, name="")
     
-    print("selecting wave file names according to speaker names...")
-    wave_file_name_selected=sampling.select_speaker_in_wav(input_path  + "/wav/", dic_speakers)
+    print()
+    wave_files=sampling.create_list_from_files_in_folder(input_path+ "/wav/")
+    
+    if dataset_type=='dev':
+        test_subset=sampling.create_list_from_files_in_folder(output+ "/test/wav/")
+        wave_files=list(set(wave_files)-set(test_subset))
+    
+    print("selecting wave file names according to speaker names...")# for the dev test, must be different than the one in the 8Kmscoco test":    
+    wave_file_name_selected=sampling.select_speaker_in_wav(wave_files, dic_speakers, output +dataset_type)
      
     print("selecting image that have 4 captions ...")
     ImgID_selected=list(sampling.get_nb_caption_per_img(n, wave_file_name_selected))
