@@ -32,7 +32,7 @@ import pandas
 import os
 
 def avg(filename, on='phoneme', task_type='across', ponderate=False):
-    input_folder=os.path(filename)
+    input_folder=os.path.dirname(os.path.abspath(filename))
     df = pandas.read_csv(filename, sep='\t', header=0)
               
     df = df[df.phoneme_1!= '#']
@@ -121,9 +121,9 @@ def avg(filename, on='phoneme', task_type='across', ponderate=False):
 
     
     res=average.mean()
-    res_per_speaker.to_csv('score_per_speaker.txt', sep="\t", header=0, index=False)
-    res_per_unit.to_csv('score_per_unit.txt', sep='\t', header=0, index=False)
-    res_per_context.to_csv('score_per_context', sep='', header=0, index=False)
+    res_per_speaker.to_csv(input_folder+'/score_per_speaker.txt', sep="\t", header=0, index=False)
+    res_per_unit.to_csv(input_folder+'/score_per_unit.txt', sep='\t', header=0, index=False)
+    res_per_context.to_csv(input_folder+'/score_per_context', sep='', header=0, index=False)
     print(res)
     return (res)
 
