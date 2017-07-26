@@ -51,6 +51,7 @@ def avg(filename, on='phoneme', task_type='across', ponderate=False):
                 average=groups.apply(lambda x: np.average(x.score, weights=None))
             res_per_speaker=average.mean(level="speakerID_1")    
             res_per_unit=average.mean(level="phoneme_1")
+            res_per_context=0
         
         
         elif task_type == 'within':
