@@ -123,9 +123,9 @@ def avg(filename, on='phoneme', task_type='across', ponderate=False):
     
     res=average.mean()
     res_per_speaker.to_csv(input_folder+'/score_per_speaker.txt', sep="\t", header=0, index=False)
-    if isinstance(res_per_unit, int):
+    if isinstance(res_per_unit, int)==False:
         res_per_unit.to_csv(input_folder+'/score_per_unit.txt', sep='\t', header=0, index=False)
-    if isinstance(res_per_context, int):
+    if isinstance(res_per_context, int)==False:
         res_per_context.to_csv(input_folder+'/score_per_context', sep='\t', header=0, index=False)
     print(res)
     return (res)
