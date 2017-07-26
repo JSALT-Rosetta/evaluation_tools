@@ -26,106 +26,106 @@
 
 """
 
-import ast
 import argparse
-import h5py
-import os
 import numpy as np
 import pandas
-import pickle
-import sys
-import warnings
+import os
 
-#from tables import DataTypeWarning
-#from tables import NaturalNameWarning
-
-import ABXpy.distances.distances as distances
-import ABXpy.distances.metrics.cosine as cosine
-import ABXpy.distances.metrics.dtw as dtw
-import ABXpy.score as score
-import ABXpy.analyze as analyze
-from ABXpy.misc import any2h5features
-
-def lookup(attr, task_items, default=None):
-    if attr in task_items:
-        return task_items[attr]
-    else:
-        return default
-
-
-def avg(filename, on='phoneme', task_type='across'):
-    #task_type = lookup('type', task, 'across')
+def avg(filename, on='phoneme', task_type='across', ponderate=False):
+    input_folder=os.path(filename)
     df = pandas.read_csv(filename, sep='\t', header=0)
+              
+    df = df[df.phoneme_1!= '#']
+    df = df[df.phoneme_2!= '#']
+    df = df[df.phoneme_1!= '__#__']
+    df = df[df.phoneme_2!= '__#__']
+    
     
     if on=="phoneme":
     
         if task_type == 'across':
-            # aggregate on speakers
-            groups = df.groupby(
-                ['speakerID_1', 'speakerID_2', 'phoneme_1', 'phoneme_2'], as_index=False)
-            df = groups['score'].mean()
+            groups = df.groupby(['speakerID_1', 'speakerID_2', 'phoneme_1', 'phoneme_2'], as_index=False)
+            if ponderate:
+                average=groups.apply(lambda x: np.average(x.score, weights=x.n))
+            else:
+                average=groups.apply(lambda x: np.average(x.score, weights=None))
+            res_per_speaker=average.mean(level="speakerID_1")    
+            res_per_unit=average.mean(level="phoneme_1")
         
         
         elif task_type == 'within':
-            arr = np.array(map(ast.literal_eval, df['by']))
-            df['speakerID']  = [e for e, f, g in arr]
-            df['context'] = [f for e, f, g in arr]
 
-            # aggregate on context
-            groups = df.groupby(['phoneme_1', 'phoneme_2'], as_index=False) 
-            df = groups['score'].mean()
+            groups = df.groupby(['phoneme_1', 'phoneme_2', 'context_1', 'context_2'], as_index=False)
+            if ponderate:
+                average=groups.apply(lambda x: np.average(x.score, weights=x.n))
+            else:
+                average=groups.apply(lambda x: np.average(x.score, weights=None))
+            res_per_speaker=0
+            res_per_context=average.mean(level="context_1")    
+            res_per_unit=average.mean(level="phoneme_1")
+
+        
+
             
         elif task_type=='control':
             groups = df.groupby(['phoneme_1', 'phoneme_2'], as_index=False) 
-            df = groups['score'].mean()
-            
+            if ponderate:
+                average=groups.apply(lambda x: np.average(x.score, weights=x.n))
+            else:
+                average=groups.apply(lambda x: np.average(x.score, weights=None))
+            res_per_speaker=0
+            res_per_context=0
+            res_per_unit=average.mean(level="phoneme_1")
+
+        
             
         else:
             raise ValueError('Unknown task type: {0}'.format(task_type))
       
       
     elif on=="speaker":
-        #aggregate on phoneme
-        groups = df.groupby(['context', 'speakerID_1', 'speakerID_2'], as_index=False)
-        df = groups['score'].mean()
-        
+        groups = df.groupby(['by', 'speakerID_1', 'speakerID_2'], as_index=False)
+        if ponderate:
+            average=groups.apply(lambda x: np.average(x.score, weights=x.n))
+        else:
+            average=groups.apply(lambda x: np.average(x.score, weights=None))
+        res_per_speaker=average.mean(level="speakerID_1")    
+        res_per_unit=average.mean(level="by")
+        res_per_context=0
+    
+           
         
     elif on=="word":
     
         if task_type=='across':
-            #aggregate on speakers
-            groups = df.groupby(['context', 'word_1', 'word_2'], as_index=False)
-            df = groups['score'].mean()
-        elif task_type=='within':
-            # aggregate on contexts
-            groups = df.groupby(['word_1', 'word_2'], as_index=False)
-            df = groups['score'].mean()
-    
-    '''
-    ## Compute confidence interval with bootstrap method :
-    boot=df 
-    n = 40000
-    N = 1000
-    ci=[]
-    for i in xrange(0,N):
-        bt=boot.merge(pandas.DataFrame(index=np.random.randint(n, size=n)), left_index=True, right_index=True, how='right')
-        groups=bt.groupby(['phone_1','phone_2'],as_index=False)
-        bt=groups['score'].mean()
-        average = bt.mean()[0]
-        ci.append(average)
-    ci=sorted(ci)
-    confidence=[ci[int(round(0.5*N))],ci[int(round(0.95*N))]]
-    confidence=[0,0]
-     aggregate on talker
-    groups = df.groupby(['phone_1', 'phone_2'], as_index=False)
-    df = groups['score'].mean()
+            groups = df.groupby(['speakerID_1', 'speakerID_2', 'word_1', 'word_2'], as_index=False)
+            if ponderate:
+                average=groups.apply(lambda x: np.average(x.score, weights=x.n))
+            else:
+                average=groups.apply(lambda x: np.average(x.score, weights=None))
+            res_per_context=0
+            res_per_speaker=average.mean(level="speakerID_1")    
+            res_per_unit=average.mean(level="word_1")
+        
 
-    '''
-    average = df.mean()[0]
-    average = (1.0-average)*100    
+
+        elif task_type=='within':
+            groups = df.groupby(['word_1', 'word_2'], as_index=False)
+            if ponderate:
+                average=groups.apply(lambda x: np.average(x.score, weights=x.n))
+            else:
+                average=groups.apply(lambda x: np.average(x.score, weights=None))    
+            res_per_unit=average.mean(level="word_1")
+            res_per_context=0
+            res_per_speaker=0
+
     
-    
-    return (average)
+    res=average.mean()
+    res_per_speaker.to_csv('score_per_speaker.txt', sep="\t", header=0, index=False)
+    res_per_unit.to_csv('score_per_unit.txt', sep='\t', header=0, index=False)
+    res_per_context.to_csv('score_per_context', sep='', header=0, index=False)
+    print(res)
+    return (res)
 
 
 if __name__ == '__main__':
@@ -146,6 +146,10 @@ if __name__ == '__main__':
     g1.add_argument(
     '-t', '--task', type=str, metavar= '<str>', default= 'across', 
     help='across or within speakers, or control, default is %(default)s')
+    
+    g1.add_argument(
+    '-p', '--ponderate', type=bool, default= False, 
+    help='weight score on number of phoneme pairs or not , default is %(default)s')
     
     
     args = parser.parse_args()
