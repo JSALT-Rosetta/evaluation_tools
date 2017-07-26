@@ -154,7 +154,7 @@ if __name__ == '__main__':
     
     args = parser.parse_args()
 
-    print("the ABX score of the task: " + args.filename.split('.')[0]+ "is :"+str(avg(args.filename, args.on, args.task)))
+    print("the ABX score of the task: " + args.filename.split('.')[0]+ "is :"+str(avg(args.filename, args.on, args.task, args.ponderate)))
 
 
 
