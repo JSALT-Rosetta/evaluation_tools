@@ -123,7 +123,7 @@ def avg(filename, on='phoneme', task_type='across', ponderate=False):
     res=average.mean()
     res_per_speaker.to_csv(input_folder+'/score_per_speaker.txt', sep="\t", header=0, index=False)
     res_per_unit.to_csv(input_folder+'/score_per_unit.txt', sep='\t', header=0, index=False)
-    res_per_context.to_csv(input_folder+'/score_per_context', sep='', header=0, index=False)
+    res_per_context.to_csv(input_folder+'/score_per_context', sep='\t', header=0, index=False)
     print(res)
     return (res)
 
@@ -153,8 +153,9 @@ if __name__ == '__main__':
     
     
     args = parser.parse_args()
-
-    print("the ABX score of the task: " + args.filename.split('.')[0]+ "is :"+str(avg(args.filename, args.on, args.task, args.ponderate)))
+    print("the ABX score of the task: " + args.filename.split('.')[0])
+    avg(args.filename, args.on, args.task, args.ponderate)
+    
 
 
 
