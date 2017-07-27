@@ -1,0 +1,17 @@
+#!/bin/bash
+#SBATCH -N 1
+#SBATCH -p RM
+#SBATCH -t 8:00:00
+##SBATCH --ntasks-per-node 11
+#SBATCH --mail-type=ALL
+#SBATCH --job-name=ph_control_testset_8kMS
+
+set - x
+
+source activate zerospeech
+
+echo "running an abx task"
+
+python run_abx.py --on $"phoneme" -i $"/pylon5/ci560op/larsene/abx/8K_mscoco/test/" -f $"mfcc.h5f" --cpu $"11"
+
+echo "abx task done"

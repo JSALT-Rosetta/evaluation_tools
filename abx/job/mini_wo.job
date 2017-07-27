@@ -1,0 +1,18 @@
+#!/bin/sh
+#SBATCH -N 1
+#SBATCH -p RM
+#SBATCH -t 1:00:00
+##SBATCH --ntasks-per-node 11
+#SBATCH --mail-type=ALL
+#SBATCH --job-name=mini_wo
+
+set - x
+
+source activate zerospeech
+
+echo "running an abx task"
+
+python run_abx.py --on $"word" -i $"/pylon5/ci560op/larsene/abx/8K_mscoco/test/mini_tests/" -f $"mfcc.h5f" --cpu $"1"
+
+echo "abx task done"
+
