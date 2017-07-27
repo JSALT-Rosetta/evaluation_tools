@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Copyright 2016, 2017 Julien Karadyi
+# Copyright 2016, 2017 Elin Larsen, Julien Karadyi
 #
 # You can redistribute this file and/or modify it under the terms of
 # the GNU General Public License as published by the Free Software
