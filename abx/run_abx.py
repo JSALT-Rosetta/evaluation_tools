@@ -137,8 +137,9 @@ if __name__=='__main__':
         fullrun()
  
     elif args.on=="word":
-        d={"speakerID":"na",
-           "na":"speakerID"}
+        #d={"speakerID":"na",
+        #   "na":"speakerID"}
+        d={"speakerID":"na"}
         for ACROSS, BY in d.iteritems():
             ON=args.on
             input_folder=args.input

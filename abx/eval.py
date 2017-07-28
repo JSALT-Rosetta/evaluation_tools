@@ -34,14 +34,12 @@ import os
 def avg(filename, on='phoneme', task_type='across', ponderate=False):
     input_folder=os.path.dirname(os.path.abspath(filename))
     df = pandas.read_csv(filename, sep='\t', header=0)
-              
-    df = df[df.phoneme_1!= '#']
-    df = df[df.phoneme_2!= '#']
-    df = df[df.phoneme_1!= '__#__']
-    df = df[df.phoneme_2!= '__#__']
-    
     
     if on=="phoneme":
+    	df = df[df.phoneme_1!= '#']
+    	df = df[df.phoneme_2!= '#']
+    	df = df[df.phoneme_1!= '__#__']
+    	df = df[df.phoneme_2!= '__#__']
     
         if task_type == 'across':
             groups = df.groupby(['speakerID_1', 'speakerID_2', 'phoneme_1', 'phoneme_2'], as_index=False)
