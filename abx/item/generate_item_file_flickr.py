@@ -128,4 +128,9 @@ def get_item_file(path_alignment, dataset_type, path_wav_spk_datasetype ):
     triphone_align=phone_to_triphone_alignment(df_align) 
     context=create_phonetic_context(triphone_align)
     final=pd.merge(context, df_set, on='#file', how="inner")
+    item = final[final["#phoneme"] != "+LAUGH+"]
+    item = item[item["#phoneme"] != "SIL"]
+    item = item[item["#phoneme"] != "+NOISE+"]
+    item = item[item["#phoneme"] != "+BREATH+"]
+    item = item[item["#phoneme"] != "+HUMAN+"]
     return(final)
