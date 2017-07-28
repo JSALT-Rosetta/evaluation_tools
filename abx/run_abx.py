@@ -115,9 +115,9 @@ if __name__=='__main__':
 
     
     if args.on=="phoneme":
-        d={"na": ["speakerID", "context"]}
-        #d={"speakerID":"context",
-	#  "context":"speakerID}
+        d={"speakerID":"context",
+	  "context":"speakerID",
+          "na":["speakerID", "context"]}
 
     
         for ACROSS, BY in d.iteritems():
@@ -137,9 +137,8 @@ if __name__=='__main__':
         fullrun()
  
     elif args.on=="word":
-        #d={"speakerID":"na",
-        #   "na":"speakerID"}
-        d={"speakerID":"na"}
+        d={"speakerID":"na",
+           "na":"speakerID"}
         for ACROSS, BY in d.iteritems():
             ON=args.on
             input_folder=args.input
