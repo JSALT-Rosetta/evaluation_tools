@@ -17,6 +17,8 @@ import ABXpy.distances.metrics.dtw as dtw
 import ABXpy.score as score
 import ABXpy.analyze as analyze
 
+import eval
+
 
 
 def dtw_cosine_distance(x, y, normalized):
@@ -68,22 +70,22 @@ def fullrun():
             task.print_stats(statsfilename)
         except:
             pass
-    print("Task is done")
+    print("the abx task file is created")
     
     print( "number of cpu used is " + str(NB_CPU))
     if not os.path.exists(distance_file):
         distances.compute_distances(feature_file, '/features/', taskfilename,
         	                         distance_file, dtw_cosine_distance,
                 	                   normalized = True, n_cpu=NB_CPU)
-    print("Computing cosine distance is done")
+    print("Computing cosine distance has been computed")
                                 
     score.score(taskfilename, distance_file, scorefilename)
     print("Score is computed")
     
     analyze.analyze(taskfilename, scorefilename, analyzefilename)
-    print("Results are available in the csv file !!")
+    print("Results are available in the csv file !")
 
-
+    eval.avg(analyzefilename, ON, taskfilename, ponderate)
 
 
 
@@ -106,6 +108,9 @@ parser.add_argument(
      '--cpu', type=int, default=1,
      help='''number of CPU to run the task on, default is %(default)s ''')
 
+parser.add_argument(
+     '-p', '--ponderate',  type=bool , default=False, 
+     help='''whether to weigth the abx score on the number of item or not,  default is %(default)s ''')
 
 
 if __name__=='__main__':
@@ -115,9 +120,9 @@ if __name__=='__main__':
 
     
     if args.on=="phoneme":
-        d={"na": ["speakerID", "context"]}
-        #d={"speakerID":"context",
-	#  "context":"speakerID}
+        d={"speakerID":"context",
+	  "context":"speakerID",
+          "na":["speakerID", "context"]}
 
     
         for ACROSS, BY in d.iteritems():
@@ -125,6 +130,7 @@ if __name__=='__main__':
             input_folder=args.input
             feature=args.feature_file
             NB_CPU=args.cpu
+	    ponderate=args.ponderate
             fullrun()
 
     elif args.on=="speakerID":
@@ -134,15 +140,16 @@ if __name__=='__main__':
         input_folder=args.input
         feature=args.feature_file
         NB_CPU=args.cpu
+        ponderate=args.ponderate
         fullrun()
  
     elif args.on=="word":
-        #d={"speakerID":"na",
-        #   "na":"speakerID"}
-        d={"speakerID":"na"}
+        d={"speakerID":"na",
+           "na":"speakerID"}
         for ACROSS, BY in d.iteritems():
             ON=args.on
             input_folder=args.input
             feature=args.feature_file
             NB_CPU=args.cpu
+	    ponderate=args.ponderate
             fullrun()
