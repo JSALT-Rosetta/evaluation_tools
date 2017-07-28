@@ -26,7 +26,7 @@ def create_list_from_files_in_folder(input_path):
     return(files)
     
 
-def select_speaker_in_wav(wave_files, dic_speakers, output_path): 
+def select_speaker_in_wav(wave_files, dic_speakers, output_path, dataset_type): 
     """
     Get all audio captions name file that are said by the selected speakers
     ----------
@@ -45,24 +45,30 @@ def select_speaker_in_wav(wave_files, dic_speakers, output_path):
             if spk in w:
                 d[spk].add(w)
     
-    for spk, proba in list(dic_speakers.items()): 
-        
+    
+    for spk, proba in list(dic_speakers.items()):    
         for k, v in list(d.items()): 
             if spk==k: 
-                size=int(proba*len(v))
-                v_weighted= np.random.choice(np.asarray(list(v)), size, replace=False )
-                print(spk + " : "+str(len(v_weighted)))
-                wav_l.append(v_weighted)
+                if dataset_type=="test":
+                    size=int(proba*len(v))
+                    v_weighted= np.random.choice(np.asarray(list(v)), size, replace=False )
+                    print(spk + " : "+str(len(v_weighted)))
+                    wav_l.append(v_weighted)
+                else:
+                    size=len(v)
+                    v_speaker_sel=np.random.choice(np.asarray(list(v)), size,replace=False )
+                    print(spk + " : "+str(len(v_speaker_sel)))
+                    wav_l.append(v_speaker_sel)
+        
     
     final=np.concatenate(wav_l)            
     
-    f=open(output_path + "/wav_selected_spk_test.txt", 'w')            
-    list_wav_sel=[]
-    for i in range(8): 
-        for s in final[i]: 
-            f.write(s)
-            f.write("\n")
-            list_wav_sel.append(s)
+    f=open(output_path + "/wav_selected_spk_" +dataset_type+ ".txt", 'w')            
+    list_wav_sel=[] 
+    for s in final: 
+        f.write(s)
+        f.write("\n")
+        list_wav_sel.append(s)
             
     return(list_wav_sel)
 
