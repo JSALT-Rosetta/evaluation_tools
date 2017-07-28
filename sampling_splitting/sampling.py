@@ -55,14 +55,15 @@ def select_speaker_in_wav(wave_files, dic_speakers, output_path, dataset_type):
                     print(spk + " : "+str(len(v_weighted)))
                     wav_l.append(v_weighted)
                 else:
-                    v=np.random.choice(np.asarray(list(v)), replace=False )
-                    print(spk + " : "+str(len(v)))
-                    wav_l.append(v)
+                    size=len(v)
+                    v_speaker_sel=np.random.choice(np.asarray(list(v)), size,replace=False )
+                    print(spk + " : "+str(len(v_speaker_sel)))
+                    wav_l.append(v_speaker_sel)
         
     
     final=np.concatenate(wav_l)            
     
-    f=open(output_path + "/wav_selected_spk_test.txt", 'w')            
+    f=open(output_path + "/wav_selected_spk_" +dataset_type+ ".txt", 'w')            
     list_wav_sel=[] 
     for s in final: 
         f.write(s)
