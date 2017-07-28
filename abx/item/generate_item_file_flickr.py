@@ -15,11 +15,12 @@ from os import listdir
 from os.path import isfile, join
 from collections import defaultdict
 
-path_labels='/pylon2/ci560op/odette/data/flickr/flickr_labels/'
-df=pd.read_table("df_wav_spk_set.txt", sep='\t', header=0)
-df["#file"]=[s.split('.')[0] for s in df["wave_file"]]
-dataset_type="test"
-
+######### INPUT
+#path_labels='/pylon2/ci560op/odette/data/flickr/flickr_labels/'
+#df=pd.read_table("df_wav_spk_set.txt", sep='\t', header=0)
+#df["#file"]=[s.split('.')[0] for s in df["wave_file"]]
+#dataset_type="test"
+##########
 
 def create_list_from_files_in_folder(input_path): 
     files = [f for f in listdir(input_path) if isfile(join(input_path, f))]
@@ -41,22 +42,20 @@ def phone_to_triphone_alignment(df):
     """
     triphones_onset=[]
     triphones_offset=[]
-    onset=df['onset']
-    offset=df['offset']
     new_df=df
     for i in range(len(df)):
         if i==0:
-            triphones_onset.append(onset[i])
+            triphones_onset.append(df.iloc[i]["onset"])
         else:
-            triphones_onset.append(onset[i-1])
-            
-        if i!=len(df)-1:
-            triphones_offset.append(offset[i+1])
+            triphones_onset.append(df.iloc[i-1]["onset"])    
+        if i==len(df)-1:
+            triphones_offset.append(df.iloc[i]["offset"])
         else:
-            triphones_offset.append(offset[i])
+            triphones_offset.append(df.iloc[i+1]["onset"])
     new_df['onset']=triphones_onset
     new_df['offset']=triphones_offset
-    return(new_df)
+    return(new_df)      
+
 
 
 def dic_alignment_to_wave(path_alignement):  
@@ -83,8 +82,29 @@ def reverse_dic(dic, save=False, name=""):
             json.dump(d, fp)
     return(d)
 
-
-
+def create_phonetic_context(df):
+    """
+    From a dataframe containing a colunms of phones, create another column 
+    containing previous and following phones for each phone
+    """
+    list_context=[]
+    phonemes=list(df["#phoneme"])
+    for i in range(len(df)):
+        if i!=0 and i!=len(df)-1:
+            print(i)
+            context="_".join((phonemes[i-1], phonemes[i+1]))
+            list_context.append(context)
+        elif i==0:
+            context="_".join((phonemes[i], phonemes[i+1]))
+            list_context.append(context)
+        elif i==len(df)-1:
+            context="_".join((phonemes[i-1], phonemes[i]))
+            list_context.append(context)          
+    df["context"]=list_context
+    return(df)
+    
+    
+    
 def get_item_file(path_alignment, dataset_type, path_wav_spk_datasetype ):    
     dic=dic_alignment_to_wave(path_alignment)
     dic_rev=reverse_dic(dic, save=False, name="")
@@ -105,17 +125,7 @@ def get_item_file(path_alignment, dataset_type, path_wav_spk_datasetype ):
         df_filename=pd.DataFrame(np.repeat(dic[filename], len(d)), columns=['#file'])
         dd=pd.concat([df_filename, d], axis=1)
         df_align=pd.concat([df_align, dd], axis=0)    
-    triphone_align=phone_to_triphone_alignment(df_align)    
-    final=pd.merge(triphone_align, df_set, on='#file', how="inner")
+    triphone_align=phone_to_triphone_alignment(df_align) 
+    context=create_phonetic_context(triphone_align)
+    final=pd.merge(context, df_set, on='#file', how="inner")
     return(final)
-
-def create_phonetic_context(df):
-    """
-    From a dataframe containing a colunms of phones, create another column 
-    containing previous and following phones for each phone
-    """
-    context=[]
-    phonemes=df["#phoneme"]
-    for i in range(len(df)):
-    
-        context.append()
