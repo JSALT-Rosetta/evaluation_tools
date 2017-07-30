@@ -120,7 +120,7 @@ def get_item_file(path_alignment, dataset_type, path_wav_spk_datasetype, output_
     dic_rev=reverse_dic(dic, save=False, name="")
     selected_align=[]  
     alignfiles= [v for k,v in dic.items()]
-    wav_set=len(set(alignfiles).intersection(set(df_set['#file'])))
+    wav_set=set(alignfiles).intersection(set(df_set['#file']))
     for w in wav_set:
         selected_align.append(dic_rev(w))
     df_align=pd.DataFrame()
