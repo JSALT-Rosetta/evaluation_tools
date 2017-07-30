@@ -16,17 +16,11 @@ from os.path import isfile, join
 from collections import defaultdict
 import argparse
 
-######### INPUT
-#path_labels='/pylon2/ci560op/odette/data/flickr/flickr_labels/'
-#df=pd.read_table("df_wav_spk_set.txt", sep='\t', header=0)
-#df["#file"]=[s.split('.')[0] for s in df["wave_file"]]
-#dataset_type="test"
-##########
+
 
 def create_list_from_files_in_folder(input_path): 
     files = [f for f in listdir(input_path) if isfile(join(input_path, f))]
     return(files)
-
 
 
 def get_wavname_from_alignment(path_alignement):
@@ -56,7 +50,6 @@ def phone_to_triphone_alignment(df):
     new_df['onset']=triphones_onset
     new_df['offset']=triphones_offset
     return(new_df)      
-
 
 
 def dic_alignment_to_wave(path_alignement):  
@@ -106,7 +99,10 @@ def create_phonetic_context(df):
     
     
     
-def get_item_file(path_alignment, dataset_type, path_wav_spk_datasetype, output_dir , on="phoneme", phone_alignment=False):    
+def get_item_file(path_alignment, dataset_type, path_wav_spk_datasetype, output_dir , on="phoneme", phone_alignment=False):
+    '''
+    Create a text file containing a dataframe corresponding to an item file for the ABX task
+    '''    
     
     
     #### transformation of the dataset containing speaker ID, dataset type for each wave file ####
@@ -173,10 +169,10 @@ def get_item_file(path_alignment, dataset_type, path_wav_spk_datasetype, output_
 
 
 
-parser = argparse.ArgumentParser(description='Write an item or alignment file for an ABX task')
+parser = argparse.ArgumentParser(description='Write an item or a phone alignment file for an ABX task')
 
 parser.add_argument(
-    '-p', '--path_alignement', type=str, metavar='<str>',
+    '-p', '--path_alignment', type=str, metavar='<str>',
     help='path of the directory containing all the alignement files for each audio caption')
 
 parser.add_argument(
@@ -207,10 +203,14 @@ parser.add_argument(
 if __name__=='__main__':
     """Entry point of the 'item_data_mscoco' command"""
     
-    args=parser.parse_args()
-    
+    args=parser.parse_args()    
    
     get_item_file(args.path_alignment, args.dataset_type, args.path_wav_spk_datasetype, args.output_dir , args.on, args.phone_alignment)
     
-    
+
+######### TERMINAL command
+
+#python generate_item_file_flickr.py -p '/pylon5/ci560op/larsene/abx/flickr/flickr_labels' -d 'test' -pw '/pylon5/ci560op/larsene/abx/flickr/df_wav_spk_set.txt' -o '/pylon5/ci560op/larsene/abx/flickr/test/mfcc/' --on 'phoneme' -a 'False'
+
+##########   
     
