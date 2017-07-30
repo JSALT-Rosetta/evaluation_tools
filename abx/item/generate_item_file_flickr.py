@@ -107,9 +107,9 @@ def create_phonetic_context(df):
     
     
 def get_item_file(path_alignment, dataset_type, path_wav_spk_datasetype, output_dir , on="phoneme", phone_alignment=False):    
-    dic=dic_alignment_to_wave(path_alignment)
-    dic_rev=reverse_dic(dic, save=False, name="")
-    #### transformation of the dataset containing speajer ID, dataset type for each wave file ####
+    
+    
+    #### transformation of the dataset containing speaker ID, dataset type for each wave file ####
     df=pd.read_table(path_wav_spk_datasetype, sep='\t', header=0)  
     if on=='speakerID':
         df.rename(columns={'speaker_id': '#speakerID', 'wave_file':'#file'}, inplace=True)
@@ -117,8 +117,10 @@ def get_item_file(path_alignment, dataset_type, path_wav_spk_datasetype, output_
         df.rename(columns={'speaker_id': 'speakerID', 'wave_file':'#file'}, inplace=True)     
     df["#file"]=[f.split(".")[0] for f in df["#file"]] # get rid of extension in file name
     df_set=df[df['dataset']==dataset_type] # subset the dataset to the set (train, dev or test)
-    #### ####
     
+    #### read all alignment files and get a dataframe with context and speaker ID info ####
+    dic=dic_alignment_to_wave(path_alignment)
+    dic_rev=reverse_dic(dic, save=False, name="")
     selected_align=[]  
     alignfiles= [v for k,v in dic.items()]
     wav_set=len(set(alignfiles).intersection(set(df_set['#file'])))
@@ -144,6 +146,8 @@ def get_item_file(path_alignment, dataset_type, path_wav_spk_datasetype, output_
         dd=pd.concat([df_filename, context], axis=1)
         df_align=pd.concat([df_align, dd], axis=0)    
     final=pd.merge(df_align, df_set, on='#file', how="inner")
+    
+    #### remove all non phonetic information and save dataframe ####
     if on=='phoneme':
         item = final[final["#phoneme"] != "+LAUGH+"]
         item = item[item["#phoneme"] != "SIL"]
