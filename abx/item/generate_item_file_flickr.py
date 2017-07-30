@@ -13,7 +13,6 @@ import pandas as pd
 import numpy as np
 from os import listdir
 from os.path import isfile, join
-from collections import defaultdict
 import argparse
 
 
@@ -60,13 +59,16 @@ def dic_alignment_to_wave(path_alignement):
         dic[align_filename[i]]= wavname[i] 
     return(dic)
 
-def create_phonetic_context(df):
+def create_phonetic_context(df, on='phoneme'):
     """
     From a dataframe containing a colunms of phones, create another column 
     containing previous and following phones for each phone
     """
     list_context=[]
-    phonemes=list(df["#phoneme"])
+    if on=='phoneme':
+        phonemes=list(df["#phoneme"])
+    else:
+        phonemes=list(df['phoneme'])
     for i in range(len(df)):
         if i!=0 and i!=len(df)-1:
             context="_".join((phonemes[i-1], phonemes[i+1]))
