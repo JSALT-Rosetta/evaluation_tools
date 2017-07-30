@@ -103,9 +103,9 @@ def get_item_file(path_alignment, dataset_type, path_wav_spk_datasetype, output_
     '''
     Create a text file containing a dataframe corresponding to an item file for the ABX task
     '''    
-    
-    
+     
     #### transformation of the dataset containing speaker ID, dataset type for each wave file ####
+    print('opening wave to speaker and dataset file')
     df=pd.read_table(path_wav_spk_datasetype, sep='\t', header=0)  
     if on=='speakerID':
         df.rename(columns={'speaker_id': '#speakerID', 'wave_file':'#file'}, inplace=True)
@@ -115,6 +115,7 @@ def get_item_file(path_alignment, dataset_type, path_wav_spk_datasetype, output_
     df_set=df[df['dataset']==dataset_type] # subset the dataset to the set (train, dev or test)
     
     #### read all alignment files and get a dataframe with context and speaker ID info ####
+    print('opining all alignment files')
     dic=dic_alignment_to_wave(path_alignment)
     dic_rev=reverse_dic(dic, save=False, name="")
     selected_align=[]  
@@ -123,6 +124,7 @@ def get_item_file(path_alignment, dataset_type, path_wav_spk_datasetype, output_
     for w in wav_set:
         selected_align.append(dic_rev(w))
     df_align=pd.DataFrame()
+    print('colunms transformation for each alignment file and concatenation into a dataframe')
     for filename in selected_align:
         if on=='phoneme':
             d=pd.read_table(path_alignment+filename, header=None, sep=" ", names=['#phoneme', 'onset', 'offset'])
@@ -144,6 +146,7 @@ def get_item_file(path_alignment, dataset_type, path_wav_spk_datasetype, output_
     final=pd.merge(df_align, df_set, on='#file', how="inner")
     
     #### remove all non phonetic information and save dataframe ####
+    print('removing side info and saving into text file')
     if on=='phoneme':
         item = final[final["#phoneme"] != "+LAUGH+"]
         item = item[item["#phoneme"] != "SIL"]
