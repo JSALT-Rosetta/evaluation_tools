@@ -141,21 +141,21 @@ def get_item_file(path_alignment, dataset_type, path_wav_spk_datasetype, output_
         item = item[item["#phoneme"] != "+NOISE+"]
         item = item[item["#phoneme"] != "+BREATH+"]
         item = item[item["#phoneme"] != "+HUMAN+"]
-        item.to_csv( output_dir+ "phoneme.item")
+        item.to_csv( output_dir+ "phoneme.item", sep='\t', header=0, index=False )
     elif on=='speakerID':
         item = final[final["phoneme"] != "+LAUGH+"]
         item = item[item["phoneme"] != "SIL"]
         item = item[item["phoneme"] != "+NOISE+"]
         item = item[item["phoneme"] != "+BREATH+"]
         item = item[item["phoneme"] != "+HUMAN+"]
-        item.to_csv( output_dir+ "speakerID.item")
+        item.to_csv( output_dir+ "speakerID.item", sep='\t', header=0, index=False)
     elif on=='word':
         item = final[final["#word"] != "+LAUGH+"]
         item = item[item["#word"] != "SIL"]
         item = item[item["#word"] != "+NOISE+"]
         item = item[item["#word"] != "+BREATH+"]
         item = item[item["#word"] != "+HUMAN+"]
-        item.to_csv( output_dir+ "word.item")
+        item.to_csv( output_dir+ "word.item", sep='\t', header=0, index=False)
     return(item)
 
 
