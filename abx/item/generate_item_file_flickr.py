@@ -123,11 +123,11 @@ def get_item_file(path_alignment, dataset_type, path_wav_spk_datasetype ):
         cols = cols[1:]+cols[0:1]
         d = d[cols] 
         df_filename=pd.DataFrame(np.repeat(dic[filename], len(d)), columns=['#file'])
-        dd=pd.concat([df_filename, d], axis=1)
+        triphone_align=phone_to_triphone_alignment(d)
+        context=create_phonetic_context(triphone_align)
+        dd=pd.concat([df_filename, context], axis=1)
         df_align=pd.concat([df_align, dd], axis=0)    
-    triphone_align=phone_to_triphone_alignment(df_align) 
-    context=create_phonetic_context(triphone_align)
-    final=pd.merge(context, df_set, on='#file', how="inner")
+    final=pd.merge(df_align, df_set, on='#file', how="inner")
     item = final[final["#phoneme"] != "+LAUGH+"]
     item = item[item["#phoneme"] != "SIL"]
     item = item[item["#phoneme"] != "+NOISE+"]
