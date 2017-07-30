@@ -128,9 +128,9 @@ def get_item_file(path_alignment, dataset_type, path_wav_spk_datasetype, output_
         df_filename=pd.DataFrame(np.repeat(dic[filename], len(d)), columns=['#file'])
         if phone_alignment==False:
             triphone_align=phone_to_triphone_alignment(d)
-            context=create_phonetic_context(triphone_align)
+            context=create_phonetic_context(triphone_align, on)
         else:
-            context=create_phonetic_context(d)
+            context=create_phonetic_context(d, on)
         dd=pd.concat([df_filename, context], axis=1)
         df_align=pd.concat([df_align, dd], axis=0)    
     final=pd.merge(df_align, df_set, on='#file', how="inner")
