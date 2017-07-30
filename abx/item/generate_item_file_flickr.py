@@ -14,6 +14,7 @@ import numpy as np
 from os import listdir
 from os.path import isfile, join
 from collections import defaultdict
+import argparse
 
 ######### INPUT
 #path_labels='/pylon2/ci560op/odette/data/flickr/flickr_labels/'
@@ -105,12 +106,19 @@ def create_phonetic_context(df):
     
     
     
-def get_item_file(path_alignment, dataset_type, path_wav_spk_datasetype ):    
+def get_item_file(path_alignment, dataset_type, path_wav_spk_datasetype, output_dir , on="phoneme", phone_alignment=False):    
     dic=dic_alignment_to_wave(path_alignment)
     dic_rev=reverse_dic(dic, save=False, name="")
+    #### transformation of the dataset containing speajer ID, dataset type for each wave file ####
     df=pd.read_table(path_wav_spk_datasetype, sep='\t', header=0)  
-    df["#file"]=[f.split(".")[0] for f in df["wave_file"]] # get rid of extension in file name
+    if on=='speakerID':
+        df.rename(columns={'speaker_id': '#speakerID', 'wave_file':'#file'}, inplace=True)
+    else:
+        df.rename(columns={'speaker_id': 'speakerID', 'wave_file':'#file'}, inplace=True)     
+    df["#file"]=[f.split(".")[0] for f in df["#file"]] # get rid of extension in file name
     df_set=df[df['dataset']==dataset_type] # subset the dataset to the set (train, dev or test)
+    #### ####
+    
     selected_align=[]  
     alignfiles= [v for k,v in dic.items()]
     wav_set=len(set(alignfiles).intersection(set(df_set['#file'])))
@@ -118,19 +126,87 @@ def get_item_file(path_alignment, dataset_type, path_wav_spk_datasetype ):
         selected_align.append(dic_rev(w))
     df_align=pd.DataFrame()
     for filename in selected_align:
-        d=pd.read_table(path_alignment+filename, header=None, sep=" ", names=['#phoneme', 'onset', 'offset'])
+        if on=='phoneme':
+            d=pd.read_table(path_alignment+filename, header=None, sep=" ", names=['#phoneme', 'onset', 'offset'])
+        elif on=='speakerID' :
+            d=pd.read_table(path_alignment+filename, header=None, sep=" ", names=['phoneme', 'onset', 'offset'])
+        elif on=='word':
+            d=pd.read_table(path_alignment+filename, header=None, sep=" ", names=['#word', 'onset', 'offset'])
         cols = d.columns.tolist()
         cols = cols[1:]+cols[0:1]
         d = d[cols] 
         df_filename=pd.DataFrame(np.repeat(dic[filename], len(d)), columns=['#file'])
-        triphone_align=phone_to_triphone_alignment(d)
-        context=create_phonetic_context(triphone_align)
+        if phone_alignment==False:
+            triphone_align=phone_to_triphone_alignment(d)
+            context=create_phonetic_context(triphone_align)
+        else:
+            context=create_phonetic_context(d)
         dd=pd.concat([df_filename, context], axis=1)
         df_align=pd.concat([df_align, dd], axis=0)    
     final=pd.merge(df_align, df_set, on='#file', how="inner")
-    item = final[final["#phoneme"] != "+LAUGH+"]
-    item = item[item["#phoneme"] != "SIL"]
-    item = item[item["#phoneme"] != "+NOISE+"]
-    item = item[item["#phoneme"] != "+BREATH+"]
-    item = item[item["#phoneme"] != "+HUMAN+"]
-    return(final)
+    if on=='phoneme':
+        item = final[final["#phoneme"] != "+LAUGH+"]
+        item = item[item["#phoneme"] != "SIL"]
+        item = item[item["#phoneme"] != "+NOISE+"]
+        item = item[item["#phoneme"] != "+BREATH+"]
+        item = item[item["#phoneme"] != "+HUMAN+"]
+        item.to_csv( output_dir+ "phoneme.item")
+    elif on=='speakerID':
+        item = final[final["phoneme"] != "+LAUGH+"]
+        item = item[item["phoneme"] != "SIL"]
+        item = item[item["phoneme"] != "+NOISE+"]
+        item = item[item["phoneme"] != "+BREATH+"]
+        item = item[item["phoneme"] != "+HUMAN+"]
+        item.to_csv( output_dir+ "speakerID.item")
+    elif on=='word':
+        item = final[final["#word"] != "+LAUGH+"]
+        item = item[item["#word"] != "SIL"]
+        item = item[item["#word"] != "+NOISE+"]
+        item = item[item["#word"] != "+BREATH+"]
+        item = item[item["#word"] != "+HUMAN+"]
+        item.to_csv( output_dir+ "word.item")
+    return(item)
+
+
+
+parser = argparse.ArgumentParser(description='Write an item or alignment file for an ABX task')
+
+parser.add_argument(
+    '-p', '--path_alignement', type=str, metavar='<str>',
+    help='path of the directory containing all the alignement files for each audio caption')
+
+parser.add_argument(
+    '-d', '--dataset_type', type=str, metavar='<int>', default="test",
+    help='type of dataset, either train, dev or test, default is %(default)s.')
+    
+parser.add_argument(
+    '-pw', '--path_wav_spk_datasetype', type=str, 
+    help='''path of the dircetory in which the file will be stored''')
+
+
+parser.add_argument(
+    '-o', '--output_dir', type=str, help='''path of text file containing 
+    dataframe with wave filenames, dataset type and speaker ID as columns''')
+
+parser.add_argument(
+     '--on', type=str, default="phoneme",
+     help='''item on which the abx task will be (phoneme, word or speakerID),
+    default is %(default)s.''')
+
+parser.add_argument(
+     '-a', '--phone_alignment', type=bool, default=False,
+     help='''By default, the alignment is on triphone''')
+
+
+
+
+if __name__=='__main__':
+    """Entry point of the 'item_data_mscoco' command"""
+    
+    args=parser.parse_args()
+    
+   
+    get_item_file(args.path_alignment, args.dataset_type, args.path_wav_spk_datasetype, args.output_dir , args.on, args.phone_alignment)
+    
+    
+    
