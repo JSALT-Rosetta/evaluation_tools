@@ -60,22 +60,6 @@ def dic_alignment_to_wave(path_alignement):
         dic[align_filename[i]]= wavname[i] 
     return(dic)
 
-
-
-def reverse_dic(dic, save=False, name=""):
-    """
-    For a given dictionary (dic), reverse keys and values. Return a dictionary
-    """
-    d = defaultdict(set)   
-    for k in dic.keys(): 
-        for v in dic.values():
-            for ii in v: 
-                d[ii].add(k)     
-    if save: 
-        with open(name, 'w') as fp:
-            json.dump(d, fp)
-    return(d)
-
 def create_phonetic_context(df):
     """
     From a dataframe containing a colunms of phones, create another column 
@@ -85,7 +69,6 @@ def create_phonetic_context(df):
     phonemes=list(df["#phoneme"])
     for i in range(len(df)):
         if i!=0 and i!=len(df)-1:
-            print(i)
             context="_".join((phonemes[i-1], phonemes[i+1]))
             list_context.append(context)
         elif i==0:
@@ -97,7 +80,12 @@ def create_phonetic_context(df):
     df["context"]=list_context
     return(df)
     
-    
+path_alignment="/pylon5/ci560op/larsene/abx/flickr/flickr_labels"
+dataset_type="test"
+path_wav_spk_datasetype='/pylon5/ci560op/larsene/abx/flickr/df_wav_spk_set.txt'
+output_dir='/pylon5/ci560op/larsene/abx/flickr/test/mfcc/'
+on='phoneme'
+
     
 def get_item_file(path_alignment, dataset_type, path_wav_spk_datasetype, output_dir , on="phoneme", phone_alignment=False):
     '''
@@ -117,12 +105,12 @@ def get_item_file(path_alignment, dataset_type, path_wav_spk_datasetype, output_
     #### read all alignment files and get a dataframe with context and speaker ID info ####
     print('opining all alignment files')
     dic=dic_alignment_to_wave(path_alignment)
-    dic_rev=reverse_dic(dic, save=False, name="")
+    dic_rev=dict((v, k) for k, v in dic.iteritems()) 
     selected_align=[]  
     alignfiles= [v for k,v in dic.items()]
     wav_set=set(alignfiles).intersection(set(df_set['#file']))
     for w in wav_set:
-        selected_align.append(dic_rev(w))
+        selected_align.append(dic_rev[w])
     df_align=pd.DataFrame()
     print('colunms transformation for each alignment file and concatenation into a dataframe')
     for filename in selected_align:
@@ -213,7 +201,7 @@ if __name__=='__main__':
 
 ######### TERMINAL command
 
-#python generate_item_file_flickr.py -p '/pylon5/ci560op/larsene/abx/flickr/flickr_labels' -d 'test' -pw '/pylon5/ci560op/larsene/abx/flickr/df_wav_spk_set.txt' -o '/pylon5/ci560op/larsene/abx/flickr/test/mfcc/' --on 'phoneme' -a 'False'
+#python generate_item_file_flickr.py -p '/pylon5/ci560op/larsene/abx/flickr/flickr_labels/' -d 'test' -pw '/pylon5/ci560op/larsene/abx/flickr/df_wav_spk_set.txt' -o '/pylon5/ci560op/larsene/abx/flickr/test/mfcc/' --on 'phoneme' -a 'False'
 
 ##########   
     
