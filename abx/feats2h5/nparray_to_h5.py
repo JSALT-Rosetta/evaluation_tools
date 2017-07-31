@@ -53,9 +53,9 @@ def h5features_from_nparray(input_path, h5f, timefunc=None):
         i = i+1
         features.append(data)
         if timefunc == None:
-            time = np.arange(f.shape[0], dtype=float) * 0.01 + 0.0025
+            time = np.arange(data.shape[0], dtype=float) * 0.01 + 0.0025
         else:
-            time = timefunc(f)
+            time = timefunc(data)
         times.append(time)
         internal_files.append(os.path.basename(os.path.splitext(f)[0]))
     if features:
