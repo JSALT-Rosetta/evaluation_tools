@@ -31,7 +31,7 @@ import numpy as np
 import pandas
 import os
 
-def avg(filename, on='phoneme', task_type='across', ponderate=False):
+def avg(filename, output_dir, on='phoneme', task_type='across', ponderate=False):
     input_folder=os.path.dirname(os.path.abspath(filename))
     df = pandas.read_csv(filename, sep='\t', header=0)
     
@@ -128,8 +128,8 @@ def avg(filename, on='phoneme', task_type='across', ponderate=False):
     if isinstance(res_per_context, int)==False:
         res_per_context.to_csv(input_folder+'/score_per_context', sep='\t', header=0, index=True)
     print(res)
-    f=open("results_abx.txt", 'a')
-    f.write (filename.split(".")[0] + res)
+    f=open(output_dir +"results_abx.txt", 'a')
+    f.write (filename.split(".")[0] + "\t" + res + "\n")
     return (res)
 
 
