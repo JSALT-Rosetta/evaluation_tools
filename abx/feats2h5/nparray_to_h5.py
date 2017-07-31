@@ -19,7 +19,7 @@ import h5features
 #########
 
 #feats_folder = '/pylon5/ci560op/londel/flickr/ploop_u100_s3_c4/posteriors_ac0.2/test/'
-#output_folder = '/pylon2/ci560op/rachine/data/mscoco/val2014/mfcc'
+#output_folder = '/pylon5/ci560op/larsene/abx/flickr/posteriogram/'
 
 
 def h5features_from_nparray(input_path, h5f, timefunc=None):
@@ -69,7 +69,7 @@ def h5features_from_nparray(input_path, h5f, timefunc=None):
 #########
 
 def make_h5file(feats_folder, output_folder, name='posteriors'):
-    h5features_from_nparray(feats_folder, os.path.join(output_folder,name, 'h5f'), timefunc=None)
+    h5features_from_nparray(feats_folder, os.path.join(output_folder,name +'.h5f'), timefunc=None)
 
 if __name__=='__main__':
     parser = argparse.ArgumentParser()
