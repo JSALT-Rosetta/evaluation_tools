@@ -150,7 +150,7 @@ if __name__=='__main__':
 
     
     if args.on=="phoneme":
-        d={"speakerID":"context",
+        d={#"speakerID":"context",
 	  "context":"speakerID"}
          # "na":["speakerID", "context"]}
 
