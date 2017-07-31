@@ -3,7 +3,7 @@
 """
 Created on Mon Jul 31 17:13:17 2017
 
-@author: elinlarsen
+@author: elinlarsen, rriad, bootphon team
 """
 
 import os 
@@ -35,13 +35,14 @@ def h5features_from_nparray(input_path, h5f, timefunc=None):
         step of 10 ms.
         
     """
-    files = [f for f in listdir(input_path) if isfile(join(input_path, f))]
+    filenames = [f for f in listdir(input_path) if isfile(join(input_path, f))]
     batch_size = 500
     features = []
     times = []
     internal_files = []
     i = 0
-    for f in files:
+    for f in filenames:
+        data=np.load(input_path+f)
         if i == batch_size:
             h5features.write(h5f, '/features/', internal_files, times,
                              features)
@@ -50,7 +51,7 @@ def h5features_from_nparray(input_path, h5f, timefunc=None):
             internal_files = []
             i = 0
         i = i+1
-        features.append(f)
+        features.append(data)
         if timefunc == None:
             time = np.arange(f.shape[0], dtype=float) * 0.01 + 0.0025
         else:
