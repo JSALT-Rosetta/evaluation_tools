@@ -12,6 +12,7 @@ from os import listdir
 from os.path import isfile, join
 import numpy as np
 import h5features
+import pdb
 
 
 #########
@@ -43,10 +44,10 @@ def h5features_from_nparray(input_path, h5f, timefunc=None):
     i = 0
     for f in filenames:
         data=np.load(input_path+f)
+        pdb.set_trace()
         print('the type of data is ' + str(type(data)))
         if i == batch_size:
-            h5features.write(h5f, '/features/', internal_files, times,
-                             features)
+            h5features.write(h5f, "/features/", internal_files, times,features)
             features = []
             times = []
             internal_files = []
@@ -60,9 +61,7 @@ def h5features_from_nparray(input_path, h5f, timefunc=None):
         times.append(time)
         internal_files.append(os.path.basename(os.path.splitext(f)[0]))
     if features:
-        h5features.write(h5f, '/features/',
-                         internal_files, times,
-                         features)
+        h5features.write(h5f, "/features/", internal_files, times, features)
 
 
 #########
