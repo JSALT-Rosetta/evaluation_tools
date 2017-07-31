@@ -97,7 +97,7 @@ def fullrun():
             
             
     if ON=='word':
-            if ACROSS == "speakerID" :
+        if ACROSS == "speakerID" :
             eval.avg(analyzefilename, ON, 'across', ponderate)
                  
         elif BY == "speakerID":
@@ -141,8 +141,8 @@ if __name__=='__main__':
     
     if args.on=="phoneme":
         d={"speakerID":"context",
-	  "context":"speakerID",
-          "na":["speakerID", "context"]}
+	  "context":"speakerID"}
+         # "na":["speakerID", "context"]}
 
     
         for ACROSS, BY in d.iteritems():
