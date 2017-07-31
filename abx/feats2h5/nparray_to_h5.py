@@ -24,9 +24,7 @@ import generate_features
 #########
 
 def make_h5file(feats_folder, output_folder, name='posteriors'):
-	generate_features.generate_all(files, os.path.join(output_folder,'mfcc.h5f'),os.path.join(output_folder, 'fb_mvn_stacked.h5f'))
-       generate_all(files, alignement_h5f, input_h5f,
-                 nframes=7, vad=None)
+
       h5features_from_nparray(feats_folder, os.path.join(output_folder,name, 'h5f'), timefunc=None)
 
 if __name__=='__main__':
