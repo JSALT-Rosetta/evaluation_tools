@@ -129,7 +129,7 @@ def avg(filename, output_dir, on='phoneme', task_type='across', ponderate=False)
         res_per_context.to_csv(input_folder+'/score_per_context', sep='\t', header=0, index=True)
     print(res)
     f=open(output_dir +"results_abx.txt", 'a')
-    f.write (filename.split(".")[0] + "\t" + res + "\n")
+    f.write (filename.split(".")[0] + "\t" + str(res) + "\n")
     return (res)
 
 
