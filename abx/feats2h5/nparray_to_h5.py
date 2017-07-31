@@ -43,6 +43,7 @@ def h5features_from_nparray(input_path, h5f, timefunc=None):
     i = 0
     for f in filenames:
         data=np.load(input_path+f)
+        print('the type of data is ' + type(data))
         if i == batch_size:
             h5features.write(h5f, '/features/', internal_files, times,
                              features)
@@ -73,7 +74,7 @@ def make_h5file(feats_folder, output_folder, name='posteriors'):
 
 if __name__=='__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('-f', '--feats_folder', help = "Folder with .wav files")
+    parser.add_argument('-f', '--feats_folder', help = "Folder with features .npy files")
     parser.add_argument('-o', '--output_folder', help = "Output folder for h5f files")
     parser.add_argument('-n', '--name', default='posteriors', help = "Folder with .wav files")
     args = parser.parse_args()
