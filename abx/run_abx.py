@@ -84,9 +84,29 @@ def fullrun():
     
     analyze.analyze(taskfilename, scorefilename, analyzefilename)
     print("Results are available in the csv file !")
-
-    eval.avg(analyzefilename, ON, taskfilename, ponderate)
-
+    
+    if ON=='phoneme':
+        if ACROSS == "speakerID" :
+            eval.avg(analyzefilename, ON, 'across', ponderate)
+                 
+        elif BY == "speakerID":
+            eval.avg(analyzefilename, ON, 'within', ponderate)
+            
+        elif ACROSS=='na':
+            eval.avg(analyzefilename, ON, 'control', ponderate)
+            
+            
+    if ON=='word':
+            if ACROSS == "speakerID" :
+            eval.avg(analyzefilename, ON, 'across', ponderate)
+                 
+        elif BY == "speakerID":
+            eval.avg(analyzefilename, ON, 'within', ponderate)
+            
+    if ON=='speakerID':
+        eval.avg(analyzefilename, ON, '', ponderate)
+    
+    print('evaluation done')
 
 
 parser = argparse.ArgumentParser(description='Run several abx task either on phone or word')
