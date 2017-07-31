@@ -145,6 +145,10 @@ if __name__ == '__main__':
     help='cvs file with the results for all pairs')
     
     g1.add_argument(
+    '-o', '--output_dir', type=str, metavar='<str>',
+    help='path of the directory where all ABX scores will be written on')
+    
+    g1.add_argument(
     '--on', type=str, metavar='<str>', default="phoneme",
     help='either phoneme,  word or speaker, default is %(default)s')
     
@@ -159,7 +163,7 @@ if __name__ == '__main__':
     
     args = parser.parse_args()
     print("the ABX score of the task: " + args.filename.split('.')[0])
-    avg(args.filename, args.on, args.task, args.ponderate)
+    avg(args.filename, args.output_dir, args.on, args.task, args.ponderate)
     
 
 

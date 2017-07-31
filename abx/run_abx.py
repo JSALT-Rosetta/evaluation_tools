@@ -87,24 +87,24 @@ def fullrun():
     
     if ON=='phoneme':
         if ACROSS == "speakerID" :
-            eval.avg(analyzefilename, ON, 'across', ponderate)
+            eval.avg(analyzefilename, out_res, ON, 'across', ponderate)
                  
         elif BY == "speakerID":
-            eval.avg(analyzefilename, ON, 'within', ponderate)
+            eval.avg(analyzefilename, out_res, ON, 'within', ponderate)
             
         elif ACROSS=='na':
-            eval.avg(analyzefilename, ON, 'control', ponderate)
+            eval.avg(analyzefilename, out_res, ON, 'control', ponderate)
             
             
     if ON=='word':
-            if ACROSS == "speakerID" :
-            eval.avg(analyzefilename, ON, 'across', ponderate)
+        if ACROSS == "speakerID" :
+            eval.avg(analyzefilename, out_res, ON, 'across', ponderate)
                  
         elif BY == "speakerID":
-            eval.avg(analyzefilename, ON, 'within', ponderate)
+            eval.avg(analyzefilename, out_res, ON, 'within', ponderate)
             
     if ON=='speakerID':
-        eval.avg(analyzefilename, ON, '', ponderate)
+        eval.avg(analyzefilename, out_res, ON, '', ponderate)
     
     print('evaluation done')
 
@@ -115,6 +115,10 @@ parser = argparse.ArgumentParser(description='Run several abx task either on pho
 parser.add_argument(
     '--on', type=str, metavar='<str>', default="phoneme",
     help='either phoneme or word, default is %(default)s')
+    
+parser.add_argument(
+    '-o', '--output_dir', type=str, metavar='<str>',
+    help='path of the directory where all ABX scores will be written on')
 
 parser.add_argument(
     '-i', '--input', type=str, 
@@ -137,6 +141,12 @@ if __name__=='__main__':
     """Entry point of the 'run_abx.py' command"""
     
     args=parser.parse_args()
+    
+    input_folder=args.input
+    feature=args.feature_file
+    NB_CPU=args.cpu
+    ponderate=args.ponderate
+    out_res=args.output_dir
 
     
     if args.on=="phoneme":
@@ -147,20 +157,12 @@ if __name__=='__main__':
     
         for ACROSS, BY in d.iteritems():
             ON=args.on
-            input_folder=args.input
-            feature=args.feature_file
-            NB_CPU=args.cpu
-	    ponderate=args.ponderate
             fullrun()
 
     elif args.on=="speakerID":
         ON=args.on
         BY="context"
         ACROSS="phoneme"
-        input_folder=args.input
-        feature=args.feature_file
-        NB_CPU=args.cpu
-        ponderate=args.ponderate
         fullrun()
  
     elif args.on=="word":
@@ -168,8 +170,4 @@ if __name__=='__main__':
            "na":"speakerID"}
         for ACROSS, BY in d.iteritems():
             ON=args.on
-            input_folder=args.input
-            feature=args.feature_file
-            NB_CPU=args.cpu
-	    ponderate=args.ponderate
             fullrun()
