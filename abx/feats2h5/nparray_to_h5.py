@@ -7,7 +7,6 @@ Created on Mon Jul 31 17:13:17 2017
 """
 
 import os 
-import generate_features
 import argparse
 from os import listdir
 from os.path import isfile, join
@@ -69,7 +68,7 @@ def h5features_from_nparray(input_path, h5f, timefunc=None):
 #########
 
 def make_h5file(feats_folder, output_folder, name='posteriors'):
-    generate_features.h5features_from_nparray(feats_folder, os.path.join(output_folder,name, 'h5f'), timefunc=None)
+    h5features_from_nparray(feats_folder, os.path.join(output_folder,name, 'h5f'), timefunc=None)
 
 if __name__=='__main__':
     parser = argparse.ArgumentParser()
