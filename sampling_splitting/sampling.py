@@ -206,9 +206,9 @@ def get_Img_file_name_from_ID(ImgId_file, pre_name="COCO_", train=True, output_p
     for ii in ImgId_file:
         fig=str(str(ii).zfill(12))
         if train: 
-            Img_file_name_list.append(pre_name+ "train_2014_"+ fig +".jpg")
+            Img_file_name_list.append(pre_name+ "train2014_"+ fig +".jpg")
         else: 
-            Img_file_name_list.append(pre_name+ "val_2014_"+ fig +".jpg")
+            Img_file_name_list.append(pre_name+ "val2014_"+ fig +".jpg")
     
     f=open(output_path+'/jpg_file_names.txt', 'w')
     for item in Img_file_name_list:
