@@ -49,7 +49,10 @@ def run_sample(dataset_type="dev",
     wav_file_name_sample=sampling.get_wav_file_name_from_ImgID(final_img_selected, wave_file_name_selected, output+ dataset_type+"/wav/")
     
     print("create text file with sample of image file name")
-    img_file_name_sample=sampling.get_Img_file_name_from_ID(final_img_selected, pre_name="COCO_", train=True, output_path=output+ dataset_type +"/jpg/")
+    if dataset_type=='train':
+        img_file_name_sample=sampling.get_Img_file_name_from_ID(final_img_selected, pre_name="COCO_", train=True, output_path=output+ dataset_type +"/jpg/")
+    else:
+        img_file_name_sample=sampling.get_Img_file_name_from_ID(final_img_selected, pre_name="COCO_", train=False, output_path=output+ dataset_type +"/jpg/")
     
     print("image and audio image files written")
 
