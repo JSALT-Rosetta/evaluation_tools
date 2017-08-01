@@ -43,8 +43,6 @@ def h5features_from_nparray(input_path, h5f, timefunc=None):
     i = 0
     for f in filenames:
         data=np.load(input_path+f)
-        
-        print('the type of data is ' + str(type(data)))
         if i == batch_size:
             pdb.set_trace()
             h5features.write(h5f, "/features/", internal_files, times,features)
