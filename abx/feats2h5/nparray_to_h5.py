@@ -79,12 +79,14 @@ if __name__=='__main__':
     parser.add_argument('-f', '--feats_folder', help = "Folder with features .npy files")
     parser.add_argument('-o', '--output_folder', help = "Output folder for h5f files")
     parser.add_argument('-n', '--name', default='posteriors', help = "Folder with .wav files")
+    parser.add_argument('-rm', '--rm_last_number', type=bool, default='False', 
+                        help = "ether or not to remove the last number in each file name separated by _")
     args = parser.parse_args()
     print("Start generating Features")
     print("Input folder : " + args.feats_folder)
     print("Output folder : " + args.output_folder)	
     
-    make_h5file(args.feats_folder, args.output_folder, args.name)
+    make_h5file(args.feats_folder, args.output_folder, args.name, args.rm_last_number)
 	
 
 
