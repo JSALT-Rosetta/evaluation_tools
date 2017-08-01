@@ -25,7 +25,10 @@ def get_item_file(path_alignment, output_dir, on='phoneme', phone_alignment=Fals
     speakerID=[f.split('_')[0] for f in alignnames]
     wavnames=['_'.join(f.split('_')[1:]) for f in alignnames]
     
-    df_names=pd.DataFrame([alignnames, speakerID, wavnames], columns=['align', 'speakerID', '#file'])
+    df_names=pd.DataFrame({'align': alignnames,
+                            'speakerID': speakerID,
+                            '#file': wavnames
+                            })
    
     df_item=pd.DataFrame()
     for ii  in range(len(df_names)):
@@ -105,7 +108,7 @@ if __name__=='__main__':
 
 ######### TERMINAL command
 
-#path_align ="/pylon2/ci560op/odette/data/mboshi-french-parallel-corpus/forced_alignments_supervised_spkr/"
+#path_align ="/pylon2/ci560op/odette/data/mboshi-french-parallel-corpus/forced_alignments_supervised_spkr/train/"
 #path_wav="/pylon2/ci560op/odette/data/mboshi-french-parallel-corpus/full_corpus/train/"
 #path_mfcc="/pylon2/ci560op/odette/data/mboshi-french-parallel-corpus/incoming/xnmt_train/mfcc.h5f"
 
