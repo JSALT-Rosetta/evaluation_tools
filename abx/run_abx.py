@@ -150,11 +150,7 @@ if __name__=='__main__':
 
     
     if args.on=="phoneme":
-        d={#"speakerID":"context",
-	  "context":"speakerID"}
-         # "na":["speakerID", "context"]}
-
-    
+        d={"speakerID":"context",  "context":"speakerID", "na":["speakerID", "context"]}
         for ACROSS, BY in d.iteritems():
             ON=args.on
             fullrun()

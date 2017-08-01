@@ -82,7 +82,7 @@ def avg(filename, output_dir, on='phoneme', task_type='across', ponderate=False)
             raise ValueError('Unknown task type: {0}'.format(task_type))
       
       
-    elif on=="speaker":
+    elif on=="speakerID":
         groups = df.groupby(['by', 'speakerID_1', 'speakerID_2'], as_index=False)
         if ponderate:
             average=groups.apply(lambda x: np.average(x.score, weights=x.n))
