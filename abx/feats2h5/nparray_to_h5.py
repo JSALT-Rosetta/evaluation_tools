@@ -9,7 +9,6 @@ Created on Mon Jul 31 17:13:17 2017
 import os 
 import argparse
 from os import listdir
-from os.path import isfile, join
 import numpy as np
 import h5features
 import pdb
@@ -36,7 +35,7 @@ def h5features_from_nparray(input_path, h5f, timefunc=None):
         step of 10 ms.
         
     """
-    filenames = [f for f in listdir(input_path) if isfile(join(input_path, f))]
+    filenames = [f for f in listdir(input_path) if os.path.splitext(f)[-1]==".npy"]
     batch_size = 500
     features = []
     times = []
@@ -44,8 +43,6 @@ def h5features_from_nparray(input_path, h5f, timefunc=None):
     i = 0
     for f in filenames:
         data=np.load(input_path+f)
-        
-        print('the type of data is ' + str(type(data)))
         if i == batch_size:
             pdb.set_trace()
             h5features.write(h5f, "/features/", internal_files, times,features)
