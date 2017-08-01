@@ -19,7 +19,7 @@ import pdb
 #########
 
 #feats_folder = '/pylon5/ci560op/londel/flickr/ploop_u100_s3_c4/posteriors_ac0.2/test/'
-#output_folder = '/pylon5/ci560op/larsene/abx/flickr/posteriogram/'
+#output_folder = '/pylon5/ci560op/larsene/abx/flickr/posteriogram/test/'
 
 
 def h5features_from_nparray(input_path, h5f, timefunc=None):
