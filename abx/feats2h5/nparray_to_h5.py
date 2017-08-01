@@ -22,7 +22,7 @@ import pdb
 #output_folder = '/pylon5/ci560op/larsene/abx/flickr/posteriogram/test/'
 
 
-def h5features_from_nparray(input_path, h5f, timefunc=None):
+def h5features_from_nparray(input_path, h5f, timefunc=None, rm_last_number=False):
     """Compute speech features (such as posteriogram) that are in numpy array 
     in h5features format.
 
@@ -33,7 +33,8 @@ def h5features_from_nparray(input_path, h5f, timefunc=None):
     timefunc: callable. Function that returns timestamps for the aforementionned
         features. By default, it assume a window length of 25 ms and a window
         step of 10 ms.
-        
+    rm_last_number :bool, wether or not to remove the last number in each file name
+    (the filenames of posteriograms have an additional number compared to the audio filenames )  
     """
     filenames = [f for f in listdir(input_path) if os.path.splitext(f)[-1]==".npy"]
     batch_size = 500
@@ -56,7 +57,12 @@ def h5features_from_nparray(input_path, h5f, timefunc=None):
         else:
             time = timefunc(data)
         times.append(time)
-        internal_files.append(os.path.basename(os.path.splitext(f)[0]))
+        if rm_last_number:
+            name=os.path.splitext(f)[0]
+            name='_'.join(name.split('_')[:-1])
+            internal_files.append(os.path.basename(name ))
+        else:
+            internal_files.append(os.path.basename(os.path.splitext(f)[0]))
     if features:
         h5features.write(h5f, "/features/", internal_files, times, features)
 
