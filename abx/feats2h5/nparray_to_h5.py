@@ -72,7 +72,7 @@ def h5features_from_nparray(input_path, h5f, timefunc=None, rm_last_number=False
 #########
 
 def make_h5file(feats_folder, output_folder, name='posteriors', rm_last_number):
-    h5features_from_nparray(feats_folder, os.path.join(output_folder,name +'.h5f'), timefunc=None, rm_last_number)
+    h5features_from_nparray(feats_folder, os.path.join(output_folder,name +'.h5f'), None, rm_last_number)
 
 if __name__=='__main__':
     parser = argparse.ArgumentParser()
