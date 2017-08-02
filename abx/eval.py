@@ -68,7 +68,7 @@ def avg(filename, output_dir, on='phoneme', across='speakerID', ponderate=False)
             
         elif across=='na':
             groups = df.groupby(['phoneme_1', 'phoneme_2', 'by'], as_index=False) 
-            gp=p.groupby('by')
+            gp=pandas.groupby('by')
             by=gp.mean()
             list_of_by=[eval(b) for b in by.index]
             df=pandas.DataFrame(list_of_by, columns=['speakerID', 'context'])
@@ -88,7 +88,7 @@ def avg(filename, output_dir, on='phoneme', across='speakerID', ponderate=False)
         
             
         else:
-            raise ValueError('Unknown task type: {0}'.format(task_type))
+            raise ValueError('Unknown task type: {0}'.format(across))
       
       
     elif on=="speakerID":
@@ -105,7 +105,7 @@ def avg(filename, output_dir, on='phoneme', across='speakerID', ponderate=False)
         
     elif on=="word":
     
-        if task_type=='across':
+        if across=='speakerID':
             groups = df.groupby(['speakerID_1', 'speakerID_2', 'word_1', 'word_2'], as_index=False)
             if ponderate:
                 average=groups.apply(lambda x: np.average(x.score, weights=x.n))
@@ -117,7 +117,7 @@ def avg(filename, output_dir, on='phoneme', across='speakerID', ponderate=False)
         
 
 
-        elif task_type=='within':
+        elif across=='na':
             groups = df.groupby(['word_1', 'word_2'], as_index=False)
             if ponderate:
                 average=groups.apply(lambda x: np.average(x.score, weights=x.n))
@@ -162,8 +162,8 @@ if __name__ == '__main__':
     help='either phoneme,  word or speaker, default is %(default)s')
     
     g1.add_argument(
-    '-t', '--task', type=str, metavar= '<str>', default= 'across', 
-    help='across or within speakers, or control, default is %(default)s')
+    '-t', '--across', type=str, metavar= '<str>', default= 'speakerID', 
+    help='whether the ABX task is done across speakerID or context or na, default is %(default)s')
     
     g1.add_argument(
     '-p', '--ponderate', type=bool, default= False, 
@@ -172,7 +172,7 @@ if __name__ == '__main__':
     
     args = parser.parse_args()
     print("the ABX score of the task: " + args.filename.split('.')[0])
-    avg(args.filename, args.output_dir, args.on, args.task, args.ponderate)
+    avg(args.filename, args.output_dir, args.on, args.across, args.ponderate)
     
 
 
