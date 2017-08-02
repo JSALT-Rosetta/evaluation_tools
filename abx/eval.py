@@ -31,7 +31,7 @@ import numpy as np
 import pandas
 import os
 
-def avg(filename, output_dir, on='phoneme', task_type='across', ponderate=False):
+def avg(filename, output_dir, on='phoneme', across='speakerID', ponderate=False):
     input_folder=os.path.dirname(os.path.abspath(filename))
     df = pandas.read_csv(filename, sep='\t', header=0)
     
@@ -41,7 +41,7 @@ def avg(filename, output_dir, on='phoneme', task_type='across', ponderate=False)
         df = df[df.phoneme_1!= '__#__']
         df = df[df.phoneme_2!= '__#__']
     
-        if task_type == 'across':
+        if across == 'speakerID':
             groups = df.groupby(['speakerID_1', 'speakerID_2', 'phoneme_1', 'phoneme_2'], as_index=False)
             if ponderate:
                 average=groups.apply(lambda x: np.average(x.score, weights=x.n))
@@ -52,7 +52,7 @@ def avg(filename, output_dir, on='phoneme', task_type='across', ponderate=False)
             res_per_context=0
         
         
-        elif task_type == 'within':
+        elif across == 'context':
 
             groups = df.groupby(['phoneme_1', 'phoneme_2', 'context_1', 'context_2'], as_index=False)
             if ponderate:
@@ -66,14 +66,23 @@ def avg(filename, output_dir, on='phoneme', task_type='across', ponderate=False)
         
 
             
-        elif task_type=='control':
-            groups = df.groupby(['phoneme_1', 'phoneme_2'], as_index=False) 
+        elif across=='na':
+            groups = df.groupby(['phoneme_1', 'phoneme_2', 'by'], as_index=False) 
+            gp=p.groupby('by')
+            by=gp.mean()
+            list_of_by=[eval(b) for b in by.index]
+            df=pandas.DataFrame(list_of_by, columns=['speakerID', 'context'])
+            df['score']=list(by['score'])
+            
+            by['speakerID']=df['speakerID']
+            by['context']=df['context']
+
             if ponderate:
                 average=groups.apply(lambda x: np.average(x.score, weights=x.n))
             else:
                 average=groups.apply(lambda x: np.average(x.score, weights=None))
-            res_per_speaker=0
-            res_per_context=0
+            res_per_speaker=df.groupby('speakerID').mean()
+            res_per_context=df.groupby('context').mean()['score']
             res_per_unit=average.mean(level="phoneme_1")
 
         
