@@ -68,21 +68,18 @@ def avg(filename, output_dir, on='phoneme', across='speakerID', ponderate=False)
             
         elif across=='na':
             groups = df.groupby(['phoneme_1', 'phoneme_2', 'by'], as_index=False) 
-            gp=pandas.groupby('by', as_index=False)
+            gp=df.groupby('by', as_index=False)
             by=gp.mean()
             list_of_by=[eval(b) for b in by.index]
-            df=pandas.DataFrame(list_of_by, columns=['speakerID', 'context'])
-            df['score']=list(by['score'])
-            
-            by['speakerID']=df['speakerID']
-            by['context']=df['context']
+            d=pandas.DataFrame(list_of_by, columns=['speakerID', 'context'])
+            d['score']=list(by['score'])
 
             if ponderate:
                 average=groups.apply(lambda x: np.average(x.score, weights=x.n))
             else:
                 average=groups.apply(lambda x: np.average(x.score, weights=None))
-            res_per_speaker=df.groupby('speakerID').mean()
-            res_per_context=df.groupby('context').mean()['score']
+            res_per_speaker=d.groupby('speakerID').mean()
+            res_per_context=d.groupby('context').mean()['score']
             res_per_unit=average.mean(level="phoneme_1")
 
         
