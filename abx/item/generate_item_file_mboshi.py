@@ -15,6 +15,7 @@ import numpy as np
 from os import listdir
 from os.path import isfile, join
 import argparse
+import pdb
 
 import generate_item_file_flickr
 
@@ -51,11 +52,11 @@ def get_item_file(path_alignment, output_dir, on='phoneme', phone_alignment=Fals
             triphone_align=generate_item_file_flickr.phone_to_triphone_alignment(d)
             context=generate_item_file_flickr.create_phonetic_context(triphone_align, on)
         else:
-            context=generate_item_file_flickr.create_phonetic_context(d, on)
-        dd=pd.concat([df_filename, context], axis=1)
+            #context=generate_item_file_flickr.create_phonetic_context(d, on)
+            pdb.set_state()
         
-        df_item=pd.concat([df_item, dd], axis=0)  
-        
+        df_item=pd.concat([df_item, context], axis=0)  
+                
     print('removing side info and saving into text file')
     if on=='phoneme':
         item = df_item[df_item["#phoneme"] != "+LAUGH+"]
@@ -112,7 +113,6 @@ if __name__=='__main__':
 #path_wav="/pylon2/ci560op/odette/data/mboshi-french-parallel-corpus/full_corpus/train/"
 #path_mfcc="/pylon2/ci560op/odette/data/mboshi-french-parallel-corpus/incoming/xnmt_train/mfcc.h5f"
 
-#python generate_item_file_mboshi.py -p "/pylon2/ci560op/odette/data/mboshi-french-parallel-corpus/forced_alignments_supervised_spkr/" -o '/pylon5/ci560op/larsene/abx/mboshi/train/mfcc/' --on 'phoneme' -a 'False'
-
+#python generate_item_file_mboshi.py -p "/pylon2/ci560op/odette/data/mboshi-french-parallel-corpus/forced_alignments_supervised_spkr/" -o '/pylon5/ci560op/larsene/abx/mboshi/train/mfcc/' --on 'phoneme' 
 ##########   
     
