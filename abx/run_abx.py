@@ -111,7 +111,7 @@ def fullrun():
         print("Raw results are available in the csv file !")
      
      
-    eval.avg(analyzefilename, out_res, ON, ACROSS, ponderate)
+    eval_abx.avg(analyzefilename, out_res, ON, ACROSS, ponderate)
     print('evaluation done')
 
 
