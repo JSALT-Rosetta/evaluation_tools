@@ -68,7 +68,7 @@ def avg(filename, output_dir, on='phoneme', across='speakerID', ponderate=False)
             
         elif across=='na':
             groups = df.groupby(['phoneme_1', 'phoneme_2', 'by'], as_index=False) 
-            gp=pandas.groupby('by')
+            gp=pandas.groupby('by', as_index=False)
             by=gp.mean()
             list_of_by=[eval(b) for b in by.index]
             df=pandas.DataFrame(list_of_by, columns=['speakerID', 'context'])
