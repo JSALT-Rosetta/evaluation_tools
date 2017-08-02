@@ -86,6 +86,7 @@ def fullrun():
     print("the abx task file is created")
     
     print( "number of cpu used is " + str(NB_CPU))
+    
     if not os.path.exists(distance_file):
         if distance == 'cosine':
             distances.compute_distances(feature_file, '/features/', taskfilename,
@@ -101,35 +102,16 @@ def fullrun():
     else:
         print("distance has already been computed")
     
-    if not os.path.exists(scorefilename):                            
-    	score.score(taskfilename, distance_file, scorefilename)
-    	print("Score is computed")
+    if not os.path.exists(scorefilename):
+        score.score(taskfilename, distance_file, scorefilename)
+        print("Score is computed")
     
     if not os.path.exists(analyzefilename):
-    	analyze.analyze(taskfilename, scorefilename, analyzefilename)
-    	print("Raw results are available in the csv file !")
-    
-    if ON=='phoneme':
-        if ACROSS == "speakerID" :
-            eval.avg(analyzefilename, out_res, ON, 'across', ponderate)
-                 
-        elif BY == "speakerID":
-            eval.avg(analyzefilename, out_res, ON, 'within', ponderate)
-            
-        elif ACROSS=='na':
-            eval.avg(analyzefilename, out_res, ON, 'control', ponderate)
-            
-            
-    if ON=='word':
-        if ACROSS == "speakerID" :
-            eval.avg(analyzefilename, ON, 'across', ponderate)
-                 
-        elif BY == "speakerID":
-            eval.avg(analyzefilename, out_res, ON, 'within', ponderate)
-             
-    if ON=='speakerID':
-        eval.avg(analyzefilename, out_res, ON, '', ponderate)
-    
+        analyze.analyze(taskfilename, scorefilename, analyzefilename)
+        print("Raw results are available in the csv file !")
+     
+     
+    eval.avg(analyzefilename, out_res, ON, ACROSS, ponderate)
     print('evaluation done')
 
 
