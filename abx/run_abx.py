@@ -78,12 +78,14 @@ def fullrun():
         	                         distance_file, dtw_cosine_distance,
                 	                   normalized = True, n_cpu=NB_CPU)
     print("Computing cosine distance has been computed")
-                                
-    score.score(taskfilename, distance_file, scorefilename)
-    print("Score is computed")
     
-    analyze.analyze(taskfilename, scorefilename, analyzefilename)
-    print("Results are available in the csv file !")
+    if not os.path.exists(scorefilename):                            
+    	score.score(taskfilename, distance_file, scorefilename)
+    	print("Score is computed")
+    
+    if not os.path.exists(analyzefilename):
+    	analyze.analyze(taskfilename, scorefilename, analyzefilename)
+    	print("Raw results are available in the csv file !")
     
     if ON=='phoneme':
         if ACROSS == "speakerID" :
@@ -102,7 +104,7 @@ def fullrun():
                  
         elif BY == "speakerID":
             eval.avg(analyzefilename, out_res, ON, 'within', ponderate)
-            
+             
     if ON=='speakerID':
         eval.avg(analyzefilename, out_res, ON, '', ponderate)
     
