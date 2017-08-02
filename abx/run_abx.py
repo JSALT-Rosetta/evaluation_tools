@@ -9,6 +9,7 @@ This test contains a full run of the ABX pipeline
 # -*- coding: utf-8 -*-
 
 import os
+import numpy as np
 import argparse
 import ABXpy.task
 import ABXpy.distances.distances as distances
@@ -25,7 +26,7 @@ def dtw_cosine_distance(x, y, normalized):
     return dtw.dtw(x, y, cosine.cosine_distance, normalized)
     
 
-def dtw_kl_divergence(x, y):
+def dtw_kl_divergence(x, y, normalized):
     """ Kullback-Leibler divergence
     """
     if x.shape[0] > 0 and y.shape[0] > 0:
@@ -96,8 +97,9 @@ def fullrun():
                     	                   normalized = True, n_cpu=NB_CPU)
         else :
             raise ValueError('distance must be either cosine or kl')
-    
-    print("Computing %(distance)s distance has been computed")
+        print("Computing %(distance)s distance has been computed")
+    else:
+        print("distance has already been computed")
     
     if not os.path.exists(scorefilename):                            
     	score.score(taskfilename, distance_file, scorefilename)
