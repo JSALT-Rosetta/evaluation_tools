@@ -30,7 +30,7 @@ def dtw_kl_divergence(x, y, normalized):
     """ Kullback-Leibler divergence
     """
     if x.shape[0] > 0 and y.shape[0] > 0:
-        d = dtw.dtw(x, y, kullback_leibler.kl_divergence)
+        d = dtw.dtw(x, y, kullback_leibler.kl_divergence, normalized)
     elif x.shape[0] == y.shape[0]:
         d = 0
     else:
