@@ -13,6 +13,7 @@ import argparse
 import ABXpy.task
 import ABXpy.distances.distances as distances
 import ABXpy.distances.metrics.cosine as cosine
+import ABXpy.distances.metrics.kullback_leibler as kullback_leibler
 import ABXpy.distances.metrics.dtw as dtw
 import ABXpy.score as score
 import ABXpy.analyze as analyze
@@ -20,9 +21,20 @@ import ABXpy.analyze as analyze
 import eval
 
 
-
 def dtw_cosine_distance(x, y, normalized):
     return dtw.dtw(x, y, cosine.cosine_distance, normalized)
+    
+
+def dtw_kl_divergence(x, y):
+    """ Kullback-Leibler divergence
+    """
+    if x.shape[0] > 0 and y.shape[0] > 0:
+        d = dtw.dtw(x, y, kullback_leibler.kl_divergence)
+    elif x.shape[0] == y.shape[0]:
+        d = 0
+    else:
+        d = np.inf
+    return d
 
 
 def fullrun():
@@ -74,10 +86,18 @@ def fullrun():
     
     print( "number of cpu used is " + str(NB_CPU))
     if not os.path.exists(distance_file):
-        distances.compute_distances(feature_file, '/features/', taskfilename,
-        	                         distance_file, dtw_cosine_distance,
-                	                   normalized = True, n_cpu=NB_CPU)
-    print("Computing cosine distance has been computed")
+        if distance == 'cosine':
+            distances.compute_distances(feature_file, '/features/', taskfilename,
+            	                         distance_file, dtw_cosine_distance,
+                    	                   normalized = True, n_cpu=NB_CPU)
+        elif distance == 'kl':
+            distances.compute_distances(feature_file, '/features/', taskfilename,
+            	                         distance_file, dtw_kl_divergence,
+                    	                   normalized = True, n_cpu=NB_CPU)
+        else :
+            raise ValueError('distance must be either cosine or kl')
+    
+    print("Computing %(distance)s distance has been computed")
     
     if not os.path.exists(scorefilename):                            
     	score.score(taskfilename, distance_file, scorefilename)
@@ -129,6 +149,10 @@ parser.add_argument(
 parser.add_argument(
      '-f', '--feature_file', type=str, default="mfcc.h5f",
      help='''name of the h5 file containing the acoustic features, default is %(default)s.''')
+     
+parser.add_argument(
+     '-d','--distance', type=str, default='cosine',
+     help='''either cosine or kl (kullback leibler) distance, default is %(default)s ''')
 
 parser.add_argument(
      '--cpu', type=int, default=1,
@@ -146,6 +170,7 @@ if __name__=='__main__':
     
     input_folder=args.input
     feature=args.feature_file
+    distance=args.distance
     NB_CPU=args.cpu
     ponderate=args.ponderate
     out_res=args.output_dir
