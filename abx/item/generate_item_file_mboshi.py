@@ -2,7 +2,7 @@
 """
 Created on Tue Aug  1 14:02:38 2017
 
-@author: doctor
+@author: elinlarsen
 """
 
 '''
@@ -43,8 +43,9 @@ def get_item_file(path_alignment, output_dir, on='phoneme', phone_alignment=Fals
         cols = d_align.columns.tolist()
         cols = cols[1:]+cols[0:1]
         d_align = d_align[cols] 
-        
-        df_filename=pd.DataFrame(np.repeat(df_names['#file'][ii], len(d_align)), columns=['#file'])
+
+        filename=df_names['#file'][ii].split('.')[0]        
+        df_filename=pd.DataFrame(np.repeat(filename , len(d_align)), columns=['#file'])
         df_speakerID=pd.DataFrame(np.repeat(df_names['speakerID'][ii], len(d_align)), columns=['speakerID'])
         d=pd.concat([df_filename, d_align, df_speakerID], axis=1) 
         
