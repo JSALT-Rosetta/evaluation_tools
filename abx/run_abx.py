@@ -19,7 +19,7 @@ import ABXpy.distances.metrics.dtw as dtw
 import ABXpy.score as score
 import ABXpy.analyze as analyze
 
-import eval
+import eval_abx
 
 
 def dtw_cosine_distance(x, y, normalized):
