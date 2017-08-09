@@ -19,10 +19,10 @@ import pdb
 #########
 
 #feats_folder = '/pylon5/ci560op/londel/flickr/ploop_u100_s3_c4/posteriors_ac0.2/test/'
-#output_folder = '/pylon5/ci560op/odette/abx/flickr/posteriogram/test/'
+#output_folder = '/pylon5/ci560op/larsene/abx/flickr/test/posteriogram/'
 
 
-def h5features_from_nparray(input_path, h5f, timefunc=None, rm_last_number=False):
+def h5features_from_nparray(input_path, h5f, timefunc=None, rm_last_number=False, transpose=False):
     """Compute speech features (such as posteriogram) that are in numpy array 
     in h5features format.
 
@@ -44,6 +44,8 @@ def h5features_from_nparray(input_path, h5f, timefunc=None, rm_last_number=False
     i = 0
     for f in filenames:
         data=np.load(input_path+f)
+        if transpose==True:
+            data=data.T
         if i == batch_size:
             h5features.write(h5f, "/features/", internal_files, times,features)
             features = []
@@ -71,8 +73,8 @@ def h5features_from_nparray(input_path, h5f, timefunc=None, rm_last_number=False
 # Generate features:
 #########
 
-def make_h5file(feats_folder, output_folder, name, rm_last_number):
-    h5features_from_nparray(feats_folder, os.path.join(output_folder,name +'.h5f'), None, rm_last_number)
+def make_h5file(feats_folder, output_folder, name, rm_last_number, transpose):
+    h5features_from_nparray(feats_folder, os.path.join(output_folder,name +'.h5f'), None, rm_last_number, transpose)
 
 if __name__=='__main__':
     parser = argparse.ArgumentParser()
@@ -81,12 +83,14 @@ if __name__=='__main__':
     parser.add_argument('-n', '--name', default='posteriors', help = "Folder with .wav files")
     parser.add_argument('-rm', '--rm_last_number', type=bool, default='False', 
                         help = "ether or not to remove the last number in each file name separated by _")
+    parser.add_argument('-t', '--transpose', type=bool, default='False', 
+                        help = "whether to transpose or not the input")
     args = parser.parse_args()
     print("Start generating Features")
     print("Input folder : " + args.feats_folder)
     print("Output folder : " + args.output_folder)	
     
-    make_h5file(args.feats_folder, args.output_folder, args.name, args.rm_last_number)
+    make_h5file(args.feats_folder, args.output_folder, args.name, args.rm_last_number, args.transpose)
 	
 
 
