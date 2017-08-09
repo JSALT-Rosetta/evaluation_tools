@@ -41,9 +41,9 @@ def dtw_kl_divergence(x, y, normalized):
 def fullrun():
     
     if type(BY)==list:
-        out='/'+ 'on_'+ ON[0:2]+ '_by_' + BY[0][0:2]+ '_'+ BY[1][0:2] +'_ac_'+ACROSS[0:2]
+        out='/'+ 'on_'+ ON[0:2]+  '_ac_'+ACROSS[0:2] + '_by_' + BY[0][0:2]+ '_'+ BY[1][0:2] 
     else:
-        out='/'+ 'on_'+ ON[0:2]+ '_by_' + BY[0:2] +'_ac_'+ACROSS[0:2]
+        out='/'+ 'on_'+ ON[0:2]+ '_ac_'+ACROSS[0:2] + '_by_' + BY[0:2] 
     output_folder=input_folder + out
 
 
@@ -161,7 +161,8 @@ if __name__=='__main__':
 
     
     if args.on=="phoneme":
-        d={"speakerID":"context",  "context":"speakerID", "na":["speakerID", "context"]}
+        d={"speakerID":"context",  "context":"speakerID", "na":["speakerID", "context"]} 
+        #"na":["speakerID", "context"]}
         for ACROSS, BY in d.iteritems():
             ON=args.on
             fullrun()

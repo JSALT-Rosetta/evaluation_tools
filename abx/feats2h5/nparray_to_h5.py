@@ -45,6 +45,7 @@ def h5features_from_nparray(input_path, h5f, timefunc=None, rm_last_number=False
     for f in filenames:
         data=np.load(input_path+f)
         if i == batch_size:
+            #pdb.set_trace()
             h5features.write(h5f, "/features/", internal_files, times,features)
             features = []
             times = []
@@ -59,7 +60,7 @@ def h5features_from_nparray(input_path, h5f, timefunc=None, rm_last_number=False
         times.append(time)
         if rm_last_number:
             name=os.path.splitext(f)[0]
-            name='_'.join(name.split('_')[:-1])
+            #name='_'.join(name.split('_')[:-1])
             internal_files.append(os.path.basename(name ))
         else:
             internal_files.append(os.path.basename(os.path.splitext(f)[0]))
