@@ -11,8 +11,8 @@ JSALT 2017
 import tables 
 import numpy
 
-outpath = '/pylon5/ci560op/dmerkx/af_feats/'
-input_path='/pylon2/ci560op/odette/data/flickr/flickr_afs_markus/flickr8_af.h5'
+outpath = '/pylon5/ci560op/larsene/abx/mboshi/train/AF/af_npy/'
+input_path='/pylon5/ci560op/larsene/abx/mboshi/train/AF/mboshi_all.h5'
 
 def af_h5_to_np(input_path, outpath):
     

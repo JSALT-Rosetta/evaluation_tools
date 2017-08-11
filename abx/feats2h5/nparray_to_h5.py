@@ -12,6 +12,7 @@ from os import listdir
 import numpy as np
 import h5features
 import pdb
+import pickle
 
 
 #########
@@ -20,6 +21,28 @@ import pdb
 
 #feats_folder = '/pylon5/ci560op/londel/flickr/ploop_u100_s3_c4/posteriors_ac0.2/test/'
 #output_folder = '/pylon5/ci560op/larsene/abx/flickr/test/posteriogram/'
+
+def change_filename(inpath, file_newnames):
+    with open (file_newnames, 'r') as f:
+        newnames=f.readlines()
+    newnames=[x.strip()+".npy" for x in newnames ] 
+    old=[f for f in listdir(inpath)if os.path.splitext(f)[-1]==".npy"]
+    sorted_old=sorted(old, key=lambda x: int(x.split(".")[0].split("_")[-1]))    
+    for n,o in zip(newnames, sorted_old):
+        os.rename(inpath+"/"+o, inpath+"/"+n)
+    return(newnames)
+    
+emb='/pylon5/ci560op/rachine/Flickr/embeddings/flickr_trad_ja_word_modular.internal512-decode-only.hyp.emb'
+def from_xnmt_format_to_filename(emb, output_dir, file_newnames):
+    data = pickle.load(open(emb,'rb'))
+    with open (file_newnames, 'r') as f:
+        newnames=f.readlines()
+    newnames=[x.strip()+".npy" for x in newnames ] 
+    for d, f in zip(data, newnames):
+        t=data.T
+        np.save(file=output_dir +"/"+f, arr=t, allow_pickle=False)
+
+
 
 
 def h5features_from_nparray(input_path, h5f, timefunc=None, rm_last_number=False, transpose=False):
@@ -74,7 +97,9 @@ def h5features_from_nparray(input_path, h5f, timefunc=None, rm_last_number=False
 # Generate features:
 #########
 
-def make_h5file(feats_folder, output_folder, name, rm_last_number, transpose):
+def make_h5file(feats_folder, output_folder, name, rm_last_number, transpose, xnmt_format=False, file_newnames=''):
+    if xnmt_format==True:
+        from_xnmt_format_to_filename(input_path, file_newnames)   
     h5features_from_nparray(feats_folder, os.path.join(output_folder,name +'.h5f'), None, rm_last_number, transpose)
 
 if __name__=='__main__':
