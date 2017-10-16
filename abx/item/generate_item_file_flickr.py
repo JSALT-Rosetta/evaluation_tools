@@ -2,7 +2,7 @@
 """
 Created on Fri Jul 28 10:30:12 2017
 
-@author: doctor
+@author: elinlarsen
 """
 
 """
