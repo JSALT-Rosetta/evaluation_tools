@@ -36,16 +36,22 @@ def phone_to_triphone_alignment(df):
     """
     triphones_onset=[]
     triphones_offset=[]
-    new_df=df
-    for i in range(len(df)):
-        if i==0:
-            triphones_onset.append(df.iloc[i]["onset"])
-        else:
-            triphones_onset.append(df.iloc[i-1]["onset"])    
-        if i==len(df)-1:
-            triphones_offset.append(df.iloc[i]["offset"])
-        else:
-            triphones_offset.append(df.iloc[i+1]["onset"])
+    
+    new_df=df.copy(deep=True)
+    filenames=reduce(lambda l, x: l if x in l else l+[x], df["#file"], []) # get all filenames in ORDER (do not use set())
+    for f in filenames: 
+        sub=df[df["#file"]==f]   #subset the dataframe for one filename (caption)                         
+        for i in range(len(sub)):
+            if i==0:
+                triphones_onset.append(sub.iloc[i]["onset"])
+            else:
+                triphones_onset.append(sub.iloc[i-1]["onset"]) 
+                   
+            if i==len(sub)-1:
+                triphones_offset.append(sub.iloc[i]["offset"])
+            else:
+                triphones_offset.append(sub.iloc[i+1]["offset"])
+             
     new_df['onset']=triphones_onset
     new_df['offset']=triphones_offset
     return(new_df)      
@@ -65,20 +71,25 @@ def create_phonetic_context(df, on='phoneme'):
     containing previous and following phones for each phone
     """
     list_context=[]
-    if on=='phoneme':
-        phonemes=list(df["#phoneme"])
-    else:
-        phonemes=list(df['phoneme'])
-    for i in range(len(df)):
-        if i!=0 and i!=len(df)-1:
-            context="_".join((phonemes[i-1], phonemes[i+1]))
-            list_context.append(context)
-        elif i==0:
-            context="_".join((phonemes[i], phonemes[i+1]))
-            list_context.append(context)
-        elif i==len(df)-1:
-            context="_".join((phonemes[i-1], phonemes[i]))
-            list_context.append(context)          
+      
+    filenames=reduce(lambda l, x: l if x in l else l+[x], df["#file"], []) # get all filenames in ORDER (do not use set())
+    for f in filenames: 
+        sub=df[df["#file"]==f]   #subset the dataframe for one filename (caption)     
+        if on=='phoneme':
+            phonemes=list(sub["#phoneme"])
+        else:
+            phonemes=list(sub['phoneme'])                    
+        L=len(sub)
+        for i in range(L):
+            if i!=0 and i!=L-1:
+                context="_".join((phonemes[i-1], phonemes[i+1]))
+                list_context.append(context)
+            elif i==0:
+                context="_".join(("BEGIN", phonemes[i+1]))
+                list_context.append(context)
+            elif i==L-1:
+                context="_".join((phonemes[i-1], "END"))
+                list_context.append(context)          
     df["context"]=list_context
     return(df)
     
