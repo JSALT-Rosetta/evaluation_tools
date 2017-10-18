@@ -22,7 +22,7 @@ def npz_to_npy(path_npz):
         os.mkdir(directory) 
     
     for fi, feat in  d.items(): 
-        np.save(file=fi, arr=feat, allow_pickle=False)
+        np.save(file= directory + fi, arr=feat, allow_pickle=False)
         
         
 if __name__=='__main__':
