@@ -8,11 +8,7 @@ Created on Wed Oct 18 12:21:25 2017
 
 import os 
 import argparse
-from os import listdir
 import numpy as np
-import h5features
-import pdb
-import pickle
 
 
 def npz_to_npy(path_npz):
@@ -32,6 +28,6 @@ def npz_to_npy(path_npz):
 if __name__=='__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-p', '--path_npz', help = " .npz files to convert into a folder containing npy files")
-    
+    args = parser.parse_args()
     npz_to_npy(args.path_npz)
 
