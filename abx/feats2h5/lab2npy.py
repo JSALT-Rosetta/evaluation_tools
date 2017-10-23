@@ -12,7 +12,7 @@ import os
 import pandas as pd
 import math
 
-def lab2npy(input_path, frame_rate= 0.01, out):
+def lab2npy(input_path, out, frame_rate= 0.01):
    """
    frame_rate : sampling rate, typically 10 ms (or 0.01s)
 
@@ -45,22 +45,22 @@ def lab2npy(input_path, frame_rate= 0.01, out):
                
    
 
-def make_npyfiles(input_folder_path, frame_rate, out):
+def make_npyfiles(input_folder_path,  out, frame_rate,):
    filenames = [f for f in listdir(input_folder_path) if os.path.splitext(f)[-1]==".lab"]
     
     for f in filenames:
-        lab2npy(f, frame_rate, out)
+        lab2npy(f, out, frame_rate,)
         
         
 if __name__=='__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-i', '--input_folder_path', help = "Folder with features .lab files")
-    parser.add_argument('-f', '--frame_rate', default='0.01', help = "Frame rate in second, default is 0.01 s")
     parser.add_argument('-o', '--out', help = "Output folder containing the npy files")
+    parser.add_argument('-f', '--frame_rate', default='0.01', help = "Frame rate in second, default is 0.01 s")
     
     args = parser.parse_args()
     
-    make_npyfiles(args.input_folder_path, , args.frame_rate, args.out)
+    make_npyfiles(args.input_folder_path, args.out, args.frame_rate)
 	
 
 
