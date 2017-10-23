@@ -33,7 +33,7 @@ def lab2npy(input_path, out, frame_rate= 0.01):
    for i in range(len(df)): 
        on=df["onset"].iloc[i]
        off=df["offset"].iloc[i]
-       nb_frame=np.floor_divide((off-on),frame_rate)
+       nb_frame=np.floor_divide((int(off)-int(on)),frame_rate)
        for ff in range(nb_frame): 
            one_hot=np.empty(len(phones))
            for j in range(len(phones)):
