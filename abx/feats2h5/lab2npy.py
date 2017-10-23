@@ -10,9 +10,9 @@ Created on Mon Oct 23 16:24:54 2017
 import numpy as np
 import os
 import pandas as pd
-import math
 from os import listdir
 import argparse
+from math import floor
 
 def lab2npy(input_path, out, frame_rate= 0.01):
    """
@@ -33,7 +33,7 @@ def lab2npy(input_path, out, frame_rate= 0.01):
    for i in range(len(df)): 
        on=df["onset"].iloc[i]
        off=df["offset"].iloc[i]
-       nb_frame=math.floor((off-on)/frame_rate)
+       nb_frame=floor(np.divide((off-on),frame_rate))
        for ff in range(nb_frame): 
            one_hot=np.empty(len(phones))
            for j in range(len(phones)):
@@ -50,7 +50,7 @@ def lab2npy(input_path, out, frame_rate= 0.01):
 def make_npyfiles(input_folder_path,  out, frame_rate,):
    filenames = [f for f in listdir(input_folder_path) if os.path.splitext(f)[-1]==".lab"]
    for f in filenames:
-       lab2npy(input_folder_path +"/"+f, out, frame_rate,)
+       lab2npy(input_folder_path +"/"+f, out, frame_rate)
         
         
 if __name__=='__main__':
