@@ -45,7 +45,7 @@ def random_sampling(item_file, col, sample_size, replace=False):
     sampled_data = df[df[col].isin(selected)]
     
     directory= os.path.dirname(item_file)
-    sampled_data.csv(directory + "sampled.item", sep="\t", header=False, index=False)
+    sampled_data.to_csv(directory + "sampled.item", sep="\t", header=False, index=False)
     
     return(sampled_data)
     
@@ -79,7 +79,7 @@ def get_sample_item_file(wav_file_names_sample, item_file, output):
 if __name__=='__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-i', '--item_file', help = "path containing the item file")
-    parser.add_argument('-c', '--col', help= "name of the col to sample on")
+    parser.add_argument('-c', '--col', type= str, default= "#file", help= "name of the col to sample on")
     parser.add_argument('-s', '--sample_size', type=int, default= 1000, help="size of the sample : number of row to randomly select")
     parser.add_argument('-r', '--replace', type=bool, default='False', help = "whether or not to have a sampling with replacement")
     args = parser.parse_args()
