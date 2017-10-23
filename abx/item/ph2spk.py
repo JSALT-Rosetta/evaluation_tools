@@ -28,7 +28,7 @@ if __name__=='__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-i', '--item_file', type=str, help="path to the phoneme file to be transformed to a speaker item file")
     parser.add_argument('-u', '--unit_colname', type=str, default="#phoneme", help="name of the unit column to take out the #")
-    parser.add_argument('-u', '--spk_colname', type=str, default="speakerID", help="name of the speaker column to add a #")
+    parser.add_argument('-s', '--spk_colname', type=str, default="speakerID", help="name of the speaker column to add a #")
 
     args=parser.parse_args()
     phoneme_to_speaker_item_file(args.item_file, args.unit_colname, args.spk_colname)    
