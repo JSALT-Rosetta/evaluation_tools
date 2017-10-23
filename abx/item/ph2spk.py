@@ -27,7 +27,7 @@ def phoneme_to_speaker_item_file(item_file):
     
 if __name__=='__main__':
     parser = argparse.ArgumentParser()
-    parser.add_Argument('-i', '--i', type=str, help="path to the phoneme file to be transformed to a speaker item file")
+    parser.add_argument('-i', '--i', type=str, help="path to the phoneme file to be transformed to a speaker item file")
 
     args=parser.parse_args()
     phoneme_to_speaker_item_file(args.item_file)    
