@@ -42,12 +42,18 @@ def random_sampling(item_file, col, sample_size, replace=False):
     except ValueError:
         print ("The group_by value is not a colunm names of the item file")
     
-    sampled_data = df[df[col].isin(selected)]
+    sampled= df[df[col].isin(selected)]
+    
+    s=sampled[sampled['context'].str.contains("BREATH")==False]
+    s=s[s['context'].str.contains("NOISE")==False]
+    s=s[s['context'].str.contains("LAUGH")==False]
+    s=s[s['context'].str.contains("HUMAN")==False]
     
     directory= os.path.dirname(item_file)
-    sampled_data.to_csv(directory + "sampled.item", sep="\t", header=False, index=False)
+
+    s.to_csv(directory + "/sampled.item", sep="\t", header=True, index=False)
     
-    return(sampled_data)
+    return(s)
     
 
 
