@@ -46,11 +46,11 @@ def lab2npy(input_path, out, frame_rate= 0.01):
    arr_feats = np.array(list_feats)
    
    directory= out+"/npy/"
-   try:
-       os.stat(directory)
-   except:
-       os.mkdir(directory)  
-    
+   #try:
+       #os.mkdir(directory)
+   #except:
+       #os.stat(directory)
+         
    os.mkdir(directory)
    np.save(directory + "/"+ name.split(".")[0], arr=arr_feats,  allow_pickle=False)          
                
