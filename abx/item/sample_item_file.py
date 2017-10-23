@@ -48,6 +48,8 @@ def random_sampling(item_file, col, sample_size, replace=False):
     s=s[s['context'].str.contains("NOISE")==False]
     s=s[s['context'].str.contains("LAUGH")==False]
     s=s[s['context'].str.contains("HUMAN")==False]
+    s=s[s['context'].str.contains("GARBAGE")==False]
+    s=s[s['#phoneme'].str.contains("GARBAGE")==False]
     
     directory= os.path.dirname(item_file)
 
