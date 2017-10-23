@@ -11,6 +11,8 @@ import numpy as np
 import os
 import pandas as pd
 import math
+from os import listdir
+import argparse
 
 def lab2npy(input_path, out, frame_rate= 0.01):
    """
@@ -18,7 +20,7 @@ def lab2npy(input_path, out, frame_rate= 0.01):
 
    """
    
-   name=os.path.basename(your_path)
+   name=os.path.basename(input_path)
    df=pd.read_table(input_path, sep=" ", header=None)
    df.columns=["onset", "offset", "phone", "score"]
    
@@ -47,9 +49,8 @@ def lab2npy(input_path, out, frame_rate= 0.01):
 
 def make_npyfiles(input_folder_path,  out, frame_rate,):
    filenames = [f for f in listdir(input_folder_path) if os.path.splitext(f)[-1]==".lab"]
-    
-    for f in filenames:
-        lab2npy(f, out, frame_rate,)
+   for f in filenames:
+       lab2npy(f, out, frame_rate,)
         
         
 if __name__=='__main__':
