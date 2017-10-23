@@ -21,7 +21,7 @@ def phoneme_to_speaker_item_file(item_file, unit_colname="#phoneme", spk_colname
     c[i], c[j]=c[j], c[i]
 
     df=df[c]    
-    df.to_csv(direc+ "speaker.item", sep="\t", header=True, index=False)
+    df.to_csv(direc+ "/speaker.item", sep="\t", header=True, index=False)
     
     
 if __name__=='__main__':
