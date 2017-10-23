@@ -47,11 +47,10 @@ def lab2npy(input_path, out, frame_rate= 0.01):
    
    directory= out+"/npy/"
    #try:
-       #os.mkdir(directory)
-   #except:
        #os.stat(directory)
-         
-   os.mkdir(directory)
+   #except:
+       #os.mkdir(directory)
+              
    np.save(directory + "/"+ name.split(".")[0], arr=arr_feats,  allow_pickle=False)          
                
    
