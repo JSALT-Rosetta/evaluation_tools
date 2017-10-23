@@ -50,7 +50,7 @@ def lab2npy(input_path, out, frame_rate= 0.01):
 def make_npyfiles(input_folder_path,  out, frame_rate,):
    filenames = [f for f in listdir(input_folder_path) if os.path.splitext(f)[-1]==".lab"]
    for f in filenames:
-       lab2npy(f, out, frame_rate,)
+       lab2npy(input_folder_path +"/"+f, out, frame_rate,)
         
         
 if __name__=='__main__':
