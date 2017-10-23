@@ -15,7 +15,7 @@ def phoneme_to_speaker_item_file(item_file):
     df=pd.read_table(item_file, sep="\t", header=0)
     df.rename(columns={'speaker_id': '#speakerID',}, inplace=True)
     df.rename(columns={'#phoneme': 'phoneme',}, inplace=True)
-    
+    print(df.columns)
     c=df.columns.tolist()
     i=c.index("#speakerID")
     j=c.index("phoneme")
