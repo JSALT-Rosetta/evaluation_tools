@@ -12,7 +12,6 @@ import os
 import pandas as pd
 from os import listdir
 import argparse
-from math import floor
 
 def lab2npy(input_path, out, frame_rate= 0.01):
    """
@@ -30,10 +29,12 @@ def lab2npy(input_path, out, frame_rate= 0.01):
    df["offset"]=df["offset"]*10**(-7)   
    phones=['a{}'.format(i) for i in range(1, 49)]   
    list_feats=[]
+   R=np.empty(1)
+   R[0]=frame_rate
    for i in range(len(df)): 
        on=df["onset"].iloc[i]
        off=df["offset"].iloc[i]
-       nb_frame=np.floor_divide((int(off)-int(on)),frame_rate)
+       nb_frame=np.floor_divide((off-on),R[0])
        for ff in range(nb_frame): 
            one_hot=np.empty(len(phones))
            for j in range(len(phones)):
