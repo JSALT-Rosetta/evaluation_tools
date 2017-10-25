@@ -53,7 +53,7 @@ def one_hot_baseline(input_path, out, frame_rate= 0.01):
            os.stat(directory)
        except:
            os.mkdir(directory)           
-       np.save(directory + "/"+ df["file"][0], arr=arr_feats,  allow_pickle=False)          
+       np.save(directory + "/"+ df["#file"][0], arr=arr_feats,  allow_pickle=False)          
                
           
         
