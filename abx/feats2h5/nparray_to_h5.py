@@ -70,7 +70,7 @@ def h5features_from_nparray(input_path, h5f, timefunc=None, rm_last_number=False
         if transpose==True:
             data=data.T
         if i == batch_size:
-            #pdb.set_trace()
+            pdb.set_trace()
             h5features.write(h5f, "/features/", internal_files, times,features)
             features = []
             times = []
@@ -99,7 +99,7 @@ def h5features_from_nparray(input_path, h5f, timefunc=None, rm_last_number=False
 
 def make_h5file(feats_folder, output_folder, name, rm_last_number, transpose, xnmt_format=False, file_newnames=''):
     if xnmt_format==True:
-        from_xnmt_format_to_filename(input_path, file_newnames)   
+        from_xnmt_format_to_filename(feats_folder, file_newnames)   
     h5features_from_nparray(feats_folder, os.path.join(output_folder,name +'.h5f'), None, rm_last_number, transpose)
 
 if __name__=='__main__':
