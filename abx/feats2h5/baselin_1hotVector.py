@@ -62,7 +62,7 @@ if __name__=='__main__':
     
     args = parser.parse_args()
     
-    one_hot_baseline(args.input_path, args.out, args.nb_to_sec, args.frame_rate)
+    one_hot_baseline(args.input_path, args.out, args.frame_rate)
 	
 
 
