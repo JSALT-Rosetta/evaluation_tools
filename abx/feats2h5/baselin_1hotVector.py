@@ -26,7 +26,8 @@ def one_hot_baseline(input_path, out, frame_rate= 0.01):
    caption_group=data.groupby("#file")
                               
    for caption in caption_group.groups.keys():
-       df=caption_group.get_group(caption).reset_index(inplace=True)      
+       df=caption_group.get_group(caption)
+       df.reset_index(inplace=True)      
        list_feats=[]
        R=np.empty(1)
        R[0]=frame_rate
