@@ -11,16 +11,9 @@ import argparse
 from os import listdir
 import numpy as np
 import h5features
-import pdb
 import pickle
 
 
-#########
-# Paths:
-#########
-
-#feats_folder = '/pylon5/ci560op/londel/flickr/ploop_u100_s3_c4/posteriors_ac0.2/test/'
-#output_folder = '/pylon5/ci560op/larsene/abx/flickr/test/posteriogram/'
 
 def change_filename(inpath, file_newnames):
     with open (file_newnames, 'r') as f:
@@ -32,7 +25,7 @@ def change_filename(inpath, file_newnames):
         os.rename(inpath+"/"+o, inpath+"/"+n)
     return(newnames)
     
-emb='/pylon5/ci560op/rachine/Flickr/embeddings/flickr_trad_ja_word_modular.internal512-decode-only.hyp.emb'
+
 def from_xnmt_format_to_filename(emb, output_dir, file_newnames):
     data = pickle.load(open(emb,'rb'))
     with open (file_newnames, 'r') as f:
@@ -41,6 +34,21 @@ def from_xnmt_format_to_filename(emb, output_dir, file_newnames):
     for d, f in zip(data, newnames):
         t=data.T
         np.save(file=output_dir +"/"+f, arr=t, allow_pickle=False)
+        
+
+def time_l2_CNN_Glass16(data):
+    """
+    time in second
+    """
+    time=np.arange(data.shape[0], dtype=float) * 0.02 + 0.015
+    return(time)
+    
+
+
+    
+def time_l3_CNN_Glass16(data):
+    time=np.arange(data.shape[0], dtype=float) * 0.04 + 0.045
+    return(time)
 
 
 
@@ -67,8 +75,6 @@ def h5features_from_nparray(input_path, h5f, timefunc=None, rm_last_number=False
     i = 0
     for f in filenames:
         data=np.load(input_path+f)
-        if transpose==True:
-            data=data.T
         if i == batch_size:
             h5features.write(h5f, "/features/", internal_files, times,features)
             features = []
@@ -105,16 +111,17 @@ if __name__=='__main__':
     parser.add_argument('-f', '--feats_folder', help = "Folder with features .npy files")
     parser.add_argument('-o', '--output_folder', help = "Output folder for h5f files")
     parser.add_argument('-n', '--name', default='posteriors', help = "Folder with .wav files")
+    parser.add_argument('-t', '--timefunc', default=None, 
+                        help = "function giving the time step between frame and the offset")
     parser.add_argument('-rm', '--rm_last_number', type=bool, default='False', 
-                        help = "ether or not to remove the last number in each file name separated by _")
-    parser.add_argument('-t', '--transpose', type=bool, default='False', 
-                        help = "whether to transpose or not the input")
+                        help = "either or not to remove the last number in each file name separated by _")
+
     args = parser.parse_args()
     print("Start generating Features")
     print("Input folder : " + args.feats_folder)
     print("Output folder : " + args.output_folder)	
     
-    make_h5file(args.feats_folder, args.output_folder, args.name, args.rm_last_number, args.transpose)
+    make_h5file(args.feats_folder, args.output_folder, args.name, args.timefunc, args.rm_last_number)
 	
 
 
