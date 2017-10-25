@@ -11,10 +11,10 @@ import os
 import pandas as pd
 from os import listdir
 import argparse
+import pdb
 
-def one_hot_baseline(input_path, out, nb_to_sec=1, frame_rate= 0.01):
+def one_hot_baseline(input_path, out, frame_rate= 0.01):
    """
-   nb_to_sec : number to convert onset et offset in sec , default is 1
    frame_rate : sampling rate, typically 10 ms (or 0.01s)
    input_path : path to the dataset
 
@@ -26,9 +26,8 @@ def one_hot_baseline(input_path, out, nb_to_sec=1, frame_rate= 0.01):
    caption_group=data.groupby("#file")
                               
    for caption in caption_group.groups.keys():
-       df=caption_group.get_group(caption)
-       df["onset"]=df["onset"]*nb_to_sec
-       df["offset"]=df["offset"]*nb_to_sec   
+       df=caption_group.get_group(caption)  
+       pdb.set_trace()
        phones=list(set(df["#phoneme"]))
        list_feats=[]
        R=np.empty(1)
@@ -59,7 +58,6 @@ if __name__=='__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-i', '--input_path', help = "Path to the phoneme item file ")
     parser.add_argument('-o', '--out', help = "Output folder containing the npy files")
-    parser.add_argument('-n', '--nb_to_sec', type=int, default=1, help = "Output folder containing the npy files")
     parser.add_argument('-f', '--frame_rate', type= float, default=0.01, help = "Frame rate in second, default is 0.01 s")
     
     args = parser.parse_args()
