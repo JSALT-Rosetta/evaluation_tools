@@ -27,7 +27,7 @@ def one_hot_baseline(input_path, out, frame_rate= 0.01):
                               
    for caption in caption_group.groups.keys():
        df=caption_group.get_group(caption)  
-       #pdb.set_trace()
+       
        phones=list(set(df["#phoneme"]))
        list_feats=[]
        R=np.empty(1)
@@ -40,6 +40,7 @@ def one_hot_baseline(input_path, out, frame_rate= 0.01):
                one_hot=np.empty(len(phones))
                for j in range(len(phones)):
                    if df["#phoneme"][i]==phones[j]:
+                       pdb.set_trace()
                        one_hot[j]=1
                    else: 
                        one_hot[j]=0
