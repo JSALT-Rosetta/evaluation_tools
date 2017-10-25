@@ -21,37 +21,37 @@ def one_hot_baseline(input_path, out, nb_to_sec=1, frame_rate= 0.01):
    """
    
    name=os.path.basename(input_path)
-   df=pd.read_table(input_path, sep="\t", header=0)
+   data=pd.read_table(input_path, sep="\t", header=0)
    
-   #onset and offset are in 100* nanosecond. Need to be put in second
-   
-   df["onset"]=df["onset"]*nb_to_sec
-   df["offset"]=df["offset"]*nb_to_sec   
-   phones=list(set(df["#phoneme"]))
-   list_feats=[]
-   R=np.empty(1)
-   R[0]=frame_rate
-   for i in range(len(df)): 
-       on=df["onset"].iloc[i]
-       off=df["offset"].iloc[i]
-       nb_frame=int(np.floor_divide((off-on),R[0]))
-       for ff in range(nb_frame): 
-           one_hot=np.empty(len(phones))
-           for j in range(len(phones)):
-               if df["#phoneme"][i]==phones[j]:
-                   one_hot[j]=1
-               else: 
-                   one_hot[j]=0
-           list_feats.append(one_hot)
-   arr_feats = np.array(list_feats)
-   
-   directory=out + "/npy/"
-   try:
-       os.stat(directory)
-   except:
-       os.mkdir(directory)
-              
-   np.save(directory + "/"+ name.split(".")[0], arr=arr_feats,  allow_pickle=False)          
+   caption_group=data.groupby("#file")
+                              
+   for caption in caption_group.groups.keys():
+       df=caption_group.get_group(caption)
+       df["onset"]=df["onset"]*nb_to_sec
+       df["offset"]=df["offset"]*nb_to_sec   
+       phones=list(set(df["#phoneme"]))
+       list_feats=[]
+       R=np.empty(1)
+       R[0]=frame_rate
+       for i in range(len(df)): 
+           on=df["onset"].iloc[i]
+           off=df["offset"].iloc[i]
+           nb_frame=int(np.floor_divide((off-on),R[0]))
+           for ff in range(nb_frame): 
+               one_hot=np.empty(len(phones))
+               for j in range(len(phones)):
+                   if df["#phoneme"][i]==phones[j]:
+                       one_hot[j]=1
+                   else: 
+                       one_hot[j]=0
+               list_feats.append(one_hot)
+       arr_feats = np.array(list_feats)
+       directory=out + "/npy/"
+       try:
+           os.stat(directory)
+       except:
+           os.mkdir(directory)           
+       np.save(directory + "/"+ name.split(".")[0], arr=arr_feats,  allow_pickle=False)          
                
           
         
