@@ -57,7 +57,7 @@ def one_hot_baseline(input_path, out, nb_to_sec=1, frame_rate= 0.01):
         
 if __name__=='__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('-i', '--input_folder_path', help = "Folder with features .lab files")
+    parser.add_argument('-i', '--input_path', help = "Path to the phoneme item file ")
     parser.add_argument('-o', '--out', help = "Output folder containing the npy files")
     parser.add_argument('-n', '--nb_to_sec', type=int, default=1, help = "Output folder containing the npy files")
     parser.add_argument('-f', '--frame_rate', type= float, default=0.01, help = "Frame rate in second, default is 0.01 s")
