@@ -53,9 +53,9 @@ def one_hot_baseline(input_path, out, frame_rate= 0.01):
        except:
            os.mkdir(directory)  
        try: 
-           name=df["file"][0].split(".")[0]
+           name=df["#file"][0].split(".")[0]
        except: 
-           name=df["file"][0]
+           name=df["#file"][0]
        np.save(directory + "/"+ name, arr=arr_feats,  allow_pickle=False)          
                
           
