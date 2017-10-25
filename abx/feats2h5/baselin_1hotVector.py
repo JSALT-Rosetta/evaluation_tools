@@ -23,7 +23,7 @@ def one_hot_baseline(input_path, out, frame_rate= 0.01):
    name=os.path.basename(input_path)
    data=pd.read_table(input_path, sep="\t", header=0)
    phones=list(set(data["#phoneme"]))
-   caption_group=data.groupby("#file")
+   caption_group=data.groupby("#file", as_index=False)
                               
    for caption in caption_group.groups.keys():
        df=caption_group.get_group(caption)      
