@@ -36,13 +36,13 @@ def one_hot_baseline(input_path, out, frame_rate= 0.01):
            nb_frame=int(np.floor_divide((off-on),R[0]))
            for ff in range(nb_frame): 
                one_hot=np.empty(len(phones))
-               for j in range(len(phones)):
+               for jj in range(len(phones)):
                    try :
-                       if df["#phoneme"][i]==phones[j]:
+                       if df["#phoneme"][i]==phones[jj]:
                        #pdb.set_trace()
-                           one_hot[j]=1
+                           one_hot[jj]=1
                        else: 
-                           one_hot[j]=0 
+                           one_hot[jj]=0 
                    except: 
                         pdb.set_trace()
                list_feats.append(one_hot)
