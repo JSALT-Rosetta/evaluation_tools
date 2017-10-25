@@ -19,8 +19,7 @@ def one_hot_baseline(input_path, out, frame_rate= 0.01):
    input_path : path to the dataset
 
    """
-   
-   name=os.path.basename(input_path)
+
    data=pd.read_table(input_path, sep="\t", header=0)
    phones=list(set(data["#phoneme"]))
    caption_group=data.groupby("#file")
@@ -52,8 +51,12 @@ def one_hot_baseline(input_path, out, frame_rate= 0.01):
        try:
            os.stat(directory)
        except:
-           os.mkdir(directory)           
-       np.save(directory + "/"+ df["#file"][0], arr=arr_feats,  allow_pickle=False)          
+           os.mkdir(directory)  
+       try: 
+           name=df["file"][0].split(".")[0]
+       except: 
+           name=df["file"][0]
+       np.save(directory + "/"+ name, arr=arr_feats,  allow_pickle=False)          
                
           
         
