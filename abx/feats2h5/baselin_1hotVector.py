@@ -38,7 +38,7 @@ def one_hot_baseline(input_path, out, nb_to_sec=1, frame_rate= 0.01):
        for ff in range(nb_frame): 
            one_hot=np.empty(len(phones))
            for j in range(len(phones)):
-               if df["phone"][i]==phones[j]:
+               if df["#phoneme"][i]==phones[j]:
                    one_hot[j]=1
                else: 
                    one_hot[j]=0
