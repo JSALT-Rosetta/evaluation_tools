@@ -21,7 +21,7 @@ def one_hot_baseline(input_path, out, nb_to_sec=1, frame_rate= 0.01):
    """
    
    name=os.path.basename(input_path)
-   df=pd.read_table(input_path, sep=" ", header=0)
+   df=pd.read_table(input_path, sep="\t", header=0)
    
    #onset and offset are in 100* nanosecond. Need to be put in second
    
