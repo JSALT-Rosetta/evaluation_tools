@@ -23,10 +23,10 @@ def one_hot_baseline(input_path, out, frame_rate= 0.01):
    name=os.path.basename(input_path)
    data=pd.read_table(input_path, sep="\t", header=0)
    phones=list(set(data["#phoneme"]))
-   caption_group=data.groupby("#file", as_index=False)
+   caption_group=data.groupby("#file")
                               
    for caption in caption_group.groups.keys():
-       df=caption_group.get_group(caption)      
+       df=caption_group.get_group(caption).reset_index(inplace=True)      
        list_feats=[]
        R=np.empty(1)
        R[0]=frame_rate
